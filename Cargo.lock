@@ -150,6 +150,12 @@ dependencies = [
 [[package]]
 name = "cb-memtier"
 version = "0.4.0"
+dependencies = [
+ "cb-core",
+ "serde",
+ "serde_json",
+ "thiserror",
+]
 
 [[package]]
 name = "cb-perf"
