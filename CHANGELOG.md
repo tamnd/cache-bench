@@ -6,6 +6,8 @@ What each release costs you, in the order the releases happened. New entries go 
 
 ### Added
 
+- Go's `sort.Slice` ported, which upstream mode needs and nothing else does. The original sorts its SET results with a comparator that reads a different slice, so the order that comes out is a property of the algorithm rather than of the data, and reproducing its published SET numbers means reproducing Go's `pdqsort` rather than merely sorting the same values. Checked against 142 cases produced by Go itself, including the aliased comparator at the four lengths the original's mutated run count produces.
+
 - The corrected reduction. Thirty one runs of one cell go in, and a median, a best, a worst and an average come out. Each series is sorted by its own key, ten percent comes off each end, and the median is the middle of what is left. All four aggregates see all 31 runs.
 - The `spread` object in a chosen file. Interquartile range, standard deviation and coefficient of variation for both throughput series and for cycles, over every run including the ones the trim drops. Nothing plots it. It is the only way to tell a cell that was measured on a quiet machine from one that was not, once both have been reduced to a single number.
 - Two golden cells in `testdata/golden/cells`, which are the original's own committed runs for dragonfly at one thread and pipeline depth 1, one cell with perf attached and one without, together with the four files the original reduced each of them to. Every statistics test here is checked against what the original actually produced rather than against a distribution somebody made up.
