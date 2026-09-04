@@ -3,7 +3,9 @@
 memcache = "memcache"
 # numpy's function for a half open range, named after the builtin it mirrors.
 arange = "arange"
-# The plural of PNG. The tokenizer splits it after two letters and then offers to correct the half it kept.
+
+[default.extend-identifiers]
+# The plural of PNG. The word splitter cuts it before the last capital, keeps PN and offers to correct that to ON, so the whole thing has to be named here rather than in the word list.
 PNGs = "PNGs"
 
 [files]
