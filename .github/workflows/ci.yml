@@ -100,6 +100,29 @@ jobs:
           print(f"{len(profiles)} profiles, {len(paths)} paths")
           PY
 
+  # Two things that must never be in the tree, checked against what git is
+  # actually tracking rather than against what .gitignore says it should be.
+  # A file that was committed before the ignore rule existed stays tracked and
+  # the ignore rule has no effect on it, which is exactly how both of these get
+  # in by accident.
+  hygiene:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - name: no raw run data, no host list
+        run: |
+          raw=$(git ls-files 'results/*/runs/*' 'results/*/logs/*')
+          if [ -n "$raw" ]; then
+            echo "raw measurement data is tracked, it belongs in the release tarball:" >&2
+            echo "$raw" >&2
+            exit 1
+          fi
+          if git ls-files --error-unmatch hosts.toml >/dev/null 2>&1; then
+            echo "hosts.toml is tracked, and it names machines that stay private" >&2
+            exit 1
+          fi
+
   test:
     strategy:
       fail-fast: false
