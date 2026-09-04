@@ -112,7 +112,7 @@ jobs:
       - uses: Swatinem/rust-cache@v2.9.2
         with:
           save-if: ${{ github.ref == 'refs/heads/main' }}
-      - uses: taiki-e/install-action@v2.62.31
+      - uses: taiki-e/install-action@v2.87.3
         with:
           tool: cargo-nextest
       - run: cargo nextest run --workspace --locked
@@ -128,7 +128,7 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7.0.1
-      - uses: dtolnay/rust-toolchain@1.94.0
+      - uses: dtolnay/rust-toolchain@1.120.0
       - uses: Swatinem/rust-cache@v2.9.2
         with:
           save-if: ${{ github.ref == 'refs/heads/main' }}
@@ -161,7 +161,7 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v7.0.1
-      - uses: EmbarkStudios/cargo-deny-action@v2.0.16
+      - uses: EmbarkStudios/cargo-deny-action@v2.1.1
         with:
           command: check all
 
@@ -170,4 +170,4 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v7.0.1
-      - uses: crate-ci/typos@v1.40.1
+      - uses: crate-ci/typos@v1.50.1
