@@ -4,7 +4,9 @@
 //! The original reads the JSON with a path query that yields zero for a missing field, which turns a version mismatch into a chart full of empty bars rather than into an error.
 
 pub mod argv;
+pub mod drive;
 pub mod parse;
 
 pub use argv::{Invocation, PERCENTILES, Pass};
+pub use drive::{Load, NotMeasured, run};
 pub use parse::{BadOutput, read};

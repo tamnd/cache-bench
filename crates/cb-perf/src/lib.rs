@@ -7,3 +7,11 @@
 //!
 //! A counter that comes back as `<not supported>` is not a zero.
 //! The original reads it as one and draws it, and `cb_core::Counter` keeps the distinction so that this crate can hand the chart layer something it can leave off the plot.
+
+pub mod csv;
+pub mod probe;
+pub mod stat;
+
+pub use csv::{BadPerf, EVENTS, counted, event_list, read};
+pub use probe::{Probe, probe};
+pub use stat::{Session, argv};

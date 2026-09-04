@@ -161,3 +161,13 @@ The original pins with `taskset -c 0-15` in front of the server command, and sto
 Both of those are a problem here for the same reason: the pid the harness holds is not the pid it thinks it is holding. With a wrapper, the pid that comes back belongs to taskset, so that is the pid perf would be attached to and the pid a stray check would look for. And a server that forks workers leaves those workers behind when the pid alone is signalled, still holding the socket and still on the cores.
 
 Here the affinity is set with `sched_setaffinity` inside the child between fork and exec, so the pid is the server's own. The child also puts itself in a new process group, and stopping means signalling the group, escalating to a kill if the grace period runs out, and then confirming the group is gone before the run counts as finished. A group that is still there is a failed run rather than a warning, because a server that outlives its run competes with the next one for the same cores and the number that comes out of that is low and entirely plausible.
+
+## D21, counters read machine readable, and utilisation computed
+
+The original parses `perf stat` out of the table perf prints for a person to read, using two string helpers that take the text between a newline and a key, and between a `#` and a key. That holds until a number is wide enough to change the column alignment, or the locale puts a separator in a thousand, or a counter is multiplexed and perf appends a scaling percentage where the helper expected the line to end. None of those fail loudly. They produce a number that is wrong or a zero that looks like a measurement.
+
+perf is asked here for `-x,`, its machine readable form, where the fields are comma separated, in a documented order, and a counter the hardware could not measure arrives as the literal `<not supported>` in the value column rather than as a line that reads differently.
+
+The same output carries a `CPUs utilized` figure in its comment column, which is the number the original scrapes. It is a value perf rounded for display. It is computed here instead, from the `task-clock` counter and a duration this process measured itself, which is the same quantity from the same source without a dependency on how perf chose to print it.
+
+Neither of these moves a published number on a machine where the original's parsing worked. They remove the cases where it silently did not.
