@@ -4,6 +4,18 @@ What each release costs you, in the order the releases happened. New entries go 
 
 ## Unreleased
 
+## 0.3.0 - 2026-09-04
+
+The charts.
+
+All 154 of them come out as PNGs now, and the same numbers produce the same bytes on Linux, macOS and Windows. That last part is the milestone. The original's chart layer writes a matplotlib script, shells out to python3 and deletes the script, and what comes back depends on which fonts the machine has, so two people running it produce two different pictures and neither can check the other. A chart drawn here is a function of its data and nothing else, and CI proves it on three operating systems on every push rather than asserting it in a README.
+
+The renderer is written here, which was not the plan. Both ways plotters can draw text are closed to us: font-kit resolves system fonts, which is the thing being removed, and ab_glyph sits on a crate cargo-deny already fails the build on. What was left turned out to be small, because a chart is only two kinds of shape. Rectangles have an exact coverage per pixel with no sampling in it, and glyphs are outlines that skrifa reads out of the fonts already embedded here and zeno fills in scalar arithmetic with no SIMD path to diverge on.
+
+The check that mattered most is the one that says the fixtures were not fooling us. All 154 charts drawn straight from the original's published output.json in upstream mode are byte for byte identical to the 154 drawn from the golden series committed here.
+
+Nothing has been measured yet. The runner is M5 and the first real sweep is M6, so every chart drawn so far is drawn from the original's numbers.
+
 ### Added
 
 - The renderer, which is the other half of the chart engine. All 154 charts now come out as PNGs. The shapes on a chart are axis aligned rectangles and glyphs, so the rectangles are filled by exact coverage per pixel with no sampling anywhere, and the glyphs are outlines read out of the embedded fonts and filled in scalar arithmetic. Nothing in the path touches a system font, a SIMD path or a floating point operation whose order is not fixed, which is what makes the output the same on every platform rather than nearly the same.
