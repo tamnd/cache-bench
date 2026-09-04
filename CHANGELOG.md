@@ -2,7 +2,17 @@
 
 What each release costs you, in the order the releases happened. New entries go on top.
 
-## Unreleased
+## 0.4.0 - 2026-09-04
+
+The documents.
+
+Everything a reader sees around a chart is generated now. Both indexes, and a README in every results directory that says what the numbers were measured on, which versions were measured, what the method was and what the numbers may not be used for. None of it is written by hand, which is the point. 154 chart references maintained by a person go stale on the first rename and nobody finds out until a reader hits a broken image, and the original's README already disagrees with the data sitting next to it.
+
+The generator is a function of its inputs and CI checks that on every push, twice over. It generates everything twice and diffs the two, and it runs `docs --check` over every published results directory so that a file somebody edited by hand fails the build rather than being quietly overwritten by the next sweep.
+
+The exit gate was run rather than asserted. All 154 charts drawn, all three documents generated, then every image reference pulled out of the three documents and diffed against the directory listing. 154 references, 154 files, no diff in either direction. Deleting a chart produces documents that name it as not drawn and link to it from nowhere.
+
+Still nothing measured. The runner is M5.
 
 ### Added
 
