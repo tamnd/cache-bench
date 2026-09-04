@@ -13,6 +13,7 @@ pub mod cell;
 pub mod correct;
 pub mod gosort;
 pub mod kind;
+pub mod upstream;
 
 pub use cell::{BadCell, check, trim_for};
 pub use kind::{BadKind, Kind};

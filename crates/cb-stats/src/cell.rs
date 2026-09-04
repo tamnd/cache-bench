@@ -38,6 +38,16 @@ pub enum BadCell {
         /// How many runs there are.
         total: usize,
     },
+    /// The original's index arithmetic would run off the end of its own slice.
+    #[error(
+        "the original reads element {at} of a window of {len} here and would panic, which is what a cell this small does to it"
+    )]
+    WouldPanic {
+        /// The index it would use.
+        at: usize,
+        /// How many runs it read.
+        len: usize,
+    },
     /// Fewer runs than the sweep says the cell should have.
     #[error("the cell has {found} runs and the sweep says {wanted}")]
     Short {

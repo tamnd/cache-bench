@@ -40,6 +40,14 @@ Two whole cells, both dragonfly at one thread and pipeline depth 1, one measured
 
 They are what the statistics are tested against. Because the answers are in the file next to the question, a test can say that the original's published median GET is rank 16 of 31 where the median is rank 15, rather than saying that our median looks reasonable.
 
+The same idea covers the statistics. Upstream mode has to reproduce the original's chosen files, and there are 2304 of them, so the test that checks all of them takes a path to the original's runs directory:
+
+```
+CB_PARITY_RUNS=/path/to/cache-benchmarks/results/runs cargo test -p cb-stats -- --ignored --nocapture
+```
+
+That reduces all 576 cells four ways each and compares against what the original wrote. The two committed cells are one engine at one thread and one pipeline depth, so they catch a mistake but they cannot show the absence of one.
+
 ## gosort.json
 
 142 cases produced by Go's `sort.Slice`, which is the one fixture here that is generated rather than copied. Upstream mode has to reproduce the original's SET numbers, and those come out of a sort whose comparator reads a slice it is not sorting, so the result depends on the exact sequence of comparisons and swaps rather than on the values. Matching it means matching Go's `pdqsort`, and the only way to know we do is to ask Go.
