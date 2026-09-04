@@ -3,6 +3,8 @@
 memcache = "memcache"
 # numpy's function for a half open range, named after the builtin it mirrors.
 arange = "arange"
+# The plural of PNG. The tokenizer splits it after two letters and then offers to correct the half it kept.
+PNGs = "PNGs"
 
 [files]
 extend-exclude = ["testdata/", "assets/fonts/", "Cargo.lock"]
