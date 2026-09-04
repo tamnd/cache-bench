@@ -23,5 +23,6 @@ pub use hosts::{BadHosts, Host, Hosts};
 pub use name::{BadName, Chosen, RunName, Slot};
 pub use num::{Counter, CpuCounter, EventCounter, Fixed0, Fixed3};
 pub use output::{Entry, Output};
+pub use profile::{BadProfile, PerfMode, Profile, Profiles, SizeRange};
 pub use run::{Info, Latency, Op, Perf, Run};
 pub use size::{BadSize, Bytes};

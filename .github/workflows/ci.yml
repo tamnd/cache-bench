@@ -65,29 +65,11 @@ jobs:
                   print(f"{p}: {e}")
           sys.exit(1 if bad else 0)
           PY
-      # The two data files that drive every run.
-      # Parsed here rather than only in the binary, because a typo in either of them is found by whoever starts a sweep, and a sweep starts on a machine that is not this one and runs for days.
-      # The deeper check, that a profile's working set fits inside its own maxmemory, belongs to doctor and lands with M1.
-      - name: profiles.toml and config.jsonc parse
-        run: |
-          python3 - <<'PY'
-          import json, re, sys, tomllib
-          with open("profiles.toml", "rb") as f:
-              profiles = tomllib.load(f)["profiles"]
-          text = open("config.jsonc").read()
-          # Line comments only.
-          # config.jsonc has no block comments and no trailing commas, and a real jsonc parser is not worth a dependency for one file.
-          paths = json.loads(re.sub(r"^\s*//.*$", "", text, flags=re.M))["paths"]
-          required = {"memtier", "memcache", "dragonfly", "valkey", "redis",
-                      "garnet", "pogocache", "yo"}
-          missing = required - paths.keys()
-          if missing:
-              sys.exit(f"config.jsonc has no path for {sorted(missing)}")
-          for name, p in profiles.items():
-              if p["bench_threads"] > p["cores"] or max(p["threads"]) > p["cores"]:
-                  sys.exit(f"profile {name} asks for more threads than it has cores")
-          print(f"{len(profiles)} profiles, {len(paths)} paths")
-          PY
+      # The data files that drive every run, checked here by the same command that checks them on the host.
+      # A typo in one of them is otherwise found by whoever starts a sweep, and a sweep starts on a machine that is not this one and runs for days.
+      # This used to be a Python approximation of the same checks, which could only look at shape. doctor reads the files with the parser the harness uses and applies the checks that matter, including whether a profile's working set fits inside its own memory limit.
+      - name: doctor reads the config, the profiles and the hosts file
+        run: cargo run --locked --package cb-cli -- doctor --files-only
 
   # Two things that must never be in the tree, checked against what git is actually tracking rather than against what .gitignore says it should be.
   # A file that was committed before the ignore rule existed stays tracked and the ignore rule has no effect on it, which is exactly how both of these get in by accident.

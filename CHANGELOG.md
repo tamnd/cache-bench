@@ -10,6 +10,11 @@ What each release costs you, in the order the releases happened. New entries go 
 - `profiles.toml`, which is the machine shape the original hardcodes. Core pinning, the thread sweep, the memory limit and the client count are constants in the original's driver script, and none of the machines this port runs on is that box.
 - Profile validation, which refuses the three mistakes that produce numbers rather than errors: a thread sweep wider than the cores it is pinned to, a load generator sharing cores with the server under test, and a key space too large for the memory limit. All three make a chart that looks fine and measures something else.
 - `hosts.toml`, absent by default, absent meaning run here. Only `hosts.example.toml` is committed, with ssh config names rather than addresses, and a test that fails if anything in it starts to look like a real machine.
+- `cache-bench doctor`, which reads all three files and says what it found, or says what is wrong with them and exits non-zero. This is the file half. The machine half, which probes cores, memory and the PMU, lands with the runner.
+
+### Changed
+
+- CI checks the data files with `doctor` instead of with a Python approximation of the same checks. The Python could only look at shape. `doctor` reads the files with the parser the harness uses and applies the checks that matter, so a profile that would evict fails in CI rather than two days into a sweep.
 
 ## 0.0.2 - 2026-09-04
 
