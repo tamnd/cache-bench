@@ -1,0 +1,1691 @@
+{
+ "cell": "bench_dragonfly-threads_1-pipeline_1-perf_yes",
+ "runs": [
+  {
+   "info": {
+    "cache": "dragonfly",
+    "version": "dragonfly v1.30.3-a8c40e34757396a034e98b2c1c437dd568b50c8a",
+    "threads": 1,
+    "bench_threads": 16,
+    "connections": 256,
+    "operations": 25600000,
+    "sizerange": "1-1024",
+    "pipeline": 1
+   },
+   "sets": {
+    "opsec": 199445.96,
+    "mbsec": 104.857,
+    "latency": {
+     "min": 0.096,
+     "max": 3.263,
+     "avg": 1.283,
+     "p50_00": 1.287,
+     "p90_00": 1.423,
+     "p99_00": 1.495,
+     "p99_90": 1.639,
+     "p99_99": 2.447
+    }
+   },
+   "gets": {
+    "opsec": 218245.22,
+    "mbsec": 113.684,
+    "latency": {
+     "min": 0.248,
+     "max": 2.511,
+     "avg": 1.172,
+     "p50_00": 1.167,
+     "p90_00": 1.319,
+     "p99_00": 1.391,
+     "p99_90": 1.487,
+     "p99_99": 1.895
+    }
+   },
+   "perf": {
+    "cpu_utilized": "0.994",
+    "cycles": "642245372237",
+    "instructions": "959099691991",
+    "branches": "<not supported>",
+    "branch_misses": "1035690224",
+    "page_faults": "21181"
+   }
+  },
+  {
+   "info": {
+    "cache": "dragonfly",
+    "version": "dragonfly v1.30.3-a8c40e34757396a034e98b2c1c437dd568b50c8a",
+    "threads": 1,
+    "bench_threads": 16,
+    "connections": 256,
+    "operations": 25600000,
+    "sizerange": "1-1024",
+    "pipeline": 1
+   },
+   "sets": {
+    "opsec": 200744.59,
+    "mbsec": 105.54,
+    "latency": {
+     "min": 0.144,
+     "max": 2.639,
+     "avg": 1.274,
+     "p50_00": 1.271,
+     "p90_00": 1.415,
+     "p99_00": 1.487,
+     "p99_90": 1.607,
+     "p99_99": 1.991
+    }
+   },
+   "gets": {
+    "opsec": 217455.59,
+    "mbsec": 113.272,
+    "latency": {
+     "min": 0.08,
+     "max": 2.255,
+     "avg": 1.176,
+     "p50_00": 1.175,
+     "p90_00": 1.319,
+     "p99_00": 1.391,
+     "p99_90": 1.487,
+     "p99_99": 1.871
+    }
+   },
+   "perf": {
+    "cpu_utilized": "0.996",
+    "cycles": "642999798833",
+    "instructions": "959122177393",
+    "branches": "<not supported>",
+    "branch_misses": "1033407570",
+    "page_faults": "21247"
+   }
+  },
+  {
+   "info": {
+    "cache": "dragonfly",
+    "version": "dragonfly v1.30.3-a8c40e34757396a034e98b2c1c437dd568b50c8a",
+    "threads": 1,
+    "bench_threads": 16,
+    "connections": 256,
+    "operations": 25600000,
+    "sizerange": "1-1024",
+    "pipeline": 1
+   },
+   "sets": {
+    "opsec": 201901.19,
+    "mbsec": 106.148,
+    "latency": {
+     "min": 0.128,
+     "max": 2.543,
+     "avg": 1.267,
+     "p50_00": 1.271,
+     "p90_00": 1.407,
+     "p99_00": 1.463,
+     "p99_90": 1.583,
+     "p99_99": 1.943
+    }
+   },
+   "gets": {
+    "opsec": 218545.08,
+    "mbsec": 113.84,
+    "latency": {
+     "min": 0.064,
+     "max": 2.239,
+     "avg": 1.171,
+     "p50_00": 1.167,
+     "p90_00": 1.311,
+     "p99_00": 1.383,
+     "p99_90": 1.479,
+     "p99_99": 1.823
+    }
+   },
+   "perf": {
+    "cpu_utilized": "0.995",
+    "cycles": "639680379161",
+    "instructions": "958686206095",
+    "branches": "<not supported>",
+    "branch_misses": "1035965808",
+    "page_faults": "21600"
+   }
+  },
+  {
+   "info": {
+    "cache": "dragonfly",
+    "version": "dragonfly v1.30.3-a8c40e34757396a034e98b2c1c437dd568b50c8a",
+    "threads": 1,
+    "bench_threads": 16,
+    "connections": 256,
+    "operations": 25600000,
+    "sizerange": "1-1024",
+    "pipeline": 1
+   },
+   "sets": {
+    "opsec": 198205.38,
+    "mbsec": 104.205,
+    "latency": {
+     "min": 0.088,
+     "max": 2.655,
+     "avg": 1.291,
+     "p50_00": 1.287,
+     "p90_00": 1.439,
+     "p99_00": 1.511,
+     "p99_90": 1.615,
+     "p99_99": 1.999
+    }
+   },
+   "gets": {
+    "opsec": 218873.82,
+    "mbsec": 114.011,
+    "latency": {
+     "min": 0.12,
+     "max": 2.223,
+     "avg": 1.169,
+     "p50_00": 1.167,
+     "p90_00": 1.311,
+     "p99_00": 1.383,
+     "p99_90": 1.479,
+     "p99_99": 1.855
+    }
+   },
+   "perf": {
+    "cpu_utilized": "0.996",
+    "cycles": "640679385615",
+    "instructions": "960231305204",
+    "branches": "<not supported>",
+    "branch_misses": "1041198232",
+    "page_faults": "22895"
+   }
+  },
+  {
+   "info": {
+    "cache": "dragonfly",
+    "version": "dragonfly v1.30.3-a8c40e34757396a034e98b2c1c437dd568b50c8a",
+    "threads": 1,
+    "bench_threads": 16,
+    "connections": 256,
+    "operations": 25600000,
+    "sizerange": "1-1024",
+    "pipeline": 1
+   },
+   "sets": {
+    "opsec": 203237.93,
+    "mbsec": 106.851,
+    "latency": {
+     "min": 0.112,
+     "max": 2.671,
+     "avg": 1.259,
+     "p50_00": 1.263,
+     "p90_00": 1.399,
+     "p99_00": 1.463,
+     "p99_90": 1.575,
+     "p99_99": 1.975
+    }
+   },
+   "gets": {
+    "opsec": 219751.29,
+    "mbsec": 114.468,
+    "latency": {
+     "min": 0.056,
+     "max": 2.127,
+     "avg": 1.164,
+     "p50_00": 1.159,
+     "p90_00": 1.303,
+     "p99_00": 1.375,
+     "p99_90": 1.479,
+     "p99_99": 1.823
+    }
+   },
+   "perf": {
+    "cpu_utilized": "0.997",
+    "cycles": "636633714956",
+    "instructions": "958015764423",
+    "branches": "<not supported>",
+    "branch_misses": "1029738637",
+    "page_faults": "22654"
+   }
+  },
+  {
+   "info": {
+    "cache": "dragonfly",
+    "version": "dragonfly v1.30.3-a8c40e34757396a034e98b2c1c437dd568b50c8a",
+    "threads": 1,
+    "bench_threads": 16,
+    "connections": 256,
+    "operations": 25600000,
+    "sizerange": "1-1024",
+    "pipeline": 1
+   },
+   "sets": {
+    "opsec": 200234.88,
+    "mbsec": 105.272,
+    "latency": {
+     "min": 0.056,
+     "max": 2.879,
+     "avg": 1.278,
+     "p50_00": 1.279,
+     "p90_00": 1.423,
+     "p99_00": 1.487,
+     "p99_90": 1.599,
+     "p99_99": 2.015
+    }
+   },
+   "gets": {
+    "opsec": 217555.88,
+    "mbsec": 113.325,
+    "latency": {
+     "min": 0.056,
+     "max": 2.255,
+     "avg": 1.176,
+     "p50_00": 1.175,
+     "p90_00": 1.319,
+     "p99_00": 1.391,
+     "p99_90": 1.503,
+     "p99_99": 1.871
+    }
+   },
+   "perf": {
+    "cpu_utilized": "0.997",
+    "cycles": "640978543265",
+    "instructions": "960152083304",
+    "branches": "<not supported>",
+    "branch_misses": "1028452845",
+    "page_faults": "21049"
+   }
+  },
+  {
+   "info": {
+    "cache": "dragonfly",
+    "version": "dragonfly v1.30.3-a8c40e34757396a034e98b2c1c437dd568b50c8a",
+    "threads": 1,
+    "bench_threads": 16,
+    "connections": 256,
+    "operations": 25600000,
+    "sizerange": "1-1024",
+    "pipeline": 1
+   },
+   "sets": {
+    "opsec": 195483.56,
+    "mbsec": 102.774,
+    "latency": {
+     "min": 0.16,
+     "max": 2.815,
+     "avg": 1.309,
+     "p50_00": 1.311,
+     "p90_00": 1.455,
+     "p99_00": 1.527,
+     "p99_90": 1.639,
+     "p99_99": 2.063
+    }
+   },
+   "gets": {
+    "opsec": 220104.53,
+    "mbsec": 114.652,
+    "latency": {
+     "min": 0.056,
+     "max": 2.159,
+     "avg": 1.162,
+     "p50_00": 1.159,
+     "p90_00": 1.303,
+     "p99_00": 1.375,
+     "p99_90": 1.471,
+     "p99_99": 1.839
+    }
+   },
+   "perf": {
+    "cpu_utilized": "0.996",
+    "cycles": "644416367129",
+    "instructions": "960149772890",
+    "branches": "<not supported>",
+    "branch_misses": "1037642700",
+    "page_faults": "21032"
+   }
+  },
+  {
+   "info": {
+    "cache": "dragonfly",
+    "version": "dragonfly v1.30.3-a8c40e34757396a034e98b2c1c437dd568b50c8a",
+    "threads": 1,
+    "bench_threads": 16,
+    "connections": 256,
+    "operations": 25600000,
+    "sizerange": "1-1024",
+    "pipeline": 1
+   },
+   "sets": {
+    "opsec": 201968.14,
+    "mbsec": 106.183,
+    "latency": {
+     "min": 0.08,
+     "max": 2.751,
+     "avg": 1.267,
+     "p50_00": 1.263,
+     "p90_00": 1.407,
+     "p99_00": 1.479,
+     "p99_90": 1.591,
+     "p99_99": 2.023
+    }
+   },
+   "gets": {
+    "opsec": 220653.31,
+    "mbsec": 114.938,
+    "latency": {
+     "min": 0.104,
+     "max": 2.191,
+     "avg": 1.159,
+     "p50_00": 1.159,
+     "p90_00": 1.303,
+     "p99_00": 1.375,
+     "p99_90": 1.479,
+     "p99_99": 1.847
+    }
+   },
+   "perf": {
+    "cpu_utilized": "0.994",
+    "cycles": "636342109531",
+    "instructions": "958376422934",
+    "branches": "<not supported>",
+    "branch_misses": "1027227267",
+    "page_faults": "22721"
+   }
+  },
+  {
+   "info": {
+    "cache": "dragonfly",
+    "version": "dragonfly v1.30.3-a8c40e34757396a034e98b2c1c437dd568b50c8a",
+    "threads": 1,
+    "bench_threads": 16,
+    "connections": 256,
+    "operations": 25600000,
+    "sizerange": "1-1024",
+    "pipeline": 1
+   },
+   "sets": {
+    "opsec": 199399.05,
+    "mbsec": 104.833,
+    "latency": {
+     "min": 0.064,
+     "max": 2.639,
+     "avg": 1.283,
+     "p50_00": 1.287,
+     "p90_00": 1.431,
+     "p99_00": 1.495,
+     "p99_90": 1.615,
+     "p99_99": 2.007
+    }
+   },
+   "gets": {
+    "opsec": 219502.77,
+    "mbsec": 114.339,
+    "latency": {
+     "min": 0.112,
+     "max": 2.623,
+     "avg": 1.165,
+     "p50_00": 1.159,
+     "p90_00": 1.311,
+     "p99_00": 1.375,
+     "p99_90": 1.479,
+     "p99_99": 1.847
+    }
+   },
+   "perf": {
+    "cpu_utilized": "0.995",
+    "cycles": "641595075819",
+    "instructions": "958795870512",
+    "branches": "<not supported>",
+    "branch_misses": "1040570631",
+    "page_faults": "22656"
+   }
+  },
+  {
+   "info": {
+    "cache": "dragonfly",
+    "version": "dragonfly v1.30.3-a8c40e34757396a034e98b2c1c437dd568b50c8a",
+    "threads": 1,
+    "bench_threads": 16,
+    "connections": 256,
+    "operations": 25600000,
+    "sizerange": "1-1024",
+    "pipeline": 1
+   },
+   "sets": {
+    "opsec": 192550.61,
+    "mbsec": 101.232,
+    "latency": {
+     "min": 0.104,
+     "max": 2.543,
+     "avg": 1.329,
+     "p50_00": 1.327,
+     "p90_00": 1.487,
+     "p99_00": 1.559,
+     "p99_90": 1.671,
+     "p99_99": 2.111
+    }
+   },
+   "gets": {
+    "opsec": 219136.7,
+    "mbsec": 114.148,
+    "latency": {
+     "min": 0.12,
+     "max": 2.303,
+     "avg": 1.167,
+     "p50_00": 1.167,
+     "p90_00": 1.311,
+     "p99_00": 1.375,
+     "p99_90": 1.479,
+     "p99_99": 1.839
+    }
+   },
+   "perf": {
+    "cpu_utilized": "0.998",
+    "cycles": "646139524407",
+    "instructions": "961820271437",
+    "branches": "<not supported>",
+    "branch_misses": "1054343371",
+    "page_faults": "22780"
+   }
+  },
+  {
+   "info": {
+    "cache": "dragonfly",
+    "version": "dragonfly v1.30.3-a8c40e34757396a034e98b2c1c437dd568b50c8a",
+    "threads": 1,
+    "bench_threads": 16,
+    "connections": 256,
+    "operations": 25600000,
+    "sizerange": "1-1024",
+    "pipeline": 1
+   },
+   "sets": {
+    "opsec": 196136.75,
+    "mbsec": 103.118,
+    "latency": {
+     "min": 0.16,
+     "max": 2.783,
+     "avg": 1.304,
+     "p50_00": 1.303,
+     "p90_00": 1.455,
+     "p99_00": 1.527,
+     "p99_90": 1.639,
+     "p99_99": 2.023
+    }
+   },
+   "gets": {
+    "opsec": 220357.36,
+    "mbsec": 114.784,
+    "latency": {
+     "min": 0.032,
+     "max": 2.783,
+     "avg": 1.161,
+     "p50_00": 1.159,
+     "p90_00": 1.303,
+     "p99_00": 1.367,
+     "p99_90": 1.479,
+     "p99_99": 1.847
+    }
+   },
+   "perf": {
+    "cpu_utilized": "0.994",
+    "cycles": "642602676585",
+    "instructions": "959739754431",
+    "branches": "<not supported>",
+    "branch_misses": "1055212132",
+    "page_faults": "21778"
+   }
+  },
+  {
+   "info": {
+    "cache": "dragonfly",
+    "version": "dragonfly v1.30.3-a8c40e34757396a034e98b2c1c437dd568b50c8a",
+    "threads": 1,
+    "bench_threads": 16,
+    "connections": 256,
+    "operations": 25600000,
+    "sizerange": "1-1024",
+    "pipeline": 1
+   },
+   "sets": {
+    "opsec": 202346.56,
+    "mbsec": 106.382,
+    "latency": {
+     "min": 0.056,
+     "max": 3.087,
+     "avg": 1.264,
+     "p50_00": 1.263,
+     "p90_00": 1.407,
+     "p99_00": 1.479,
+     "p99_90": 1.591,
+     "p99_99": 1.959
+    }
+   },
+   "gets": {
+    "opsec": 220329.53,
+    "mbsec": 114.769,
+    "latency": {
+     "min": 0.016,
+     "max": 2.239,
+     "avg": 1.161,
+     "p50_00": 1.159,
+     "p90_00": 1.303,
+     "p99_00": 1.375,
+     "p99_90": 1.463,
+     "p99_99": 1.815
+    }
+   },
+   "perf": {
+    "cpu_utilized": "0.994",
+    "cycles": "637118375940",
+    "instructions": "958622138922",
+    "branches": "<not supported>",
+    "branch_misses": "1044223043",
+    "page_faults": "22705"
+   }
+  },
+  {
+   "info": {
+    "cache": "dragonfly",
+    "version": "dragonfly v1.30.3-a8c40e34757396a034e98b2c1c437dd568b50c8a",
+    "threads": 1,
+    "bench_threads": 16,
+    "connections": 256,
+    "operations": 25600000,
+    "sizerange": "1-1024",
+    "pipeline": 1
+   },
+   "sets": {
+    "opsec": 197565.62,
+    "mbsec": 103.869,
+    "latency": {
+     "min": 0.096,
+     "max": 2.671,
+     "avg": 1.295,
+     "p50_00": 1.295,
+     "p90_00": 1.447,
+     "p99_00": 1.519,
+     "p99_90": 1.647,
+     "p99_99": 2.039
+    }
+   },
+   "gets": {
+    "opsec": 218689.49,
+    "mbsec": 113.915,
+    "latency": {
+     "min": 0.104,
+     "max": 2.207,
+     "avg": 1.17,
+     "p50_00": 1.167,
+     "p90_00": 1.311,
+     "p99_00": 1.375,
+     "p99_90": 1.479,
+     "p99_99": 1.855
+    }
+   },
+   "perf": {
+    "cpu_utilized": "0.994",
+    "cycles": "643637501165",
+    "instructions": "959805664423",
+    "branches": "<not supported>",
+    "branch_misses": "1042511514",
+    "page_faults": "21538"
+   }
+  },
+  {
+   "info": {
+    "cache": "dragonfly",
+    "version": "dragonfly v1.30.3-a8c40e34757396a034e98b2c1c437dd568b50c8a",
+    "threads": 1,
+    "bench_threads": 16,
+    "connections": 256,
+    "operations": 25600000,
+    "sizerange": "1-1024",
+    "pipeline": 1
+   },
+   "sets": {
+    "opsec": 197841.53,
+    "mbsec": 104.014,
+    "latency": {
+     "min": 0.168,
+     "max": 2.639,
+     "avg": 1.293,
+     "p50_00": 1.295,
+     "p90_00": 1.439,
+     "p99_00": 1.511,
+     "p99_90": 1.615,
+     "p99_99": 1.999
+    }
+   },
+   "gets": {
+    "opsec": 219452.75,
+    "mbsec": 114.313,
+    "latency": {
+     "min": 0.056,
+     "max": 2.175,
+     "avg": 1.166,
+     "p50_00": 1.159,
+     "p90_00": 1.311,
+     "p99_00": 1.375,
+     "p99_90": 1.471,
+     "p99_99": 1.815
+    }
+   },
+   "perf": {
+    "cpu_utilized": "0.996",
+    "cycles": "639492408592",
+    "instructions": "960977824036",
+    "branches": "<not supported>",
+    "branch_misses": "1038592369",
+    "page_faults": "21592"
+   }
+  },
+  {
+   "info": {
+    "cache": "dragonfly",
+    "version": "dragonfly v1.30.3-a8c40e34757396a034e98b2c1c437dd568b50c8a",
+    "threads": 1,
+    "bench_threads": 16,
+    "connections": 256,
+    "operations": 25600000,
+    "sizerange": "1-1024",
+    "pipeline": 1
+   },
+   "sets": {
+    "opsec": 200193.54,
+    "mbsec": 105.25,
+    "latency": {
+     "min": 0.08,
+     "max": 2.927,
+     "avg": 1.278,
+     "p50_00": 1.279,
+     "p90_00": 1.423,
+     "p99_00": 1.487,
+     "p99_90": 1.583,
+     "p99_99": 1.983
+    }
+   },
+   "gets": {
+    "opsec": 218505.73,
+    "mbsec": 113.819,
+    "latency": {
+     "min": 0.024,
+     "max": 2.191,
+     "avg": 1.171,
+     "p50_00": 1.167,
+     "p90_00": 1.319,
+     "p99_00": 1.383,
+     "p99_90": 1.487,
+     "p99_99": 1.815
+    }
+   },
+   "perf": {
+    "cpu_utilized": "0.995",
+    "cycles": "639950017633",
+    "instructions": "960045785594",
+    "branches": "<not supported>",
+    "branch_misses": "1034884552",
+    "page_faults": "21461"
+   }
+  },
+  {
+   "info": {
+    "cache": "dragonfly",
+    "version": "dragonfly v1.30.3-a8c40e34757396a034e98b2c1c437dd568b50c8a",
+    "threads": 1,
+    "bench_threads": 16,
+    "connections": 256,
+    "operations": 25600000,
+    "sizerange": "1-1024",
+    "pipeline": 1
+   },
+   "sets": {
+    "opsec": 198079.13,
+    "mbsec": 104.139,
+    "latency": {
+     "min": 0.064,
+     "max": 2.751,
+     "avg": 1.292,
+     "p50_00": 1.295,
+     "p90_00": 1.439,
+     "p99_00": 1.503,
+     "p99_90": 1.607,
+     "p99_99": 1.991
+    }
+   },
+   "gets": {
+    "opsec": 215361.99,
+    "mbsec": 112.182,
+    "latency": {
+     "min": 0.072,
+     "max": 2.239,
+     "avg": 1.188,
+     "p50_00": 1.183,
+     "p90_00": 1.335,
+     "p99_00": 1.407,
+     "p99_90": 1.503,
+     "p99_99": 1.895
+    }
+   },
+   "perf": {
+    "cpu_utilized": "0.996",
+    "cycles": "645619943325",
+    "instructions": "960951774209",
+    "branches": "<not supported>",
+    "branch_misses": "1054889892",
+    "page_faults": "21572"
+   }
+  },
+  {
+   "info": {
+    "cache": "dragonfly",
+    "version": "dragonfly v1.30.3-a8c40e34757396a034e98b2c1c437dd568b50c8a",
+    "threads": 1,
+    "bench_threads": 16,
+    "connections": 256,
+    "operations": 25600000,
+    "sizerange": "1-1024",
+    "pipeline": 1
+   },
+   "sets": {
+    "opsec": 196527.9,
+    "mbsec": 103.323,
+    "latency": {
+     "min": 0.064,
+     "max": 2.655,
+     "avg": 1.302,
+     "p50_00": 1.303,
+     "p90_00": 1.455,
+     "p99_00": 1.519,
+     "p99_90": 1.631,
+     "p99_99": 2.015
+    }
+   },
+   "gets": {
+    "opsec": 220174.5,
+    "mbsec": 114.689,
+    "latency": {
+     "min": 0.056,
+     "max": 2.351,
+     "avg": 1.162,
+     "p50_00": 1.159,
+     "p90_00": 1.303,
+     "p99_00": 1.367,
+     "p99_90": 1.463,
+     "p99_99": 1.799
+    }
+   },
+   "perf": {
+    "cpu_utilized": "0.993",
+    "cycles": "640031542073",
+    "instructions": "961398832185",
+    "branches": "<not supported>",
+    "branch_misses": "1036563277",
+    "page_faults": "23521"
+   }
+  },
+  {
+   "info": {
+    "cache": "dragonfly",
+    "version": "dragonfly v1.30.3-a8c40e34757396a034e98b2c1c437dd568b50c8a",
+    "threads": 1,
+    "bench_threads": 16,
+    "connections": 256,
+    "operations": 25600000,
+    "sizerange": "1-1024",
+    "pipeline": 1
+   },
+   "sets": {
+    "opsec": 197633.19,
+    "mbsec": 103.904,
+    "latency": {
+     "min": 0.08,
+     "max": 2.543,
+     "avg": 1.295,
+     "p50_00": 1.295,
+     "p90_00": 1.439,
+     "p99_00": 1.503,
+     "p99_90": 1.607,
+     "p99_99": 1.991
+    }
+   },
+   "gets": {
+    "opsec": 216941.62,
+    "mbsec": 113.005,
+    "latency": {
+     "min": 0.064,
+     "max": 2.783,
+     "avg": 1.179,
+     "p50_00": 1.175,
+     "p90_00": 1.327,
+     "p99_00": 1.399,
+     "p99_90": 1.495,
+     "p99_99": 1.831
+    }
+   },
+   "perf": {
+    "cpu_utilized": "0.998",
+    "cycles": "644005707966",
+    "instructions": "960892117627",
+    "branches": "<not supported>",
+    "branch_misses": "1038271168",
+    "page_faults": "21994"
+   }
+  },
+  {
+   "info": {
+    "cache": "dragonfly",
+    "version": "dragonfly v1.30.3-a8c40e34757396a034e98b2c1c437dd568b50c8a",
+    "threads": 1,
+    "bench_threads": 16,
+    "connections": 256,
+    "operations": 25600000,
+    "sizerange": "1-1024",
+    "pipeline": 1
+   },
+   "sets": {
+    "opsec": 197303.21,
+    "mbsec": 103.731,
+    "latency": {
+     "min": 0.072,
+     "max": 2.767,
+     "avg": 1.297,
+     "p50_00": 1.295,
+     "p90_00": 1.455,
+     "p99_00": 1.511,
+     "p99_90": 1.615,
+     "p99_99": 1.975
+    }
+   },
+   "gets": {
+    "opsec": 218183.83,
+    "mbsec": 113.652,
+    "latency": {
+     "min": 0.088,
+     "max": 2.479,
+     "avg": 1.172,
+     "p50_00": 1.167,
+     "p90_00": 1.319,
+     "p99_00": 1.383,
+     "p99_90": 1.487,
+     "p99_99": 1.831
+    }
+   },
+   "perf": {
+    "cpu_utilized": "0.996",
+    "cycles": "641082021362",
+    "instructions": "961863510362",
+    "branches": "<not supported>",
+    "branch_misses": "1050863044",
+    "page_faults": "20578"
+   }
+  },
+  {
+   "info": {
+    "cache": "dragonfly",
+    "version": "dragonfly v1.30.3-a8c40e34757396a034e98b2c1c437dd568b50c8a",
+    "threads": 1,
+    "bench_threads": 16,
+    "connections": 256,
+    "operations": 25600000,
+    "sizerange": "1-1024",
+    "pipeline": 1
+   },
+   "sets": {
+    "opsec": 203787.17,
+    "mbsec": 107.14,
+    "latency": {
+     "min": 0.064,
+     "max": 2.719,
+     "avg": 1.255,
+     "p50_00": 1.255,
+     "p90_00": 1.391,
+     "p99_00": 1.455,
+     "p99_90": 1.559,
+     "p99_99": 1.919
+    }
+   },
+   "gets": {
+    "opsec": 218278.77,
+    "mbsec": 113.701,
+    "latency": {
+     "min": 0.096,
+     "max": 2.799,
+     "avg": 1.172,
+     "p50_00": 1.167,
+     "p90_00": 1.319,
+     "p99_00": 1.383,
+     "p99_90": 1.479,
+     "p99_99": 1.855
+    }
+   },
+   "perf": {
+    "cpu_utilized": "0.995",
+    "cycles": "636009203941",
+    "instructions": "958434440530",
+    "branches": "<not supported>",
+    "branch_misses": "1035971411",
+    "page_faults": "21945"
+   }
+  },
+  {
+   "info": {
+    "cache": "dragonfly",
+    "version": "dragonfly v1.30.3-a8c40e34757396a034e98b2c1c437dd568b50c8a",
+    "threads": 1,
+    "bench_threads": 16,
+    "connections": 256,
+    "operations": 25600000,
+    "sizerange": "1-1024",
+    "pipeline": 1
+   },
+   "sets": {
+    "opsec": 200682.69,
+    "mbsec": 105.508,
+    "latency": {
+     "min": 0.064,
+     "max": 2.687,
+     "avg": 1.275,
+     "p50_00": 1.279,
+     "p90_00": 1.415,
+     "p99_00": 1.487,
+     "p99_90": 1.583,
+     "p99_99": 1.967
+    }
+   },
+   "gets": {
+    "opsec": 219600.49,
+    "mbsec": 114.39,
+    "latency": {
+     "min": 0.056,
+     "max": 2.463,
+     "avg": 1.165,
+     "p50_00": 1.159,
+     "p90_00": 1.311,
+     "p99_00": 1.375,
+     "p99_90": 1.479,
+     "p99_99": 1.871
+    }
+   },
+   "perf": {
+    "cpu_utilized": "0.996",
+    "cycles": "636821725676",
+    "instructions": "959318044137",
+    "branches": "<not supported>",
+    "branch_misses": "1027696831",
+    "page_faults": "23856"
+   }
+  },
+  {
+   "info": {
+    "cache": "dragonfly",
+    "version": "dragonfly v1.30.3-a8c40e34757396a034e98b2c1c437dd568b50c8a",
+    "threads": 1,
+    "bench_threads": 16,
+    "connections": 256,
+    "operations": 25600000,
+    "sizerange": "1-1024",
+    "pipeline": 1
+   },
+   "sets": {
+    "opsec": 196434.82,
+    "mbsec": 103.274,
+    "latency": {
+     "min": 0.08,
+     "max": 3.071,
+     "avg": 1.302,
+     "p50_00": 1.303,
+     "p90_00": 1.455,
+     "p99_00": 1.527,
+     "p99_90": 1.623,
+     "p99_99": 2.031
+    }
+   },
+   "gets": {
+    "opsec": 219142.49,
+    "mbsec": 114.151,
+    "latency": {
+     "min": 0.104,
+     "max": 2.223,
+     "avg": 1.167,
+     "p50_00": 1.159,
+     "p90_00": 1.311,
+     "p99_00": 1.383,
+     "p99_90": 1.463,
+     "p99_99": 1.807
+    }
+   },
+   "perf": {
+    "cpu_utilized": "0.996",
+    "cycles": "640563857970",
+    "instructions": "960590858276",
+    "branches": "<not supported>",
+    "branch_misses": "1047172954",
+    "page_faults": "22152"
+   }
+  },
+  {
+   "info": {
+    "cache": "dragonfly",
+    "version": "dragonfly v1.30.3-a8c40e34757396a034e98b2c1c437dd568b50c8a",
+    "threads": 1,
+    "bench_threads": 16,
+    "connections": 256,
+    "operations": 25600000,
+    "sizerange": "1-1024",
+    "pipeline": 1
+   },
+   "sets": {
+    "opsec": 199598.49,
+    "mbsec": 104.938,
+    "latency": {
+     "min": 0.144,
+     "max": 2.575,
+     "avg": 1.282,
+     "p50_00": 1.279,
+     "p90_00": 1.431,
+     "p99_00": 1.495,
+     "p99_90": 1.599,
+     "p99_99": 1.967
+    }
+   },
+   "gets": {
+    "opsec": 218052.05,
+    "mbsec": 113.583,
+    "latency": {
+     "min": 0.056,
+     "max": 2.303,
+     "avg": 1.173,
+     "p50_00": 1.167,
+     "p90_00": 1.319,
+     "p99_00": 1.391,
+     "p99_90": 1.503,
+     "p99_99": 1.839
+    }
+   },
+   "perf": {
+    "cpu_utilized": "0.994",
+    "cycles": "640828506714",
+    "instructions": "960273274348",
+    "branches": "<not supported>",
+    "branch_misses": "1041729914",
+    "page_faults": "23840"
+   }
+  },
+  {
+   "info": {
+    "cache": "dragonfly",
+    "version": "dragonfly v1.30.3-a8c40e34757396a034e98b2c1c437dd568b50c8a",
+    "threads": 1,
+    "bench_threads": 16,
+    "connections": 256,
+    "operations": 25600000,
+    "sizerange": "1-1024",
+    "pipeline": 1
+   },
+   "sets": {
+    "opsec": 198042.32,
+    "mbsec": 104.119,
+    "latency": {
+     "min": 0.168,
+     "max": 2.671,
+     "avg": 1.292,
+     "p50_00": 1.295,
+     "p90_00": 1.439,
+     "p99_00": 1.511,
+     "p99_90": 1.615,
+     "p99_99": 1.999
+    }
+   },
+   "gets": {
+    "opsec": 217971.68,
+    "mbsec": 113.541,
+    "latency": {
+     "min": 0.04,
+     "max": 2.207,
+     "avg": 1.174,
+     "p50_00": 1.167,
+     "p90_00": 1.319,
+     "p99_00": 1.391,
+     "p99_90": 1.487,
+     "p99_99": 1.815
+    }
+   },
+   "perf": {
+    "cpu_utilized": "0.994",
+    "cycles": "643325772633",
+    "instructions": "960405464800",
+    "branches": "<not supported>",
+    "branch_misses": "1035102945",
+    "page_faults": "23316"
+   }
+  },
+  {
+   "info": {
+    "cache": "dragonfly",
+    "version": "dragonfly v1.30.3-a8c40e34757396a034e98b2c1c437dd568b50c8a",
+    "threads": 1,
+    "bench_threads": 16,
+    "connections": 256,
+    "operations": 25600000,
+    "sizerange": "1-1024",
+    "pipeline": 1
+   },
+   "sets": {
+    "opsec": 198278.65,
+    "mbsec": 104.244,
+    "latency": {
+     "min": 0.064,
+     "max": 2.831,
+     "avg": 1.29,
+     "p50_00": 1.287,
+     "p90_00": 1.439,
+     "p99_00": 1.503,
+     "p99_90": 1.615,
+     "p99_99": 1.991
+    }
+   },
+   "gets": {
+    "opsec": 216340.03,
+    "mbsec": 112.691,
+    "latency": {
+     "min": 0.064,
+     "max": 2.271,
+     "avg": 1.182,
+     "p50_00": 1.183,
+     "p90_00": 1.335,
+     "p99_00": 1.399,
+     "p99_90": 1.495,
+     "p99_99": 1.823
+    }
+   },
+   "perf": {
+    "cpu_utilized": "0.993",
+    "cycles": "643561360197",
+    "instructions": "960486180048",
+    "branches": "<not supported>",
+    "branch_misses": "1040930105",
+    "page_faults": "22012"
+   }
+  },
+  {
+   "info": {
+    "cache": "dragonfly",
+    "version": "dragonfly v1.30.3-a8c40e34757396a034e98b2c1c437dd568b50c8a",
+    "threads": 1,
+    "bench_threads": 16,
+    "connections": 256,
+    "operations": 25600000,
+    "sizerange": "1-1024",
+    "pipeline": 1
+   },
+   "sets": {
+    "opsec": 197123.77,
+    "mbsec": 103.636,
+    "latency": {
+     "min": 0.064,
+     "max": 3.327,
+     "avg": 1.298,
+     "p50_00": 1.295,
+     "p90_00": 1.447,
+     "p99_00": 1.519,
+     "p99_90": 1.623,
+     "p99_99": 1.959
+    }
+   },
+   "gets": {
+    "opsec": 216894.32,
+    "mbsec": 112.98,
+    "latency": {
+     "min": 0.112,
+     "max": 2.191,
+     "avg": 1.179,
+     "p50_00": 1.175,
+     "p90_00": 1.327,
+     "p99_00": 1.399,
+     "p99_90": 1.495,
+     "p99_99": 1.823
+    }
+   },
+   "perf": {
+    "cpu_utilized": "0.995",
+    "cycles": "644149259124",
+    "instructions": "960866136064",
+    "branches": "<not supported>",
+    "branch_misses": "1039014104",
+    "page_faults": "18824"
+   }
+  },
+  {
+   "info": {
+    "cache": "dragonfly",
+    "version": "dragonfly v1.30.3-a8c40e34757396a034e98b2c1c437dd568b50c8a",
+    "threads": 1,
+    "bench_threads": 16,
+    "connections": 256,
+    "operations": 25600000,
+    "sizerange": "1-1024",
+    "pipeline": 1
+   },
+   "sets": {
+    "opsec": 201575.19,
+    "mbsec": 105.977,
+    "latency": {
+     "min": 0.2,
+     "max": 2.719,
+     "avg": 1.269,
+     "p50_00": 1.271,
+     "p90_00": 1.415,
+     "p99_00": 1.487,
+     "p99_90": 1.591,
+     "p99_99": 1.951
+    }
+   },
+   "gets": {
+    "opsec": 217888.18,
+    "mbsec": 113.498,
+    "latency": {
+     "min": 0.032,
+     "max": 2.223,
+     "avg": 1.174,
+     "p50_00": 1.175,
+     "p90_00": 1.319,
+     "p99_00": 1.383,
+     "p99_90": 1.487,
+     "p99_99": 1.847
+    }
+   },
+   "perf": {
+    "cpu_utilized": "0.997",
+    "cycles": "638025558256",
+    "instructions": "959707232113",
+    "branches": "<not supported>",
+    "branch_misses": "1037796285",
+    "page_faults": "22935"
+   }
+  },
+  {
+   "info": {
+    "cache": "dragonfly",
+    "version": "dragonfly v1.30.3-a8c40e34757396a034e98b2c1c437dd568b50c8a",
+    "threads": 1,
+    "bench_threads": 16,
+    "connections": 256,
+    "operations": 25600000,
+    "sizerange": "1-1024",
+    "pipeline": 1
+   },
+   "sets": {
+    "opsec": 195503.24,
+    "mbsec": 102.784,
+    "latency": {
+     "min": 0.088,
+     "max": 2.799,
+     "avg": 1.309,
+     "p50_00": 1.311,
+     "p90_00": 1.463,
+     "p99_00": 1.543,
+     "p99_90": 1.639,
+     "p99_99": 1.983
+    }
+   },
+   "gets": {
+    "opsec": 218530.9,
+    "mbsec": 113.832,
+    "latency": {
+     "min": 0.048,
+     "max": 2.191,
+     "avg": 1.171,
+     "p50_00": 1.167,
+     "p90_00": 1.319,
+     "p99_00": 1.383,
+     "p99_90": 1.479,
+     "p99_99": 1.783
+    }
+   },
+   "perf": {
+    "cpu_utilized": "0.996",
+    "cycles": "641642677207",
+    "instructions": "962008273368",
+    "branches": "<not supported>",
+    "branch_misses": "1056767995",
+    "page_faults": "21397"
+   }
+  },
+  {
+   "info": {
+    "cache": "dragonfly",
+    "version": "dragonfly v1.30.3-a8c40e34757396a034e98b2c1c437dd568b50c8a",
+    "threads": 1,
+    "bench_threads": 16,
+    "connections": 256,
+    "operations": 25600000,
+    "sizerange": "1-1024",
+    "pipeline": 1
+   },
+   "sets": {
+    "opsec": 193107.86,
+    "mbsec": 101.525,
+    "latency": {
+     "min": 0.064,
+     "max": 2.751,
+     "avg": 1.325,
+     "p50_00": 1.327,
+     "p90_00": 1.487,
+     "p99_00": 1.559,
+     "p99_90": 1.663,
+     "p99_99": 2.023
+    }
+   },
+   "gets": {
+    "opsec": 220021.61,
+    "mbsec": 114.609,
+    "latency": {
+     "min": 0.04,
+     "max": 2.367,
+     "avg": 1.163,
+     "p50_00": 1.159,
+     "p90_00": 1.311,
+     "p99_00": 1.375,
+     "p99_90": 1.479,
+     "p99_99": 1.847
+    }
+   },
+   "perf": {
+    "cpu_utilized": "0.995",
+    "cycles": "644691831136",
+    "instructions": "960885321055",
+    "branches": "<not supported>",
+    "branch_misses": "1046231539",
+    "page_faults": "21483"
+   }
+  },
+  {
+   "info": {
+    "cache": "dragonfly",
+    "version": "dragonfly v1.30.3-a8c40e34757396a034e98b2c1c437dd568b50c8a",
+    "threads": 1,
+    "bench_threads": 16,
+    "connections": 256,
+    "operations": 25600000,
+    "sizerange": "1-1024",
+    "pipeline": 1
+   },
+   "sets": {
+    "opsec": 201285.88,
+    "mbsec": 105.825,
+    "latency": {
+     "min": 0.08,
+     "max": 2.607,
+     "avg": 1.271,
+     "p50_00": 1.271,
+     "p90_00": 1.415,
+     "p99_00": 1.479,
+     "p99_90": 1.583,
+     "p99_99": 1.943
+    }
+   },
+   "gets": {
+    "opsec": 217757.95,
+    "mbsec": 113.43,
+    "latency": {
+     "min": 0.088,
+     "max": 2.223,
+     "avg": 1.175,
+     "p50_00": 1.175,
+     "p90_00": 1.319,
+     "p99_00": 1.391,
+     "p99_90": 1.487,
+     "p99_99": 1.839
+    }
+   },
+   "perf": {
+    "cpu_utilized": "0.994",
+    "cycles": "639640458618",
+    "instructions": "959803938680",
+    "branches": "<not supported>",
+    "branch_misses": "1025882393",
+    "page_faults": "22062"
+   }
+  },
+  {
+   "info": {
+    "cache": "dragonfly",
+    "version": "dragonfly v1.30.3-a8c40e34757396a034e98b2c1c437dd568b50c8a",
+    "threads": 1,
+    "bench_threads": 16,
+    "connections": 256,
+    "operations": 25600000,
+    "sizerange": "1-1024",
+    "pipeline": 1
+   },
+   "sets": {
+    "opsec": 198348.83,
+    "mbsec": 104.281,
+    "latency": {
+     "min": 0.088,
+     "max": 2.687,
+     "avg": 1.29,
+     "p50_00": 1.287,
+     "p90_00": 1.439,
+     "p99_00": 1.511,
+     "p99_90": 1.607,
+     "p99_99": 1.911
+    }
+   },
+   "gets": {
+    "opsec": 219774.83,
+    "mbsec": 114.48,
+    "latency": {
+     "min": 0.048,
+     "max": 2.287,
+     "avg": 1.164,
+     "p50_00": 1.159,
+     "p90_00": 1.311,
+     "p99_00": 1.375,
+     "p99_90": 1.471,
+     "p99_99": 1.775
+    }
+   },
+   "perf": {
+    "cpu_utilized": "0.994",
+    "cycles": "638598350952",
+    "instructions": "960091964878",
+    "branches": "<not supported>",
+    "branch_misses": "1032655660",
+    "page_faults": "21483"
+   }
+  }
+ ],
+ "upstream": {
+  "median": {
+   "info": {
+    "cache": "dragonfly",
+    "version": "dragonfly v1.30.3-a8c40e34757396a034e98b2c1c437dd568b50c8a",
+    "threads": 1,
+    "bench_threads": 16,
+    "connections": 256,
+    "operations": 25600000,
+    "sizerange": "1-1024",
+    "pipeline": 1,
+    "kind": "median"
+   },
+   "sets": {
+    "opsec": 197123.77,
+    "mbsec": 103.636,
+    "latency": {
+     "min": 0.064,
+     "max": 3.327,
+     "avg": 1.298,
+     "p50_00": 1.295,
+     "p90_00": 1.447,
+     "p99_00": 1.519,
+     "p99_90": 1.623,
+     "p99_99": 1.959
+    }
+   },
+   "gets": {
+    "opsec": 218689.49,
+    "mbsec": 113.915,
+    "latency": {
+     "min": 0.104,
+     "max": 2.207,
+     "avg": 1.17,
+     "p50_00": 1.167,
+     "p90_00": 1.311,
+     "p99_00": 1.375,
+     "p99_90": 1.479,
+     "p99_99": 1.855
+    }
+   },
+   "perf": {
+    "cpu_utilized": 0.993,
+    "cycles": 640031542073,
+    "instructions": 961398832185,
+    "branches": 0,
+    "branch_misses": 1036563277,
+    "page_faults": 23521
+   }
+  },
+  "best": {
+   "info": {
+    "cache": "dragonfly",
+    "version": "dragonfly v1.30.3-a8c40e34757396a034e98b2c1c437dd568b50c8a",
+    "threads": 1,
+    "bench_threads": 16,
+    "connections": 256,
+    "operations": 25600000,
+    "sizerange": "1-1024",
+    "pipeline": 1,
+    "kind": "best"
+   },
+   "sets": {
+    "opsec": 201968.14,
+    "mbsec": 106.183,
+    "latency": {
+     "min": 0.08,
+     "max": 2.751,
+     "avg": 1.267,
+     "p50_00": 1.263,
+     "p90_00": 1.407,
+     "p99_00": 1.479,
+     "p99_90": 1.591,
+     "p99_99": 2.023
+    }
+   },
+   "gets": {
+    "opsec": 220329.53,
+    "mbsec": 114.769,
+    "latency": {
+     "min": 0.016,
+     "max": 2.239,
+     "avg": 1.161,
+     "p50_00": 1.159,
+     "p90_00": 1.303,
+     "p99_00": 1.375,
+     "p99_90": 1.463,
+     "p99_99": 1.815
+    }
+   },
+   "perf": {
+    "cpu_utilized": 0.994,
+    "cycles": 640828506714,
+    "instructions": 960273274348,
+    "branches": 0,
+    "branch_misses": 1041729914,
+    "page_faults": 23840
+   }
+  },
+  "worst": {
+   "info": {
+    "cache": "dragonfly",
+    "version": "dragonfly v1.30.3-a8c40e34757396a034e98b2c1c437dd568b50c8a",
+    "threads": 1,
+    "bench_threads": 16,
+    "connections": 256,
+    "operations": 25600000,
+    "sizerange": "1-1024",
+    "pipeline": 1,
+    "kind": "worst"
+   },
+   "sets": {
+    "opsec": 200744.59,
+    "mbsec": 105.54,
+    "latency": {
+     "min": 0.144,
+     "max": 2.639,
+     "avg": 1.274,
+     "p50_00": 1.271,
+     "p90_00": 1.415,
+     "p99_00": 1.487,
+     "p99_90": 1.607,
+     "p99_99": 1.991
+    }
+   },
+   "gets": {
+    "opsec": 217455.59,
+    "mbsec": 113.272,
+    "latency": {
+     "min": 0.08,
+     "max": 2.255,
+     "avg": 1.176,
+     "p50_00": 1.175,
+     "p90_00": 1.319,
+     "p99_00": 1.391,
+     "p99_90": 1.487,
+     "p99_99": 1.871
+    }
+   },
+   "perf": {
+    "cpu_utilized": 0.995,
+    "cycles": 639680379161,
+    "instructions": 958686206095,
+    "branches": 0,
+    "branch_misses": 1035965808,
+    "page_faults": 21600
+   }
+  },
+  "average": {
+   "info": {
+    "cache": "dragonfly",
+    "version": "dragonfly v1.30.3-a8c40e34757396a034e98b2c1c437dd568b50c8a",
+    "threads": 1,
+    "bench_threads": 16,
+    "connections": 256,
+    "operations": 25600000,
+    "sizerange": "1-1024",
+    "pipeline": 1,
+    "kind": "average"
+   },
+   "sets": {
+    "opsec": 198876.055,
+    "mbsec": 104.558,
+    "latency": {
+     "min": 0.097,
+     "max": 2.762,
+     "avg": 1.287,
+     "p50_00": 1.287,
+     "p90_00": 1.433,
+     "p99_00": 1.501,
+     "p99_90": 1.616,
+     "p99_99": 2.036
+    }
+   },
+   "gets": {
+    "opsec": 219112.016,
+    "mbsec": 114.135,
+    "latency": {
+     "min": 0.08,
+     "max": 2.309,
+     "avg": 1.168,
+     "p50_00": 1.164,
+     "p90_00": 1.31,
+     "p99_00": 1.379,
+     "p99_90": 1.479,
+     "p99_99": 1.841
+    }
+   },
+   "perf": {
+    "cpu_utilized": 0.996,
+    "cycles": 641192388130,
+    "instructions": 959699521054,
+    "branches": 0,
+    "branch_misses": 1039924038,
+    "page_faults": 21952
+   }
+  }
+ }
+}

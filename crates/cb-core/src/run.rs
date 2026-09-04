@@ -22,6 +22,7 @@
 use serde::{Deserialize, Serialize};
 
 use crate::num::{CpuCounter, EventCounter, Fixed3};
+use crate::spread::Spread;
 
 /// One measurement, or one aggregate over 31 of them.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -34,6 +35,13 @@ pub struct Run {
     pub gets: Op,
     /// The counters, empty for a run with no perf attached.
     pub perf: Perf,
+
+    /// How noisy the cell was.
+    /// Ours, not the original's.
+    ///
+    /// Present only in a chosen file, and only in corrected mode, because it describes a cell rather than a run.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub spread: Option<Spread>,
 }
 
 impl Run {
@@ -55,13 +63,18 @@ impl Run {
     pub fn emit(&self) -> String {
         let part =
             |name: &str, value: &dyn erased::Compact| format!("  \"{name}\": {}", value.compact());
-        format!(
-            "{{\n{},\n{},\n{},\n{}\n}}\n",
+        let mut parts = vec![
             part("info", &self.info),
             part("sets", &self.sets),
             part("gets", &self.gets),
             part("perf", &self.perf),
-        )
+        ];
+        // Ours, so it goes last, where a key added later would land.
+        // A file without it is the original's file exactly, which is what the parity test needs.
+        if let Some(spread) = &self.spread {
+            parts.push(part("spread", spread));
+        }
+        format!("{{\n{}\n}}\n", parts.join(",\n"))
     }
 }
 

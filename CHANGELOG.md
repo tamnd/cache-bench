@@ -4,7 +4,21 @@ What each release costs you, in the order the releases happened. New entries go 
 
 ## Unreleased
 
-Nothing yet.
+### Added
+
+- The corrected reduction. Thirty one runs of one cell go in, and a median, a best, a worst and an average come out. Each series is sorted by its own key, ten percent comes off each end, and the median is the middle of what is left. All four aggregates see all 31 runs.
+- The `spread` object in a chosen file. Interquartile range, standard deviation and coefficient of variation for both throughput series and for cycles, over every run including the ones the trim drops. Nothing plots it. It is the only way to tell a cell that was measured on a quiet machine from one that was not, once both have been reduced to a single number.
+- Two golden cells in `testdata/golden/cells`, which are the original's own committed runs for dragonfly at one thread and pipeline depth 1, one cell with perf attached and one without, together with the four files the original reduced each of them to. Every statistics test here is checked against what the original actually produced rather than against a distribution somebody made up.
+- `divergences.md` gains the evidence for D1 to D4. Each defect now carries the line of Go that causes it and the published number it changes, all of it re-derivable from the two golden cells.
+
+### Changed
+
+- A counter the hardware cannot measure stays unmeasured through the reduction rather than averaging to zero. `<not supported>` was surviving the median, best and worst, which clone a run whole, and being flattened to a 0 by the average. The chart layer needs that distinction to leave the cell out instead of drawing a bar saying the engine took no branches, which is D11.
+
+### Notes
+
+- The original's published median SET throughput for the perf cell is the 8th slowest run of 31. That is the sort whose comparator reads the perf slice while it permutes the sets slice, and it is not a small error. The cell measured without perf escapes it, because every cycles count there is absent and the comparator is false for every pair, so the two halves of the same chart set are not computed the same way.
+- Reproducing the mutated run count alone regenerates all four of the original's published GET numbers and all four of its cycles numbers exactly, for both cells. SET is the only series that also needs Go's sort to be ported.
 
 ## 0.1.0 - 2026-09-04
 
