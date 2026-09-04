@@ -4,7 +4,12 @@ What each release costs you, in the order the releases happened. New entries go 
 
 ## Unreleased
 
-Nothing yet.
+### Added
+
+- `config.jsonc`, the same file the original reads, with the same keys and the same `${arch}` placeholder, so a config that works there works here and the other way round. Comments and trailing commas are allowed and nothing else is, because the original hands everything past those to a strict JSON parser and a file that only works on one side defeats the point of sharing it.
+- `profiles.toml`, which is the machine shape the original hardcodes. Core pinning, the thread sweep, the memory limit and the client count are constants in the original's driver script, and none of the machines this port runs on is that box.
+- Profile validation, which refuses the three mistakes that produce numbers rather than errors: a thread sweep wider than the cores it is pinned to, a load generator sharing cores with the server under test, and a key space too large for the memory limit. All three make a chart that looks fine and measures something else.
+- `hosts.toml`, absent by default, absent meaning run here. Only `hosts.example.toml` is committed, with ssh config names rather than addresses, and a test that fails if anything in it starts to look like a real machine.
 
 ## 0.0.2 - 2026-09-04
 

@@ -5,14 +5,21 @@
 
 pub mod cache;
 pub mod compat;
+pub mod config;
+pub mod cpuset;
+pub mod hosts;
 pub mod name;
 pub mod num;
 pub mod output;
+pub mod profile;
 pub mod run;
 pub mod size;
 
 pub use cache::{CacheKind, Endpoint, Launch, Protocol, UnknownCache};
 pub use compat::{BadCompat, Compat};
+pub use config::{Arch, BadConfig, Config};
+pub use cpuset::{BadCpuSet, CpuSet};
+pub use hosts::{BadHosts, Host, Hosts};
 pub use name::{BadName, Chosen, RunName, Slot};
 pub use num::{Counter, CpuCounter, EventCounter, Fixed0, Fixed3};
 pub use output::{Entry, Output};
