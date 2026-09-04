@@ -6,7 +6,7 @@ This is a Rust port of [tidwall/cache-benchmarks](https://github.com/tidwall/cac
 
 ## Status
 
-It measures now. `doctor`, `run`, `choose`, `combine`, `chart`, `docs` and `verify` all work: `run` starts a server, drives memtier against it, counts cycles over it and writes one result file, and everything downstream of that file has been working since the chart milestone. What is missing is `sweep`, which is the loop that runs the other ten thousand cells, and the hardware gate that says all seven servers come up and go away again on a real Linux box. The [milestones](https://github.com/tamnd/cache-bench/milestones) say what each stage has to land and what it is gated on.
+Every stage is written. `doctor`, `run`, `sweep`, `choose`, `combine`, `chart`, `docs` and `verify` all work: `run` measures one cell and writes one file, `sweep` is the loop that measures the other ten thousand, and everything downstream of those files has been working since the chart milestone. What is missing is the record a sweep keeps of itself, which is the log of what ran and the file of what failed, and the hardware gate that says all seven servers come up and go away again on a real Linux box. The [milestones](https://github.com/tamnd/cache-bench/milestones) say what each stage has to land and what it is gated on.
 
 No results have been published. When they are, they will come with the raw `output.json` next to them, so anyone can redraw every chart without trusting us.
 
@@ -63,7 +63,7 @@ cache-bench verify  --against /path/to/cache-benchmarks/results
 
 `doctor` refuses rather than warns. A machine with fewer cores than the profile names, a profile that sweeps cycles on a host with no counters, a working set that would not fit in memory, a load average that says somebody else is using the box: each of those is a sweep that produces numbers rather than an error, so each of them stops here instead. `--write` records what the machine is in `host.json` next to the results, and `--deep` starts each of the seven servers in turn and stops it again, which is the check no file can make.
 
-`sweep` takes days. It is restartable, it skips runs whose result file already exists, and it prints an ETA once it has enough completed runs to derive one.
+`sweep` takes days. It measures in the original's order, engine then threads then pipeline depth then counters then run number, so that all the runs of one cell happen together in time and a noisy hour shows up as one bad cell rather than as a tilt across the whole matrix. It is restartable, and the restart rule is file existence and nothing else: a cell whose file is there is skipped, a file that will not parse is measured again rather than trusted, and one results directory takes one sweep at a time. `--dry-run` prints the cells it would measure and touches nothing.
 
 `verify` is the claim this port makes about itself. With no arguments it checks the golden files committed here and runs anywhere in under a second. Pointed at a checkout of the original it reads all 20160 of its committed run files, reproduces all 2304 of its chosen files and its whole published `output.json` byte for byte, rebuilds all 154 of its charts down to the last bar, and then prints how far the corrected statistics sit from the original's.
 

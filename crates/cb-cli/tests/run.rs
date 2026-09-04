@@ -79,6 +79,22 @@ maxmemory = "64mb"
 pipelines = [1]
 runs = 1
 perf = ["no"]
+
+[profiles.sweepy]
+description = "The same two cores, with four cells in it, for the test that sweeps and then restarts."
+cores = 2
+cache_pin = "0"
+bench_pin = "1"
+threads = [1]
+bench_threads = 1
+connections_per_thread = 1
+operations = 10
+size_range = "1-1024"
+key_maximum = 100
+maxmemory = "64mb"
+pipelines = [1, 10]
+runs = 2
+perf = ["no"]
 "#;
 
     /// Whether there is a python3 to run the fakes with.
@@ -139,6 +155,23 @@ perf = ["no"]
     ) -> std::process::Output {
         Command::new(env!("CARGO_BIN_EXE_cache-bench"))
             .args(["run", "redis", "--threads", "1", "--profile", "fake"])
+            .arg("--config")
+            .arg(config)
+            .arg("--dir")
+            .arg(results)
+            .arg("--socket")
+            .arg(dir.join("cb.sock"))
+            .arg("--profiles")
+            .arg(dir.join("profiles.toml"))
+            .args(extra)
+            .output()
+            .expect("runs cache-bench")
+    }
+
+    /// `cache-bench sweep` over the four cell profile, against the same fakes.
+    fn sweep(dir: &Path, config: &Path, results: &Path, extra: &[&str]) -> std::process::Output {
+        Command::new(env!("CARGO_BIN_EXE_cache-bench"))
+            .args(["sweep", "--profile", "sweepy", "--cache", "redis"])
             .arg("--config")
             .arg(config)
             .arg("--dir")
@@ -261,6 +294,85 @@ perf = ["no"]
 
         let _ = stray.kill();
         let _ = stray.wait();
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    // The gate this milestone is measured against, in miniature. A sweep completes, a second one repeats nothing, and a file that was left half written is measured again instead of being counted as a run.
+    #[test]
+    fn a_sweep_measures_every_cell_once_and_a_restart_repeats_none_of_them() {
+        if !have_python() {
+            eprintln!("skipped: this machine has no python3 to run the fake server with");
+            return;
+        }
+        let (dir, config, results) = scaffold("sweep");
+        let out = sweep(&dir, &config, &results, &[]);
+        let said = String::from_utf8_lossy(&out.stdout).into_owned()
+            + &String::from_utf8_lossy(&out.stderr);
+        assert!(out.status.success(), "{said}");
+
+        // Two pipeline depths and two runs each, in the order the original measures them.
+        let names = [
+            "bench_redis-threads_1-pipeline_1-perf_no-run_1.json",
+            "bench_redis-threads_1-pipeline_1-perf_no-run_2.json",
+            "bench_redis-threads_1-pipeline_10-perf_no-run_1.json",
+            "bench_redis-threads_1-pipeline_10-perf_no-run_2.json",
+        ];
+        for name in names {
+            assert!(
+                results.join("runs").join(name).exists(),
+                "{name} is missing"
+            );
+        }
+        let at = |name: &str| said.find(name).expect("every cell was named as it was run");
+        assert!(at(names[0]) < at(names[1]), "{said}");
+        assert!(at(names[1]) < at(names[2]), "{said}");
+        assert!(at(names[2]) < at(names[3]), "{said}");
+        assert!(!results.join(".lock").exists(), "the lock was not released");
+
+        // Started again, it measures nothing, because everything it was going to measure is on disk.
+        let again = sweep(&dir, &config, &results, &[]);
+        assert!(again.status.success());
+        assert!(
+            String::from_utf8_lossy(&again.stdout).contains("0 measured here, 4 already on disk"),
+            "{}",
+            String::from_utf8_lossy(&again.stdout)
+        );
+
+        // A file of the right name holding half a run is what a machine that lost power partway through a write leaves behind.
+        let cut = results.join("runs").join(names[2]);
+        let whole = std::fs::read_to_string(&cut).expect("reads the run file");
+        std::fs::write(&cut, &whole[..whole.len() / 2]).expect("truncates it");
+        let third = sweep(&dir, &config, &results, &[]);
+        let told = String::from_utf8_lossy(&third.stdout).into_owned();
+        assert!(third.status.success(), "{told}");
+        assert!(told.contains("being measured again"), "{told}");
+        assert!(
+            told.contains("1 measured here, 3 already on disk"),
+            "{told}"
+        );
+        assert_eq!(
+            std::fs::read_to_string(&cut).expect("reads it back"),
+            whole,
+            "the truncated file was not measured again"
+        );
+
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    // A dry run says what it would do and touches nothing, which is how somebody checks the shape of a sweep before giving up a machine for a week.
+    #[test]
+    fn a_dry_run_names_the_cells_and_measures_none_of_them() {
+        let (dir, config, results) = scaffold("dry");
+        let out = sweep(&dir, &config, &results, &["--dry-run"]);
+        let said = String::from_utf8_lossy(&out.stdout).into_owned();
+        assert!(out.status.success(), "{said}");
+        assert!(said.contains("4 cells over redis"), "{said}");
+        assert!(
+            said.contains("bench_redis-threads_1-pipeline_10-perf_no-run_2.json"),
+            "{said}"
+        );
+        assert!(!results.join("runs").exists(), "a dry run wrote results");
+
         let _ = std::fs::remove_dir_all(&dir);
     }
 }
