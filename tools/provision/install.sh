@@ -109,9 +109,15 @@ if wanted deps; then
     say "build dependencies"
     # A machine that has been used for anything else has third party apt sources on it, and one of those being unreachable or unsigned fails the whole update even though every package below comes from the distribution. What matters is whether the install works, so the update is allowed to complain and the install is the thing that has to succeed.
     sudo apt-get update || echo "some apt sources did not refresh, carrying on with what is cached"
+    # What every build below needs, and the run fails here if any of it is missing rather than in the middle of a compile an hour later.
     sudo apt-get install -y --no-install-recommends \
         autoconf automake build-essential ca-certificates cmake curl git libevent-dev \
-        libpcre3-dev libssl-dev libtool linux-tools-common pkg-config python3 zlib1g-dev
+        libssl-dev libtool pkg-config python3 zlib1g-dev
+    # Packages that are named differently, or gone, depending on how old or new the release is. Ubuntu 24.04 has libpcre3-dev and 26.04 has only libpcre2-dev, and linux-tools-common is not on a WSL kernel at all. One name that has no candidate would fail the whole line, so these go one at a time and a miss is reported rather than fatal.
+    for extra in libpcre2-dev libpcre3-dev linux-tools-common; do
+        sudo apt-get install -y --no-install-recommends "$extra" >/dev/null 2>&1 \
+            || echo "no $extra on this release, which is only a problem if a build below asks for it"
+    done
     # perf comes from a package named after the running kernel, and a virtual machine can be running a kernel its distribution has no package for. That is not fatal here: doctor decides whether this box can measure cycles, and a profile with no perf in it does not need it.
     sudo apt-get install -y "linux-tools-$(uname -r)" || echo "no perf package for $(uname -r), so this box measures no cycles"
 fi
