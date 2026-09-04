@@ -14,3 +14,8 @@ publish.workspace = true
 
 [lints]
 workspace = true
+
+[dependencies]
+cb-cache.workspace = true
+cb-core.workspace = true
+thiserror = "2.0.20"
