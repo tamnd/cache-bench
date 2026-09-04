@@ -4,6 +4,13 @@ What each release costs you, in the order the releases happened. New entries go 
 
 ## Unreleased
 
+### Added
+
+- The machine half of `cache-bench doctor`. It reads what the kernel publishes about the box it is on, the CPU, the memory, the governor, the mitigations, the load average and whether there are counters to count with, and then measures the profile that is about to be swept against it. A profile that names more cores than the machine has, a profile that sweeps the cycles half of the matrix on a host with no PMU, a working set that would not fit in memory, or a load average that says somebody else is using the machine: each of those is refused rather than warned about, because a warning printed at the start of a job that runs for eight days is read by nobody and each of them produces numbers rather than an error.
+- `doctor --write`, which records what the machine is in `host.json` next to the results. A fact the machine does not publish is refused rather than written as unknown, since this file is the whole of what a published results directory says about where its numbers came from. Nothing in it names the machine, and if a `hosts.toml` is there its names are checked against the file before it is written.
+- `doctor --deep`, which starts each of the seven servers in turn, waits for it to answer, stops it and checks the group is gone. A binary of the wrong architecture, a server built without unix socket support, a Garnet whose runtime is not installed: all of them read as a correct config and all of them fail on the first run of a sweep instead of here.
+- Every file the kernel publishes is parsed by a function that takes a string, with tests over the text an ARM box, an x86 box and a container each produce. A parser that has only ever run on the machine it was written on is a parser nobody has checked.
+
 ## 0.5.0 - 2026-09-04
 
 The runner.

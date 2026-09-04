@@ -8,6 +8,7 @@ mod choose;
 mod combine;
 mod docs;
 mod doctor;
+mod host;
 mod lock;
 mod results;
 mod run;
