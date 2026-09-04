@@ -156,6 +156,7 @@ dependencies = [
 name = "cb-memtier"
 version = "0.4.0"
 dependencies = [
+ "cb-cache",
  "cb-core",
  "serde",
  "serde_json",
