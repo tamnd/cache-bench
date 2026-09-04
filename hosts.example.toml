@@ -1,12 +1,10 @@
 # Where sweeps run. Copy to hosts.toml, which is gitignored.
 #
-# Real host names and addresses do not belong in a public repository, so this
-# file has placeholders and hosts.toml never gets committed. The harness reads
-# hosts.toml if it exists and otherwise assumes it is running locally, which is
-# the normal case: you ssh to the box, start tmux, and run the sweep there.
+# Real host names and addresses do not belong in a public repository, so this file has placeholders and hosts.toml never gets committed.
+# The harness reads hosts.toml if it exists and otherwise assumes it is running locally, which is the normal case: you ssh to the box, start tmux, and run the sweep there.
 #
-# ssh entries are names from your ~/.ssh/config, not addresses. Keeping the
-# address in ssh config rather than here means one less place for it to leak.
+# ssh entries are names from your ~/.ssh/config, not addresses.
+# Keeping the address in ssh config rather than here means one less place for it to leak.
 
 [hosts.local]
 profile = "epyc8"
@@ -15,8 +13,8 @@ profile = "epyc8"
 [hosts.big]
 ssh = "some-ssh-config-name"
 profile = "wsl32"
-# Where the cache servers and memtier_benchmark are built on that host. Relative
-# paths in config.jsonc resolve against this.
+# Where the cache servers and memtier_benchmark are built on that host.
+# Relative paths in config.jsonc resolve against this.
 workdir = "/home/user/bench"
 
 [hosts.perf]

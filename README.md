@@ -6,7 +6,7 @@ This is a Rust port of [tidwall/cache-benchmarks](https://github.com/tidwall/cac
 
 ## Status
 
-Skeleton. The workspace, the toolchain and the CI are here. Nothing measures anything yet. The [milestones](https://github.com/tamnd/cache-bench/milestones) say what each stage has to land and what it is gated on.
+Early. The workspace, the toolchain and the CI are here, and so is the on disk model, which reads and writes the original's result files byte for byte in both directions. Nothing measures anything yet. The [milestones](https://github.com/tamnd/cache-bench/milestones) say what each stage has to land and what it is gated on.
 
 No results have been published. When they are, they will come with the raw `output.json` next to them, so anyone can redraw every chart without trusting us.
 

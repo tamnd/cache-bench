@@ -1,9 +1,8 @@
 version: 2
 
 updates:
-  # Grouped, because eleven separate pull requests that each bump one patch
-  # version is not review, it is clicking. One pull request a week that says
-  # what moved is.
+  # Grouped, because eleven separate pull requests that each bump one patch version is not review, it is clicking.
+  # One pull request a week that says what moved is.
   - package-ecosystem: cargo
     directory: /
     schedule:
@@ -15,11 +14,10 @@ updates:
         update-types: [patch]
       minor:
         update-types: [minor]
-    # The chart stack is deliberately not grouped and not batched. A patch bump
-    # to plotters or image changes anti aliasing, every PNG hash in the manifest
-    # moves, and the determinism job goes red. That is the job working. The fix
-    # is to look at the visual diff and update the manifest in its own commit,
-    # never to wave the bump through with the rest of the week's noise.
+    # The chart stack is deliberately not grouped and not batched.
+    # A patch bump to plotters or image changes anti aliasing, every PNG hash in the manifest moves, and the determinism job goes red.
+    # That is the job working.
+    # The fix is to look at the visual diff and update the manifest in its own commit, never to wave the bump through with the rest of the week's noise.
     ignore:
       - dependency-name: plotters
         update-types: [version-update:semver-patch]
@@ -37,11 +35,8 @@ updates:
     groups:
       actions:
         patterns: ["*"]
-    # dtolnay/rust-toolchain tags itself with the Rust version it installs, so
-    # the msrv job pins it to the compiler floor rather than to a version of the
-    # action. Dependabot cannot know that and bumps it to the highest tag, which
-    # produced a job asking rustup for Rust 1.120.0 and a 404. The floor moves
-    # when we decide it moves, and it moves in rust-toolchain.toml and in
-    # Cargo.toml at the same time.
+    # dtolnay/rust-toolchain tags itself with the Rust version it installs, so the msrv job pins it to the compiler floor rather than to a version of the action.
+    # Dependabot cannot know that and bumps it to the highest tag, which produced a job asking rustup for Rust 1.120.0 and a 404.
+    # The floor moves when we decide it moves, and it moves in rust-toolchain.toml and in Cargo.toml at the same time.
     ignore:
       - dependency-name: dtolnay/rust-toolchain

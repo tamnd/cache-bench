@@ -7,9 +7,8 @@ yanked = "deny"
 
 [licenses]
 version = 2
-# Permissive only. The harness ships as a binary with fonts embedded in it, and
-# a copyleft dependency would put terms on that binary that this project is not
-# in a position to offer.
+# Permissive only.
+# The harness ships as a binary with fonts embedded in it, and a copyleft dependency would put terms on that binary that this project is not in a position to offer.
 allow = [
     "MIT",
     "Apache-2.0",
@@ -19,10 +18,8 @@ allow = [
     "ISC",
     "Unicode-3.0",
     "Zlib",
-    # Jost is SIL Open Font License and DejaVu Sans is under the Bitstream Vera
-    # licence. Neither is a crate, so neither is in this graph, but both are in
-    # the binary and both are recorded in assets/fonts/README.md with their
-    # licence text next to them.
+    # Jost is SIL Open Font License and DejaVu Sans is under the Bitstream Vera licence.
+    # Neither is a crate, so neither is in this graph, but both are in the binary and both are recorded in assets/fonts/README.md with their licence text next to them.
 ]
 confidence-threshold = 0.93
 
@@ -31,18 +28,17 @@ multiple-versions = "warn"
 wildcards = "deny"
 
 deny = [
-    # No async runtime. The harness starts a server, waits for it, starts a load
-    # generator, waits for that, and reads two files. There is nothing to
-    # overlap, and an executor in the tree is one more thing between the code
-    # and a wall clock number that has to be believable.
+    # No async runtime.
+    # The harness starts a server, waits for it, starts a load generator, waits for that, and reads two files.
+    # There is nothing to overlap, and an executor in the tree is one more thing between the code and a wall clock number that has to be believable.
     { name = "tokio", reason = "the harness is blocking on purpose, see spec section 03" },
     { name = "async-std", reason = "the harness is blocking on purpose, see spec section 03" },
     { name = "smol", reason = "the harness is blocking on purpose, see spec section 03" },
-    # Charts are drawn, not shelled out to. The whole reason this is a port is
-    # that the original's chart layer is a Python script that cannot be tested.
+    # Charts are drawn, not shelled out to.
+    # The whole reason this is a port is that the original's chart layer is a Python script that cannot be tested.
     { name = "pyo3", reason = "no Python in the chart path, see spec section 07" },
-    # Timing is a measured quantity here. Anything that reaches for the network
-    # during a run is a source of variance nobody asked for.
+    # Timing is a measured quantity here.
+    # Anything that reaches for the network during a run is a source of variance nobody asked for.
     { name = "reqwest", reason = "nothing in a run talks to the network" },
     { name = "curl", reason = "nothing in a run talks to the network" },
 ]

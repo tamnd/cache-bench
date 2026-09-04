@@ -1,18 +1,15 @@
 name: release
 
-# A tag is what a release is cut from, and nothing here produces one from an
-# untagged tree.
+# A tag is what a release is cut from, and nothing here produces one from an untagged tree.
 #
-# The manual trigger is the recovery path. A tag push runs the copy of this file
-# that is in the tag, so a fix landed on main after a tag was cut does not apply
-# to that tag and the tag cannot be moved to pick it up. Dispatching this from
-# main with tag: set is how a half finished release gets finished: main's
-# workflow, the tag's code. The ref: on every checkout below is the half that
-# makes it the tag's code.
+# The manual trigger is the recovery path.
+# A tag push runs the copy of this file that is in the tag, so a fix landed on main after a tag was cut does not apply to that tag and the tag cannot be moved to pick it up.
+# Dispatching this from main with a tag input is how a half finished release gets finished, using main's workflow against the tag's code.
+# The ref on every checkout below is the half that makes it the tag's code.
 #
-# Nothing is published to crates.io. This is a harness, not a library, and the
-# only thing anyone wants from a release is a binary that runs on the box the
-# sweep is going to happen on.
+# Nothing is published to crates.io.
+# This is a harness, not a library, and the only thing anyone wants from a release is a binary that runs on the box the sweep is going to happen on.
+
 on:
   push:
     tags: ["v*"]
@@ -31,16 +28,14 @@ permissions:
   contents: read
 
 # Two tags pushed close together would otherwise race through the same release.
-# Not cancelled, because cancelling halfway through leaves a release with some
-# of its binaries attached, which is worse than waiting.
+# Not cancelled, because cancelling halfway through leaves a release with some of its binaries attached, which is worse than waiting.
 concurrency:
   group: release-${{ inputs.tag || github.ref }}
   cancel-in-progress: false
 
 jobs:
-  # The tag, the version in Cargo.toml and the changelog have to agree before
-  # anything else runs. All three drift, and finding out after the release is
-  # published means the fix is another release.
+  # The tag, the version in Cargo.toml and the changelog have to agree before anything else runs.
+  # All three drift, and finding out after the release is published means the fix is another release.
   check:
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -65,8 +60,7 @@ jobs:
             exit 1
           fi
 
-  # The same gates the branch runs, against the tag rather than against a branch
-  # tip that has since moved.
+  # The same gates the branch runs, against the tag rather than against a branch tip that has since moved.
   verify:
     needs: check
     strategy:
@@ -90,13 +84,9 @@ jobs:
       - run: cargo test --workspace --locked
       - run: cargo test --workspace --locked --release
 
-  # One binary per platform anyone actually runs a sweep on. The linux-arm64
-  # entry is a native runner rather than a cross build, because the reference
-  # results this project exists to reproduce were measured on ARM64 and a cross
-  # built binary is the wrong thing to hand somebody who rents a box to check
-  # them. macOS is here for the chart and statistics half, which needs no cache
-  # server, and Windows is here because the load generator side of the work gets
-  # driven from one.
+  # One binary per platform anyone actually runs a sweep on.
+  # The linux-arm64 entry is a native runner rather than a cross build, because the reference results this project exists to reproduce were measured on ARM64 and a cross built binary is the wrong thing to hand somebody who rents a box to check them.
+  # macOS is here for the chart and statistics half, which needs no cache server, and Windows is here because the load generator side of the work gets driven from one.
   build:
     needs: [check, verify]
     strategy:
@@ -137,8 +127,7 @@ jobs:
           fi
           cp README.md LICENSE-APACHE profiles.toml config.jsonc "dist/$name/"
           tar -C dist -czf "dist/$name.tar.gz" "$name"
-          # Written next to the archive rather than only in the release notes, so
-          # a copy that was fetched once and passed around can still be checked.
+          # Written next to the archive rather than only in the release notes, so a copy that was fetched once and passed around can still be checked.
           (cd dist && shasum -a 256 "$name.tar.gz" > "$name.tar.gz.sha256")
       - uses: actions/upload-artifact@v7.0.1
         with:
@@ -161,8 +150,7 @@ jobs:
           path: dist
           merge-multiple: true
       # The release body is the changelog section, not a generated commit list.
-      # A commit list tells you what was typed, the changelog tells you what it
-      # costs you, which is the only one of the two worth reading.
+      # A commit list tells you what was typed and the changelog tells you what it costs you, which is the only one of the two worth reading.
       - name: Cut the changelog section
         run: |
           awk -v v="${{ needs.check.outputs.version }}" '
