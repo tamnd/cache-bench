@@ -4,6 +4,14 @@ What each release costs you, in the order the releases happened. New entries go 
 
 ## Unreleased
 
+Nothing yet.
+
+## 0.0.2 - 2026-09-04
+
+The combined file and the seven command lines. Still nothing measures anything.
+
+What this release is for is that the format half of the port is now proved rather than asserted. The original's entire published `output.json` reads in and writes back out byte for byte, all 2304 entries of it, in both directions. That was the cheapest available proof that the port is faithful and it is now spent, which means the statistics work in M2 starts from a known good floor rather than from a hope.
+
 ### Added
 
 - `output.json`, the combined file the chart layer reads, matching the original's layout field for field and number for number. Verified against the original's whole published file, all 2304 entries, byte for byte in both directions.
@@ -17,7 +25,13 @@ What each release costs you, in the order the releases happened. New entries go 
 
 ### Fixed
 
-- Numeric perf counters are written with the decimal places the original writes them with. How many places a counter gets is a property of which counter it is rather than of its value, so `cpu_utilized` goes out with three and every event count with none. Before this, a CPU figure that happened to land on 0.99 was written as `0.99` where the original writes `0.990`.
+- Numeric perf counters are written with the decimal places the original writes them with. How many places a counter gets is a property of which counter it is rather than of its value, so `cpu_utilized` goes out with three and every event count with none. Before this, a CPU figure that happened to land on 0.99 was written as `0.99` where the original writes `0.990`. The full file test is what caught it, since three entries were not enough to reach a value that lands on 0.99.
+
+### Notes
+
+The full file test is ignored by default, because the file it reads is 1.7 MB of measurement data and raw data does not go in this repository. Run it with `CB_PARITY_OUTPUT=/path/to/cache-benchmarks/results/output.json cargo test -p cb-core -- --ignored`. `cache-bench verify` in M8 wires it up so it is not something you have to remember.
+
+The other half of the parity claim, a file we write being accepted by the original's `graph`, needs a Go toolchain and is not done yet. It lands with `verify` as well.
 
 ## 0.0.1 - 2026-09-04
 

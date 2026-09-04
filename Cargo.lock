@@ -4,15 +4,15 @@ version = 4
 
 [[package]]
 name = "cb-cache"
-version = "0.0.1"
+version = "0.0.2"
 
 [[package]]
 name = "cb-chart"
-version = "0.0.1"
+version = "0.0.2"
 
 [[package]]
 name = "cb-cli"
-version = "0.0.1"
+version = "0.0.2"
 dependencies = [
  "cb-cache",
  "cb-chart",
@@ -25,7 +25,7 @@ dependencies = [
 
 [[package]]
 name = "cb-core"
-version = "0.0.1"
+version = "0.0.2"
 dependencies = [
  "serde",
  "serde_json",
@@ -33,19 +33,19 @@ dependencies = [
 
 [[package]]
 name = "cb-docs"
-version = "0.0.1"
+version = "0.0.2"
 
 [[package]]
 name = "cb-memtier"
-version = "0.0.1"
+version = "0.0.2"
 
 [[package]]
 name = "cb-perf"
-version = "0.0.1"
+version = "0.0.2"
 
 [[package]]
 name = "cb-stats"
-version = "0.0.1"
+version = "0.0.2"
 
 [[package]]
 name = "itoa"
@@ -139,7 +139,7 @@ checksum = "e6e4313cd5fcd3dad5cafa179702e2b244f760991f45397d14d4ebf38247da75"
 
 [[package]]
 name = "xtask"
-version = "0.0.1"
+version = "0.0.2"
 
 [[package]]
 name = "zmij"
