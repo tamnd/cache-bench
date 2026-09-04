@@ -311,6 +311,14 @@ pub enum BadProcess {
     Unsupported,
 }
 
+/// Whether this process is running as root.
+///
+/// One server cares. memcached refuses to start as root unless it is told that root was meant, and a sweep is often run under sudo because the perf settings want it, so the answer has to be asked for rather than assumed. Everywhere that is not a Unix the answer is no, because there is no euid to ask about.
+#[must_use]
+pub fn as_root() -> bool {
+    platform::as_root()
+}
+
 #[cfg(unix)]
 mod platform {
     //! The Unix half. Process groups everywhere, pinning on Linux only.
@@ -342,6 +350,17 @@ mod platform {
             });
         }
         Ok(())
+    }
+
+    /// Whether this process is root.
+    pub(super) fn as_root() -> bool {
+        // SAFETY: geteuid takes no arguments, returns a uid, touches no memory of ours and cannot fail.
+        #[allow(
+            unsafe_code,
+            reason = "there is no safe way to ask, and memcached refuses to start as root unless it is told that root was meant"
+        )]
+        let uid = unsafe { libc::geteuid() };
+        uid == 0
     }
 
     /// Ask the group to stop.
@@ -487,6 +506,10 @@ mod platform {
 
     pub(super) fn prepare(_command: &mut Command, _pin: Option<&CpuSet>) -> Result<(), BadProcess> {
         Err(BadProcess::Unsupported)
+    }
+
+    pub(super) const fn as_root() -> bool {
+        false
     }
 
     pub(super) fn term(_pgid: u32) -> Result<(), BadProcess> {

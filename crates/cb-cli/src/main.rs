@@ -8,7 +8,9 @@ mod choose;
 mod combine;
 mod docs;
 mod doctor;
+mod lock;
 mod results;
+mod run;
 mod verify;
 
 use std::process::ExitCode;
@@ -29,6 +31,8 @@ struct Cli {
 enum Command {
     /// Check everything a sweep needs before starting one.
     Doctor(doctor::Args),
+    /// Measure one cell once and write one run file.
+    Run(run::Args),
     /// Reduce each cell's runs to a median, a best, a worst and an average.
     Choose(choose::Args),
     /// Gather every chosen file into the one file the charts read.
@@ -45,6 +49,7 @@ fn main() -> ExitCode {
     let cli = Cli::parse();
     let result = match &cli.command {
         Command::Doctor(args) => doctor::run(args),
+        Command::Run(args) => run::run(args),
         Command::Choose(args) => choose::run(args),
         Command::Combine(args) => combine::run(args),
         Command::Chart(args) => chart::run(args),

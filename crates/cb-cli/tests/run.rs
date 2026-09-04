@@ -1,0 +1,245 @@
+//! One whole run, against a server and a load generator that are not real.
+//!
+//! Every piece of the runner has unit tests around it already. What those cannot check is the sequence: that the server is started before it is waited for, that the socket in the argv is the socket the readiness probe connects to, that the file memtier is told to write is the file that gets read back, and that what comes out the far end is a result file of the shape the rest of the harness reads.
+//!
+//! So this runs the real binary against a fake server that speaks just enough RESP to answer a `PING`, and a fake memtier that writes the JSON a real one writes. Both are Python, because a shell script cannot bind a unix socket and the alternative is a second Rust binary built only for this.
+//!
+//! It is not a benchmark and it measures nothing. It finishes in about a second, and if it breaks, the wiring is wrong.
+
+#![allow(clippy::unwrap_used, clippy::expect_used)]
+
+#[cfg(unix)]
+mod unix {
+    use std::path::{Path, PathBuf};
+    use std::process::Command;
+
+    /// A fake cache server. Binds whatever `--unixsocket` it was given and answers every line with `+PONG`.
+    const SERVER: &str = r#"
+import socket, sys, threading
+sock = None
+for i, a in enumerate(sys.argv):
+    if a == "--unixsocket" and i + 1 < len(sys.argv):
+        sock = sys.argv[i + 1]
+if sock is None:
+    print("fake-server 9.9.9", flush=True)
+    sys.exit(0)
+print("fake-server 9.9.9 listening", flush=True)
+s = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+s.bind(sock)
+s.listen(64)
+def serve(c):
+    with c:
+        while True:
+            d = c.recv(4096)
+            if not d:
+                return
+            c.sendall(b"+PONG\r\n" * d.count(b"\n"))
+while True:
+    c, _ = s.accept()
+    threading.Thread(target=serve, args=(c,), daemon=True).start()
+"#;
+
+    /// A fake memtier. Reads its own argv for where to write and how many operations it was asked for, and reports exactly that many.
+    ///
+    /// `-n` is per connection and `-c` is per thread, so the total a real memtier reports is all three multiplied together. Getting that wrong here is what this fake is for: the runner checks the count it gets back against the count it asked for, and the two have to be the same kind of number.
+    const MEMTIER: &str = r#"
+import json, sys
+out = None
+n = c = t = 0
+for i, a in enumerate(sys.argv):
+    if a == "--json-out-file": out = sys.argv[i + 1]
+    if a == "-n": n = int(sys.argv[i + 1])
+    if a == "-c": c = int(sys.argv[i + 1])
+    if a == "-t": t = int(sys.argv[i + 1])
+stats = {"Ops/sec": 1234.5, "KB/sec": 2048.0, "Count": n * c * t, "Latency": 0.5,
+         "Min Latency": 0.1, "Max Latency": 9.9, "Average Latency": 0.5,
+         "Percentile Latencies": {"p50.00": 0.4, "p90.00": 0.8, "p99.00": 1.5,
+                                  "p99.90": 3.0, "p99.99": 7.0}}
+which = "Gets" if "0:1" in sys.argv else "Sets"
+json.dump({"ALL STATS": {which: stats}}, open(out, "w"))
+print("fake memtier ran the", which, "pass")
+"#;
+
+    /// Whether there is a python3 to run the fakes with.
+    ///
+    /// Every machine this project is developed or tested on has one. A machine that does not gets told the test was skipped rather than told it failed, because what would have failed is the test's own scaffolding.
+    fn have_python() -> bool {
+        Command::new("python3")
+            .arg("--version")
+            .output()
+            .is_ok_and(|out| out.status.success())
+    }
+
+    /// A working directory of this test's own, emptied first.
+    fn workspace(tag: &str) -> PathBuf {
+        let dir =
+            std::env::temp_dir().join(format!("cache-bench-run-{tag}-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&dir);
+        std::fs::create_dir_all(&dir).expect("makes the working directory");
+        dir
+    }
+
+    /// Write one of the fakes and make it executable.
+    fn fake(dir: &Path, name: &str, body: &str) -> PathBuf {
+        use std::os::unix::fs::PermissionsExt as _;
+
+        let path = dir.join(name);
+        std::fs::write(&path, format!("#!/usr/bin/env python3{body}")).expect("writes the fake");
+        std::fs::set_permissions(&path, std::fs::Permissions::from_mode(0o755)).expect("chmod");
+        path
+    }
+
+    /// The whole scaffolding: two fakes, a config that points at them, and somewhere to put the results.
+    fn scaffold(tag: &str) -> (PathBuf, PathBuf, PathBuf) {
+        let dir = workspace(tag);
+        let server = fake(&dir, "fake-server", SERVER);
+        let memtier = fake(&dir, "fake-memtier", MEMTIER);
+        let config = dir.join("config.jsonc");
+        std::fs::write(
+            &config,
+            format!(
+                "{{ \"paths\": {{ \"memtier\": {:?}, \"redis\": {:?} }} }}",
+                memtier.display().to_string(),
+                server.display().to_string()
+            ),
+        )
+        .expect("writes the config");
+        let results = dir.join("results");
+        (dir, config, results)
+    }
+
+    /// `cache-bench run` with the arguments every case here shares.
+    fn cache_bench(
+        dir: &Path,
+        config: &Path,
+        results: &Path,
+        extra: &[&str],
+    ) -> std::process::Output {
+        Command::new(env!("CARGO_BIN_EXE_cache-bench"))
+            .args(["run", "redis", "--threads", "1", "--profile", "reference"])
+            .arg("--config")
+            .arg(config)
+            .arg("--dir")
+            .arg(results)
+            .arg("--socket")
+            .arg(dir.join("cb.sock"))
+            // The repository root, so that the reference profile is the one in the tree.
+            .arg("--profiles")
+            .arg(concat!(env!("CARGO_MANIFEST_DIR"), "/../../profiles.toml"))
+            .args(extra)
+            .output()
+            .expect("runs cache-bench")
+    }
+
+    // The whole sequence, and the file it produces.
+    #[test]
+    fn a_run_starts_a_server_drives_it_and_writes_a_result() {
+        if !have_python() {
+            eprintln!("skipped: this machine has no python3 to run the fake server with");
+            return;
+        }
+        let (dir, config, results) = scaffold("whole");
+        let out = cache_bench(&dir, &config, &results, &[]);
+        let said = String::from_utf8_lossy(&out.stdout).into_owned()
+            + &String::from_utf8_lossy(&out.stderr);
+        assert!(out.status.success(), "{said}");
+
+        let path = results
+            .join("runs")
+            .join("bench_redis-threads_1-pipeline_1-perf_no-run_1.json");
+        let text = std::fs::read_to_string(&path).expect("wrote the run file");
+        // The version is the server's own first line, and the counters are absent rather than zero.
+        assert!(text.contains("\"version\":\"fake-server 9.9.9\""), "{text}");
+        assert!(text.contains("\"opsec\":1234.500"), "{text}");
+        assert!(text.contains("\"perf\": {}"), "{text}");
+        // Ours, and both present because this ran in corrected mode.
+        assert!(text.contains("\"profile\":\"reference\""), "{text}");
+        assert!(text.contains("\"run_started\""), "{text}");
+
+        // Three passes ran, and each one wrote where it was told to.
+        for pass in ["warmup", "sets", "gets"] {
+            let log = results.join("logs").join(format!(
+                "bench_redis-threads_1-pipeline_1-perf_no-run_1-{pass}.log"
+            ));
+            assert!(log.exists(), "the {pass} pass left no log");
+        }
+        // The directory was given back, so the next run is not refused by a process that has exited.
+        assert!(!results.join(".lock").exists(), "the lock was not released");
+
+        // A cell that is already on disk is skipped rather than measured again, which is the whole of how a sweep is restartable.
+        let again = cache_bench(&dir, &config, &results, &[]);
+        assert!(again.status.success());
+        assert!(
+            String::from_utf8_lossy(&again.stdout).contains("already measured"),
+            "a run that was already on disk was measured again"
+        );
+
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    // Upstream mode writes the original's file, which does not have this project's two extra keys in it.
+    #[test]
+    fn upstream_mode_writes_the_originals_fields_and_no_others() {
+        if !have_python() {
+            eprintln!("skipped: this machine has no python3 to run the fake server with");
+            return;
+        }
+        let (dir, config, results) = scaffold("upstream");
+        let out = cache_bench(&dir, &config, &results, &["--compat", "upstream"]);
+        assert!(
+            out.status.success(),
+            "{}",
+            String::from_utf8_lossy(&out.stderr)
+        );
+
+        let text = std::fs::read_to_string(
+            results
+                .join("runs")
+                .join("bench_redis-threads_1-pipeline_1-perf_no-run_1.json"),
+        )
+        .expect("wrote the run file");
+        assert!(!text.contains("\"profile\""), "{text}");
+        assert!(!text.contains("\"run_started\""), "{text}");
+
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    // The failure that produces plausible numbers for the wrong engine. A server left over from an earlier cell would answer this whole run.
+    #[test]
+    fn a_server_already_on_the_socket_stops_the_run() {
+        if !have_python() {
+            eprintln!("skipped: this machine has no python3 to run the fake server with");
+            return;
+        }
+        let (dir, config, results) = scaffold("stray");
+        let socket = dir.join("cb.sock");
+        // The supervisor is the right way to start a server, and this is a test that starts one the wrong way on purpose, because a stray is by definition a process this harness did not start and is not holding a handle to.
+        #[allow(
+            clippy::disallowed_methods,
+            reason = "this process stands in for one the harness did not start"
+        )]
+        let mut stray = Command::new(dir.join("fake-server"))
+            .arg("--unixsocket")
+            .arg(&socket)
+            .stdout(std::process::Stdio::null())
+            .stderr(std::process::Stdio::null())
+            .spawn()
+            .expect("starts the stray server");
+        // Give it long enough to bind, since the point of the test is that the socket is answering.
+        for _ in 0..100 {
+            if std::os::unix::net::UnixStream::connect(&socket).is_ok() {
+                break;
+            }
+            std::thread::sleep(std::time::Duration::from_millis(20));
+        }
+
+        let out = cache_bench(&dir, &config, &results, &[]);
+        let why = String::from_utf8_lossy(&out.stderr).into_owned();
+        assert!(!out.status.success(), "the stray server was measured");
+        assert!(why.contains("already answering"), "{why}");
+
+        let _ = stray.kill();
+        let _ = stray.wait();
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+}

@@ -13,3 +13,7 @@ hosts.toml
 # What is committed from a results directory is the finished article and nothing else: output.json, host.json, the charts and the generated markdown.
 results/*/runs/
 results/*/logs/
+
+# The lock a run holds on a results directory while it is writing to it.
+# It is taken away when the run ends, and a run that was killed leaves one behind, which is a thing to notice locally rather than a thing to commit.
+results/*/.lock
