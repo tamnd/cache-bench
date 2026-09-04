@@ -1,0 +1,7 @@
+# Everything that starts a process has to go through the supervisor in
+# cb-cache, which puts the child in its own process group and applies the CPU
+# pin before exec. A bare spawn somewhere else would leave a server running
+# after a panic, and the next run would silently benchmark it.
+disallowed-methods = [
+    { path = "std::process::Command::spawn", reason = "use cb_cache::Supervisor" },
+]

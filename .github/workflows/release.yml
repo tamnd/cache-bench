@@ -1,0 +1,182 @@
+name: release
+
+# A tag is what a release is cut from, and nothing here produces one from an
+# untagged tree.
+#
+# The manual trigger is the recovery path. A tag push runs the copy of this file
+# that is in the tag, so a fix landed on main after a tag was cut does not apply
+# to that tag and the tag cannot be moved to pick it up. Dispatching this from
+# main with tag: set is how a half finished release gets finished: main's
+# workflow, the tag's code. The ref: on every checkout below is the half that
+# makes it the tag's code.
+#
+# Nothing is published to crates.io. This is a harness, not a library, and the
+# only thing anyone wants from a release is a binary that runs on the box the
+# sweep is going to happen on.
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: The tag to build the release from
+        required: true
+
+env:
+  CARGO_TERM_COLOR: always
+  CARGO_INCREMENTAL: 0
+  RUSTFLAGS: -D warnings
+
+permissions:
+  contents: read
+
+# Two tags pushed close together would otherwise race through the same release.
+# Not cancelled, because cancelling halfway through leaves a release with some
+# of its binaries attached, which is worse than waiting.
+concurrency:
+  group: release-${{ inputs.tag || github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  # The tag, the version in Cargo.toml and the changelog have to agree before
+  # anything else runs. All three drift, and finding out after the release is
+  # published means the fix is another release.
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      version: ${{ steps.v.outputs.version }}
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          ref: ${{ inputs.tag || github.ref }}
+      - id: v
+        run: |
+          tag="${{ inputs.tag || github.ref_name }}"
+          version="${tag#v}"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          manifest=$(grep -m1 '^version = ' Cargo.toml | cut -d'"' -f2)
+          if [ "$manifest" != "$version" ]; then
+            echo "tag $tag says $version, Cargo.toml says $manifest" >&2
+            exit 1
+          fi
+          if ! grep -q "^## $version " CHANGELOG.md; then
+            echo "CHANGELOG.md has no section for $version" >&2
+            exit 1
+          fi
+
+  # The same gates the branch runs, against the tag rather than against a branch
+  # tip that has since moved.
+  verify:
+    needs: check
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          ref: ${{ inputs.tag || github.ref }}
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@v2.9.2
+        with:
+          save-if: false
+      - run: cargo fmt --all --check
+      - run: cargo clippy --workspace --all-targets --all-features
+      - run: cargo test --workspace --locked
+      - run: cargo test --workspace --locked --release
+
+  # One binary per platform anyone actually runs a sweep on. The linux-arm64
+  # entry is a native runner rather than a cross build, because the reference
+  # results this project exists to reproduce were measured on ARM64 and a cross
+  # built binary is the wrong thing to hand somebody who rents a box to check
+  # them. macOS is here for the chart and statistics half, which needs no cache
+  # server, and Windows is here because the load generator side of the work gets
+  # driven from one.
+  build:
+    needs: [check, verify]
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+          - os: ubuntu-24.04-arm
+            target: aarch64-unknown-linux-gnu
+          - os: macos-latest
+            target: aarch64-apple-darwin
+          - os: windows-latest
+            target: x86_64-pc-windows-msvc
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          ref: ${{ inputs.tag || github.ref }}
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+      - uses: Swatinem/rust-cache@v2.9.2
+        with:
+          save-if: false
+      - run: cargo build --release --locked -p cb-cli --target ${{ matrix.target }}
+      - name: Package
+        shell: bash
+        run: |
+          v="${{ needs.check.outputs.version }}"
+          name="cache-bench-$v-${{ matrix.target }}"
+          mkdir -p "dist/$name"
+          if [ -f "target/${{ matrix.target }}/release/cache-bench.exe" ]; then
+            cp "target/${{ matrix.target }}/release/cache-bench.exe" "dist/$name/"
+          else
+            cp "target/${{ matrix.target }}/release/cache-bench" "dist/$name/"
+          fi
+          cp README.md LICENSE-MIT LICENSE-APACHE profiles.toml config.jsonc "dist/$name/"
+          tar -C dist -czf "dist/$name.tar.gz" "$name"
+          # Written next to the archive rather than only in the release notes, so
+          # a copy that was fetched once and passed around can still be checked.
+          (cd dist && shasum -a 256 "$name.tar.gz" > "$name.tar.gz.sha256")
+      - uses: actions/upload-artifact@v5.0.0
+        with:
+          name: ${{ matrix.target }}
+          path: dist/*.tar.gz*
+          if-no-files-found: error
+
+  publish:
+    needs: [check, verify, build]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          ref: ${{ inputs.tag || github.ref }}
+      - uses: actions/download-artifact@v6.0.0
+        with:
+          path: dist
+          merge-multiple: true
+      # The release body is the changelog section, not a generated commit list.
+      # A commit list tells you what was typed, the changelog tells you what it
+      # costs you, which is the only one of the two worth reading.
+      - name: Cut the changelog section
+        run: |
+          awk -v v="${{ needs.check.outputs.version }}" '
+            $0 ~ "^## " v " " { on = 1; next }
+            on && /^## / { exit }
+            on { print }
+          ' CHANGELOG.md > release-notes.md
+          test -s release-notes.md
+      - name: Publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${{ inputs.tag || github.ref_name }}" \
+            --title "v${{ needs.check.outputs.version }}" \
+            --notes-file release-notes.md \
+            --verify-tag \
+            dist/*

@@ -1,0 +1,39 @@
+version: 2
+
+updates:
+  # Grouped, because eleven separate pull requests that each bump one patch
+  # version is not review, it is clicking. One pull request a week that says
+  # what moved is.
+  - package-ecosystem: cargo
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    groups:
+      patch:
+        update-types: [patch]
+      minor:
+        update-types: [minor]
+    # The chart stack is deliberately not grouped and not batched. A patch bump
+    # to plotters or image changes anti aliasing, every PNG hash in the manifest
+    # moves, and the determinism job goes red. That is the job working. The fix
+    # is to look at the visual diff and update the manifest in its own commit,
+    # never to wave the bump through with the rest of the week's noise.
+    ignore:
+      - dependency-name: plotters
+        update-types: [version-update:semver-patch]
+      - dependency-name: plotters-bitmap
+        update-types: [version-update:semver-patch]
+      - dependency-name: image
+        update-types: [version-update:semver-patch]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    groups:
+      actions:
+        patterns: ["*"]

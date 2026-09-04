@@ -1,0 +1,13 @@
+/target
+Cargo.lock.orig
+
+# The ssh targets for the benchmark hosts. Names and addresses of those
+# machines do not go in a public repository, and CI checks that this file is
+# not tracked. hosts.example.toml is the template.
+hosts.toml
+
+# The raw runs are seventeen thousand small files per sweep. They ship as a
+# tarball on the release instead, and only the aggregated output.json is
+# committed.
+results/*/runs/
+results/*/logs/

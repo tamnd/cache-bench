@@ -1,0 +1,18 @@
+{
+    // Paths to the binaries. Same shape and same keys as the original, so a
+    // config that works there works here.
+    //
+    // ${arch} is replaced with x86_64 or aarch64, which is only needed for the
+    // Dragonfly release binary.
+    "paths": {
+        "memtier": "memtier_benchmark",
+        "memcache": "../memcached/memcached",
+        "dragonfly": "../dragonfly/dragonfly-${arch}",
+        "valkey": "../valkey/src/valkey-server",
+        "redis": "../redis/src/redis-server",
+        // Garnet is .NET and is expected to be built for Release already.
+        "garnet": "../garnet/main/GarnetServer/bin/Release/net9.0/GarnetServer",
+        "pogocache": "../pogocache/pogocache",
+        "yo": "../yo/target/release/yodb"
+    }
+}

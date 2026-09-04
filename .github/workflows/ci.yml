@@ -1,0 +1,173 @@
+name: ci
+
+# Everything that runs on every push and every pull request. The budget for this
+# file is under three minutes to a verdict, because a check slower than the time
+# it takes to switch to something else is a check people learn to scroll past.
+#
+# Nothing in here needs a cache server, a load generator or a PMU. That is on
+# purpose. The parts of this project that are hard to get right are the
+# statistics and the chart geometry, and both are pure functions over committed
+# data, so both can be tested on a runner. The parts that need real hardware are
+# in bench.yml and are not on this path.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+env:
+  CARGO_TERM_COLOR: always
+  # Incremental artifacts are large, slow to save and restore, and useless
+  # across the fresh checkout every job gets.
+  CARGO_INCREMENTAL: 0
+  # Debug info is most of what rustc emits and most of what the linker then has
+  # to work through, and no job here reads a backtrace line number.
+  CARGO_PROFILE_DEV_DEBUG: 0
+  CARGO_PROFILE_TEST_DEBUG: 0
+  RUSTFLAGS: -D warnings
+
+# Read only, and no job here widens it. A benchmark harness has no reason to
+# hold a write token on a pull request from a fork.
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # Style first, so a run that is going to fail on formatting fails in under a
+  # minute rather than after the test matrix.
+  style:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@v2.9.2
+        with:
+          # Only main writes the cache. A pull request reads main's and skips
+          # the upload, which is twenty to forty seconds a job that nobody was
+          # getting anything back for.
+          save-if: ${{ github.ref == 'refs/heads/main' }}
+      - run: cargo fmt --all --check
+      - run: cargo clippy --workspace --all-targets --all-features
+      # A workflow file that does not parse produces a run with no jobs in it,
+      # which reports as a failure with nothing to click on and no log. One
+      # unquoted colon in a run: line is enough to do it. Parsing them here
+      # costs a second and puts the error next to a line number.
+      - name: the workflow files parse
+        run: |
+          python3 - <<'PY'
+          import sys, yaml, pathlib
+          bad = False
+          for p in sorted(pathlib.Path(".github/workflows").glob("*.yml")):
+              try:
+                  yaml.safe_load(p.read_text())
+              except yaml.YAMLError as e:
+                  bad = True
+                  print(f"{p}: {e}")
+          sys.exit(1 if bad else 0)
+          PY
+      # The two data files that drive every run. Parsed here rather than only in
+      # the binary, because a typo in either of them is found by whoever starts
+      # a sweep, and a sweep starts on a machine that is not this one and runs
+      # for days. The deeper check, that a profile's working set fits inside its
+      # own maxmemory, belongs to doctor and lands with M1.
+      - name: profiles.toml and config.jsonc parse
+        run: |
+          python3 - <<'PY'
+          import json, re, sys, tomllib
+          with open("profiles.toml", "rb") as f:
+              profiles = tomllib.load(f)["profiles"]
+          text = open("config.jsonc").read()
+          # Line comments only. config.jsonc has no block comments and no
+          # trailing commas, and a real jsonc parser is not worth a dependency
+          # for one file.
+          paths = json.loads(re.sub(r"^\s*//.*$", "", text, flags=re.M))["paths"]
+          required = {"memtier", "memcache", "dragonfly", "valkey", "redis",
+                      "garnet", "pogocache", "yo"}
+          missing = required - paths.keys()
+          if missing:
+              sys.exit(f"config.jsonc has no path for {sorted(missing)}")
+          for name, p in profiles.items():
+              if p["bench_threads"] > p["cores"] or max(p["threads"]) > p["cores"]:
+                  sys.exit(f"profile {name} asks for more threads than it has cores")
+          print(f"{len(profiles)} profiles, {len(paths)} paths")
+          PY
+
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2.9.2
+        with:
+          save-if: ${{ github.ref == 'refs/heads/main' }}
+      - uses: taiki-e/install-action@v2.62.31
+        with:
+          tool: cargo-nextest
+      - run: cargo nextest run --workspace --locked
+      # nextest runs one test per process and so cannot run doctests at all.
+      # They are most of the documentation for the statistics crate, so they get
+      # their own step rather than being quietly dropped.
+      - run: cargo test --workspace --locked --doc
+
+  # The floor stays green too. Held behind stable, and it is the same floor as
+  # tamnd/yo so the two trees agree on what a supported compiler is.
+  msrv:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: dtolnay/rust-toolchain@1.94.0
+      - uses: Swatinem/rust-cache@v2.9.2
+        with:
+          save-if: ${{ github.ref == 'refs/heads/main' }}
+      # rust-toolchain.toml pins the working toolchain and has to be out of the
+      # way for this job to test what it says it tests.
+      - run: rm rust-toolchain.toml
+      - run: cargo test --workspace --locked
+
+  # Documentation is part of the interface. A broken intra doc link is a broken
+  # link in the published reference, so it fails the build.
+  docs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: dtolnay/rust-toolchain@nightly
+      - uses: Swatinem/rust-cache@v2.9.2
+        with:
+          save-if: ${{ github.ref == 'refs/heads/main' }}
+      - run: rm rust-toolchain.toml
+      - run: cargo doc --workspace --no-deps --all-features
+        env:
+          RUSTDOCFLAGS: -D warnings --cfg docsrs
+
+  # Licences, advisories and duplicate versions. The licence half is the half
+  # that matters here: this repository ships fonts and will ship result data,
+  # and both have terms that are easy to get wrong by accident.
+  deny:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: EmbarkStudios/cargo-deny-action@v2.0.16
+        with:
+          command: check all
+
+  typos:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: crate-ci/typos@v1.40.1

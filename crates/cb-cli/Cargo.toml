@@ -1,0 +1,28 @@
+[package]
+name = "cb-cli"
+description = "The cache-bench command line tool."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+readme.workspace = true
+keywords.workspace = true
+categories.workspace = true
+
+[[bin]]
+name = "cache-bench"
+path = "src/main.rs"
+
+[dependencies]
+cb-cache.workspace = true
+cb-chart.workspace = true
+cb-core.workspace = true
+cb-docs.workspace = true
+cb-memtier.workspace = true
+cb-perf.workspace = true
+cb-stats.workspace = true
+
+[lints]
+workspace = true

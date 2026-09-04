@@ -1,0 +1,6 @@
+[default.extend-words]
+# The original spells memcached this way in its filenames and we match it.
+memcache = "memcache"
+
+[files]
+extend-exclude = ["testdata/", "assets/fonts/", "Cargo.lock"]
