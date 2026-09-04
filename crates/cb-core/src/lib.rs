@@ -14,6 +14,7 @@ pub mod output;
 pub mod profile;
 pub mod run;
 pub mod size;
+pub mod spread;
 
 pub use cache::{CacheKind, Endpoint, Launch, Protocol, UnknownCache};
 pub use compat::{BadCompat, Compat};
@@ -26,3 +27,4 @@ pub use output::{Entry, Output};
 pub use profile::{BadProfile, PerfMode, Profile, Profiles, SizeRange};
 pub use run::{Info, Latency, Op, Perf, Run};
 pub use size::{BadSize, Bytes};
+pub use spread::{Dispersion, PerfSpread, Spread};
