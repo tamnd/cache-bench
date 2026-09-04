@@ -76,4 +76,4 @@ The charts use Jost and DejaVu Sans, which are open fonts embedded in the binary
 
 ## Licence
 
-MIT or Apache-2.0, at your option.
+Apache-2.0.

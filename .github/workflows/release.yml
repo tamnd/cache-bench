@@ -135,7 +135,7 @@ jobs:
           else
             cp "target/${{ matrix.target }}/release/cache-bench" "dist/$name/"
           fi
-          cp README.md LICENSE-MIT LICENSE-APACHE profiles.toml config.jsonc "dist/$name/"
+          cp README.md LICENSE-APACHE profiles.toml config.jsonc "dist/$name/"
           tar -C dist -czf "dist/$name.tar.gz" "$name"
           # Written next to the archive rather than only in the release notes, so
           # a copy that was fetched once and passed around can still be checked.
