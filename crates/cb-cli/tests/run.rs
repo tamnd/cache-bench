@@ -60,6 +60,27 @@ json.dump({"ALL STATS": {which: stats}}, open(out, "w"))
 print("fake memtier ran the", which, "pass")
 "#;
 
+    /// A profile that fits on any machine this test will ever run on.
+    ///
+    /// The profiles in the tree pin to cores 0 to 15 and 16 to 31, and a CI runner has four. Pinning to a core that is not there is refused by the kernel rather than ignored, so the real profiles cannot be used here. The numbers are as small as the checks in `Profile::check` allow, because nothing in this test is measuring anything.
+    const PROFILES: &str = r#"
+[profiles.fake]
+description = "Two cores and nothing real, for the test that runs the whole sequence against fakes."
+cores = 2
+cache_pin = "0"
+bench_pin = "1"
+threads = [1]
+bench_threads = 1
+connections_per_thread = 1
+operations = 10
+size_range = "1-1024"
+key_maximum = 100
+maxmemory = "64mb"
+pipelines = [1]
+runs = 1
+perf = ["no"]
+"#;
+
     /// Whether there is a python3 to run the fakes with.
     ///
     /// Every machine this project is developed or tested on has one. A machine that does not gets told the test was skipped rather than told it failed, because what would have failed is the test's own scaffolding.
@@ -89,7 +110,7 @@ print("fake memtier ran the", which, "pass")
         path
     }
 
-    /// The whole scaffolding: two fakes, a config that points at them, and somewhere to put the results.
+    /// The whole scaffolding: two fakes, a config that points at them, a profile that fits, and somewhere to put the results.
     fn scaffold(tag: &str) -> (PathBuf, PathBuf, PathBuf) {
         let dir = workspace(tag);
         let server = fake(&dir, "fake-server", SERVER);
@@ -104,6 +125,7 @@ print("fake memtier ran the", which, "pass")
             ),
         )
         .expect("writes the config");
+        std::fs::write(dir.join("profiles.toml"), PROFILES).expect("writes the profiles");
         let results = dir.join("results");
         (dir, config, results)
     }
@@ -116,16 +138,15 @@ print("fake memtier ran the", which, "pass")
         extra: &[&str],
     ) -> std::process::Output {
         Command::new(env!("CARGO_BIN_EXE_cache-bench"))
-            .args(["run", "redis", "--threads", "1", "--profile", "reference"])
+            .args(["run", "redis", "--threads", "1", "--profile", "fake"])
             .arg("--config")
             .arg(config)
             .arg("--dir")
             .arg(results)
             .arg("--socket")
             .arg(dir.join("cb.sock"))
-            // The repository root, so that the reference profile is the one in the tree.
             .arg("--profiles")
-            .arg(concat!(env!("CARGO_MANIFEST_DIR"), "/../../profiles.toml"))
+            .arg(dir.join("profiles.toml"))
             .args(extra)
             .output()
             .expect("runs cache-bench")
@@ -153,7 +174,7 @@ print("fake memtier ran the", which, "pass")
         assert!(text.contains("\"opsec\":1234.500"), "{text}");
         assert!(text.contains("\"perf\": {}"), "{text}");
         // Ours, and both present because this ran in corrected mode.
-        assert!(text.contains("\"profile\":\"reference\""), "{text}");
+        assert!(text.contains("\"profile\":\"fake\""), "{text}");
         assert!(text.contains("\"run_started\""), "{text}");
 
         // Three passes ran, and each one wrote where it was told to.
