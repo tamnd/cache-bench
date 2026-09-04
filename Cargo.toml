@@ -13,7 +13,7 @@ members = [
 ]
 
 [workspace.package]
-version = "0.5.0"
+version = "0.5.1"
 edition = "2024"
 # Held behind stable, and it matches the floor in tamnd/yo so the two trees agree on what a supported compiler is.
 rust-version = "1.94"
@@ -28,13 +28,13 @@ publish = true
 
 # A path for building here and a version for building anywhere else. Cargo uses the path in this workspace and rewrites the entry to the version when the crate is packaged, so both have to be here and the version has to move with the workspace version.
 [workspace.dependencies]
-cb-cache = { path = "crates/cb-cache", version = "0.5.0" }
-cb-chart = { path = "crates/cb-chart", version = "0.5.0" }
-cb-core = { path = "crates/cb-core", version = "0.5.0" }
-cb-docs = { path = "crates/cb-docs", version = "0.5.0" }
-cb-memtier = { path = "crates/cb-memtier", version = "0.5.0" }
-cb-perf = { path = "crates/cb-perf", version = "0.5.0" }
-cb-stats = { path = "crates/cb-stats", version = "0.5.0" }
+cb-cache = { path = "crates/cb-cache", version = "0.5.1" }
+cb-chart = { path = "crates/cb-chart", version = "0.5.1" }
+cb-core = { path = "crates/cb-core", version = "0.5.1" }
+cb-docs = { path = "crates/cb-docs", version = "0.5.1" }
+cb-memtier = { path = "crates/cb-memtier", version = "0.5.1" }
+cb-perf = { path = "crates/cb-perf", version = "0.5.1" }
+cb-stats = { path = "crates/cb-stats", version = "0.5.1" }
 
 [workspace.lints.rust]
 missing_docs = "warn"
