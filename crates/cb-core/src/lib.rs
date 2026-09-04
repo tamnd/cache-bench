@@ -8,6 +8,7 @@ pub mod clock;
 pub mod compat;
 pub mod config;
 pub mod cpuset;
+pub mod golden;
 pub mod hosts;
 pub mod journal;
 pub mod machine;

@@ -224,16 +224,7 @@ impl Perf {
 #[allow(clippy::unwrap_used)]
 mod tests {
     use super::Run;
-
-    const NO_PERF: &str = include_str!(
-        "../../../testdata/golden/bench_dragonfly-threads_1-pipeline_1-perf_no-run_1.json"
-    );
-    const WITH_PERF: &str = include_str!(
-        "../../../testdata/golden/bench_dragonfly-threads_1-pipeline_1-perf_yes-run_1.json"
-    );
-    const CHOSEN: &str = include_str!(
-        "../../../testdata/golden/bench_dragonfly-threads_1-pipeline_1-perf_yes-run_median.json"
-    );
+    use crate::golden::{CHOSEN, RUN_PERF as WITH_PERF, RUN_PLAIN as NO_PERF};
 
     // The whole point of the crate, in three assertions.
     // These are real files from the original's committed results, unmodified.

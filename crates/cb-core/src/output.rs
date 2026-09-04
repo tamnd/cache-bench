@@ -91,11 +91,10 @@ fn reindent(run: &str) -> String {
 #[allow(clippy::unwrap_used)]
 mod tests {
     use super::{Entry, Output};
+    // Three entries lifted out of the original's published output.json without changing a byte, which is what the whole format exists to be able to do.
+    use crate::golden::COMBINED as GOLDEN;
     use crate::name::{Chosen, Slot};
     use crate::run::Run;
-
-    // Three entries lifted out of the original's published output.json without changing a byte, which is what the whole format exists to be able to do.
-    const GOLDEN: &str = include_str!("../../../testdata/golden/output-three-cells.json");
 
     #[test]
     fn the_originals_output_round_trips_byte_for_byte() {
@@ -159,9 +158,8 @@ mod tests {
     // Every entry has to survive the trip through the wider indent and come back as the same run, since the run file and the entry are the two places the same measurement is written down.
     #[test]
     fn an_entry_holds_the_same_run_the_run_file_holds() {
-        const CHOSEN: &str = include_str!(
-            "../../../testdata/golden/bench_dragonfly-threads_1-pipeline_1-perf_yes-run_median.json"
-        );
+        use crate::golden::CHOSEN;
+
         let run = Run::parse(CHOSEN).unwrap();
         let out = Output {
             entries: vec![Entry {

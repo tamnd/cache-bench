@@ -1,5 +1,5 @@
 [package]
-name = "cb-cli"
+name = "cache-bench"
 description = "The cache-bench command line tool."
 version.workspace = true
 edition.workspace = true

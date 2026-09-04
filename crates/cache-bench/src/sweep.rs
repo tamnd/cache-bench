@@ -503,9 +503,7 @@ mod tests {
     // The failure this rule prevents is a file that was created and never finished being counted as a measurement.
     #[test]
     fn a_file_that_will_not_parse_is_not_a_measured_cell() {
-        const RUN: &str = include_str!(
-            "../../../testdata/golden/bench_dragonfly-threads_1-pipeline_1-perf_yes-run_1.json"
-        );
+        use cb_core::golden::RUN_PERF as RUN;
         let dir = std::env::temp_dir().join("cache-bench-sweep-done");
         let _ = std::fs::remove_dir_all(&dir);
         std::fs::create_dir_all(&dir).unwrap();

@@ -8,7 +8,7 @@ The rule for this file is that a divergence is either listed here or it is a bug
 
 The original selects one run out of the 31 it made, per cell, four times over, for median, best, worst and mean. All four selections have a defect. What follows is read off `cmd/choose/main.go` rather than inferred from the output, and then checked against the output.
 
-The numbers quoted are the original's own committed data for dragonfly at one thread and pipeline depth 1. Both fixtures are in `testdata/golden/cells`, each holding the 31 runs and the four files the original reduced them to, so every claim below can be re-derived from files in this repository. Ranks are positions in the 31 runs sorted ascending, counting from zero.
+The numbers quoted are the original's own committed data for dragonfly at one thread and pipeline depth 1. Both fixtures are in `crates/cb-core/golden/cells`, each holding the 31 runs and the four files the original reduced them to, so every claim below can be re-derived from files in this repository. Ranks are positions in the 31 runs sorted ascending, counting from zero.
 
 **D1, the median is off by one inside the trimmed window.** With 31 runs and 10 percent trimmed from each end the surviving window is 25 wide, so the middle of it is the 13th, at index 12. The original computes the index as the window length divided by two plus one, which is 13, so it reads the 14th. This is one position out on a sorted list of near identical numbers, which is why nobody has ever noticed it.
 
@@ -64,7 +64,7 @@ Three faces, because the original asks for three. Jost Book stands in for Futura
 
 DejaVu Sans is a wider face than Verdana at the same size, so those margin numbers take more room here than they do there. They sit in the space to the left of the axis and nothing else is competing for it, so nothing moves as a result, but it is the one place where a chart here and a chart there differ in layout rather than only in letter shapes.
 
-The reason any of this matters beyond aesthetics is determinism. A chart drawn against whatever font the host happened to have is a chart nobody else can reproduce, and the PNG hash manifest in `testdata/` only means something if the fonts are in the binary. `assets/fonts/README.md` records the exact release each file came from, and the digest of all three is written into `crates/cb-chart/src/font.rs` where a test checks it, so a font cannot be replaced without the commit that does it saying so.
+The reason any of this matters beyond aesthetics is determinism. A chart drawn against whatever font the host happened to have is a chart nobody else can reproduce, and the PNG hash manifest in `crates/cb-core/golden` only means something if the fonts are in the binary. `crates/cb-chart/assets/fonts/README.md` records the exact release each file came from, and the digest of all three is written into `crates/cb-chart/src/font.rs` where a test checks it, so a font cannot be replaced without the commit that does it saying so.
 
 ## D7, a --threads flag on yo
 

@@ -13,11 +13,8 @@ use std::collections::BTreeMap;
 use cb_chart::render::{Stamp, draw};
 use cb_chart::{Axis, Chart, Scale};
 
-/// The whole corpus, which is what the charts are drawn from.
-const SERIES: &str = include_str!("../../../testdata/golden/series.json");
-
-/// The hash of every chart, written by `cache-bench chart --golden --manifest`.
-const MANIFEST: &str = include_str!("../../../testdata/golden/charts.sha256");
+/// The whole corpus, which is what the charts are drawn from, and the hash of every chart, written by `cache-bench chart --golden --manifest`.
+use cb_core::golden::{CHARTS as MANIFEST, SERIES};
 
 /// One chart of each shape the corpus has. Both scales, a counter chart with no GET or SET in it, a latency chart whose axis spans four decades, and the deepest pipeline depth, where the throughput numbers run to seven digits and the y axis column is at its widest.
 const SAMPLE: [&str; 4] = [

@@ -1,6 +1,6 @@
 # Fonts
 
-The chart engine embeds its fonts in the binary rather than asking the host for them. A chart drawn against whatever font happened to be installed is a chart nobody else can reproduce, and the PNG hash manifest in `testdata/` only means anything if the letter shapes are fixed.
+The chart engine embeds its fonts in the binary rather than asking the host for them. A chart drawn against whatever font happened to be installed is a chart nobody else can reproduce, and the PNG hash manifest in `crates/cb-core/golden` only means anything if the letter shapes are fixed.
 
 The original sets `plt.rcParams['font.family'] = "Futura"`, asks matplotlib for bold on the title and both axis labels, and names Verdana for the small gray quarter decade numbers in the margin of a logarithmic chart. Neither face is redistributable and both only resolve on macOS, so this port substitutes:
 

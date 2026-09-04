@@ -6,7 +6,7 @@
 //!
 //! The comparator takes positions rather than elements, exactly as `sort.Slice` does, which is the only way a comparator can read a slice it is not sorting.
 //!
-//! Verified against the real thing. `testdata/golden/gosort.json` holds 142 cases produced by Go, covering every length to 64, the shapes that drive a quicksort into its slow paths, and the aliased comparator at the four lengths the original's mutated run count produces.
+//! Verified against the real thing. `cb_core::golden::GOSORT` holds 142 cases produced by Go, covering every length to 64, the shapes that drive a quicksort into its slow paths, and the aliased comparator at the four lengths the original's mutated run count produces.
 
 /// A slice being sorted, and how to compare and swap two positions in it.
 ///
@@ -445,8 +445,7 @@ mod tests {
 
     #[allow(clippy::expect_used)]
     fn cases() -> Vec<Case> {
-        serde_json::from_str(include_str!("../../../testdata/golden/gosort.json"))
-            .expect("the committed sort vectors parse")
+        serde_json::from_str(cb_core::golden::GOSORT).expect("the committed sort vectors parse")
     }
 
     // The whole of the point. Every one of these came out of Go's sort.Slice, and any difference in the algorithm shows up as a different permutation rather than as a different set of values, so this catches transcription slips that a sortedness check would sail past.

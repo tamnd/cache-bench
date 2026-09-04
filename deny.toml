@@ -19,7 +19,7 @@ allow = [
     "Unicode-3.0",
     "Zlib",
     # Jost is SIL Open Font License and DejaVu Sans is under the Bitstream Vera licence.
-    # Neither is a crate, so neither is in this graph, but both are in the binary and both are recorded in assets/fonts/README.md with their licence text next to them.
+    # Neither is a crate, so neither is in this graph, but both are in the binary and both are recorded in crates/cb-chart/assets/fonts/README.md with their licence text next to them.
 ]
 confidence-threshold = 0.93
 

@@ -25,16 +25,12 @@ pub(crate) struct Cell {
 
 /// A cell measured with perf attached, where the counters are strings and one of them is `<not supported>`.
 pub(crate) fn with_perf() -> Cell {
-    load(include_str!(
-        "../../../testdata/golden/cells/dragonfly-threads_1-pipeline_1-perf_yes.json"
-    ))
+    load(cb_core::golden::CELL_PERF)
 }
 
 /// A cell measured without perf, where every perf object is `{}`.
 pub(crate) fn without_perf() -> Cell {
-    load(include_str!(
-        "../../../testdata/golden/cells/dragonfly-threads_1-pipeline_1-perf_no.json"
-    ))
+    load(cb_core::golden::CELL_PLAIN)
 }
 
 /// Read one, loudly.

@@ -22,13 +22,13 @@ impl Face {
     /// All three.
     pub const ALL: [Self; 3] = [Self::Body, Self::Heading, Self::Gutter];
 
-    /// The bytes of the face, as they sit in `assets/fonts`.
+    /// The bytes of the face, as they sit in `crates/cb-chart/assets/fonts`.
     #[must_use]
     pub const fn bytes(self) -> &'static [u8] {
         match self {
-            Self::Body => include_bytes!("../../../assets/fonts/jost/Jost-400-Book.ttf"),
-            Self::Heading => include_bytes!("../../../assets/fonts/jost/Jost-700-Bold.ttf"),
-            Self::Gutter => include_bytes!("../../../assets/fonts/dejavu/DejaVuSans.ttf"),
+            Self::Body => include_bytes!("../assets/fonts/jost/Jost-400-Book.ttf"),
+            Self::Heading => include_bytes!("../assets/fonts/jost/Jost-700-Bold.ttf"),
+            Self::Gutter => include_bytes!("../assets/fonts/dejavu/DejaVuSans.ttf"),
         }
     }
 

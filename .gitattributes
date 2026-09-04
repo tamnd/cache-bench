@@ -3,7 +3,7 @@
 * text=auto eol=lf
 
 # Golden data is never touched. These are real result files from the original harness and the round trip test asserts that reading and writing one gives back the same bytes, so a line ending rewrite on checkout turns into a test failure on Windows and nowhere else.
-testdata/golden/** -text
+crates/cb-core/golden/** -text
 
 # Generated charts and fonts.
 *.png binary

@@ -1,6 +1,6 @@
 # axis-vectors
 
-Produces `testdata/golden/axes.json`, which is where the original put everything that `series.json` says is on a chart.
+Produces `crates/cb-core/golden/axes.json`, which is where the original put everything that `series.json` says is on a chart.
 
 `series-vectors` keeps the top of each generated Python script, which is the data. Everything below it is matplotlib, and that part is not none of our business after all, because it decides the bounds of the y axis, which ticks get labels, where the gridlines go and what text sits beside each one. That arithmetic is about forty lines of Python living inside two Go string constants, it is never written down anywhere, and reading it and reimplementing it is exactly the kind of work that produces something which looks right and is a decade off at the top.
 

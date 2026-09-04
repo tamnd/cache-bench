@@ -1,6 +1,6 @@
 //! Where things go on a chart, in the chart's own units.
 //!
-//! The original decides all of this in about forty lines of Python in the middle of a Go string constant, and none of it is written down anywhere. `tools/axis-vectors` runs those lines against the same 154 charts with matplotlib replaced by something that records what it was told, and `testdata/golden/axes.json` is what came back. Everything here is checked against it.
+//! The original decides all of this in about forty lines of Python in the middle of a Go string constant, and none of it is written down anywhere. `tools/axis-vectors` runs those lines against the same 154 charts with matplotlib replaced by something that records what it was told, and `crates/cb-core/golden/axes.json` is what came back. Everything here is checked against it.
 //!
 //! Nothing in this module knows about pixels. A y axis has a bottom, a top, a set of ticks with the text that goes on them and a set of gridlines, and turning that into a picture is somebody else's job. Splitting it this way is what makes the arithmetic testable, and the arithmetic is where the original keeps its surprises.
 
