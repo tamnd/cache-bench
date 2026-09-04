@@ -79,3 +79,5 @@ The charts use Jost and DejaVu Sans, which are open fonts embedded in the binary
 ## Licence
 
 Apache-2.0.
+
+The three fonts in the binary are not. Jost is under the SIL Open Font License 1.1 and DejaVu Sans is under the Bitstream Vera Fonts Copyright, both permissive enough to embed, and both licence texts ship in the directory beside the font file they cover. See [assets/fonts/README.md](assets/fonts/README.md) for which release each file came from.

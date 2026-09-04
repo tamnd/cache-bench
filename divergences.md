@@ -60,7 +60,11 @@ It covers all 31 runs including the ones the trim drops, because the trim is the
 
 The original draws with Futura and Verdana, which are not redistributable and which only resolve on macOS. This port embeds Jost, a metric compatible open alternative to Futura, and DejaVu Sans in place of Verdana. Everything else about the chart geometry, the colours, the axis treatment and the legend is the original's, so charts are recognisably the same charts with different letter shapes.
 
-The reason it matters beyond aesthetics is determinism. A chart drawn against whatever font the host happened to have is a chart nobody else can reproduce, and the PNG hash manifest in `testdata/` only means something if the fonts are in the binary.
+Three faces, because the original asks for three. Jost Book stands in for Futura at its normal weight, which is the tick labels and the legend. Jost Bold stands in for the bold the original asks matplotlib for on the title and both axis labels, and it is a second file rather than a synthesised weight, because a smeared regular is not the same shape on two machines. DejaVu Sans stands in for the one place the original names a second family, the eight point gray quarter decade numbers in the margin of a logarithmic chart.
+
+DejaVu Sans is a wider face than Verdana at the same size, so those margin numbers take more room here than they do there. They sit in the space to the left of the axis and nothing else is competing for it, so nothing moves as a result, but it is the one place where a chart here and a chart there differ in layout rather than only in letter shapes.
+
+The reason any of this matters beyond aesthetics is determinism. A chart drawn against whatever font the host happened to have is a chart nobody else can reproduce, and the PNG hash manifest in `testdata/` only means something if the fonts are in the binary. `assets/fonts/README.md` records the exact release each file came from, and the digest of all three is written into `crates/cb-chart/src/font.rs` where a test checks it, so a font cannot be replaced without the commit that does it saying so.
 
 ## D7, a --threads flag on yo
 

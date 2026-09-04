@@ -1,3 +1,7 @@
+# Names that are spelled with an inner capital because that is how they are spelled, not because they are code.
+# The default list is the Rust ecosystem's, and this adds the two fonts the charts are drawn with.
+doc-valid-idents = ["DejaVu", "DejaVuSans", ".."]
+
 # Everything that starts a process has to go through the supervisor in cb-cache, which puts the child in its own process group and applies the CPU pin before exec.
 # A bare spawn somewhere else would leave a server running after a panic, and the next run would silently benchmark it.
 disallowed-methods = [
