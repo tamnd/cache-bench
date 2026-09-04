@@ -113,7 +113,7 @@ pub(crate) fn run(args: &Args) -> Result<(), String> {
     let profile = profiles.get(&args.profile).map_err(|e| e.to_string())?;
     profile.check().map_err(|e| why(&args.profiles, &e))?;
     check_threads(args.threads, profile)?;
-    check_machine(profile)?;
+    check_machine(profile, cpus())?;
 
     let name = RunName {
         cache: args.cache,
@@ -304,12 +304,12 @@ fn check_threads(threads: u32, profile: &Profile) -> Result<(), String> {
 /// The pin is the reason this matters. Asking the kernel for a core that is not there is refused, so the reference profile on a laptop fails somewhere in the middle of a run with `Invalid argument` and nothing saying which argument. Worse, a mask that names some cores this machine has and some it does not is accepted and quietly narrowed, so a server that was meant to have sixteen cores gets four and the run produces numbers.
 ///
 /// A machine that will not say how many cores it has is left alone. That is a question this harness can do without an answer to, and refusing a run over it would be worse than the failure it prevents.
-fn check_machine(profile: &Profile) -> Result<(), String> {
-    let Ok(here) = std::thread::available_parallelism() else {
+///
+/// The count is passed in rather than asked for here, because `doctor` makes the same check as part of a set of them and both want one implementation of it.
+pub(crate) fn check_machine(profile: &Profile, cpus: Option<u32>) -> Result<(), String> {
+    let Some(here) = cpus else {
         return Ok(());
     };
-    // A machine with more cores than a u32 can hold does not exist, and if one turns up it is not the machine this refuses.
-    let here = u32::try_from(here.get()).unwrap_or(u32::MAX);
     if profile.cores > here {
         return Err(format!(
             "this profile is written for {} cores and this machine has {here}, so the pins in it name cores that are not here, and a run pinned to a core that does not exist is either refused by the kernel or quietly given a smaller one",
@@ -317,6 +317,15 @@ fn check_machine(profile: &Profile) -> Result<(), String> {
         ));
     }
     Ok(())
+}
+
+/// How many logical CPUs this machine has, where it says.
+///
+/// A machine with more cores than a u32 can hold does not exist, and if one turns up it is not the machine anything here refuses.
+fn cpus() -> Option<u32> {
+    std::thread::available_parallelism()
+        .ok()
+        .map(|here| u32::try_from(here.get()).unwrap_or(u32::MAX))
 }
 
 /// The pin, where pinning is possible.
@@ -398,21 +407,17 @@ mod tests {
         assert!(check_threads(0, &profile).is_err());
     }
 
-    // The reference profile is written for 32 cores, and this test runs wherever it runs, so the only thing that can be asserted here is that the two answers agree with each other.
+    // The pins in a profile name cores by number, so a profile written for a bigger machine names cores that are not there.
     #[test]
     fn a_profile_written_for_a_bigger_machine_is_refused() {
         let mut profile = profile();
-        let here = u32::try_from(
-            std::thread::available_parallelism()
-                .expect("this machine says how many cores it has")
-                .get(),
-        )
-        .expect("this machine has a believable number of cores");
-        profile.cores = here + 1;
-        let why = check_machine(&profile).unwrap_err();
-        assert!(why.contains(&format!("has {here}")), "{why}");
-        profile.cores = here;
-        assert!(check_machine(&profile).is_ok());
+        profile.cores = 32;
+        let why = check_machine(&profile, Some(8)).unwrap_err();
+        assert!(why.contains("has 8"), "{why}");
+        assert!(check_machine(&profile, Some(32)).is_ok());
+        assert!(check_machine(&profile, Some(64)).is_ok());
+        // A machine that will not say is left alone rather than refused.
+        assert!(check_machine(&profile, None).is_ok());
     }
 
     // The two fields this project added are the two that have to disappear in upstream mode, because a file with an extra key in it is not the original's file.

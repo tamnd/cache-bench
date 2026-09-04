@@ -6,7 +6,7 @@ This is a Rust port of [tidwall/cache-benchmarks](https://github.com/tidwall/cac
 
 ## Status
 
-Early. The workspace, the toolchain and the CI are here, and so is the on disk model, which reads and writes the original's result files byte for byte in both directions. `doctor` is the one subcommand that works, and it checks the files rather than the machine so far. Nothing measures anything yet. The [milestones](https://github.com/tamnd/cache-bench/milestones) say what each stage has to land and what it is gated on.
+It measures now. `doctor`, `run`, `choose`, `combine`, `chart`, `docs` and `verify` all work: `run` starts a server, drives memtier against it, counts cycles over it and writes one result file, and everything downstream of that file has been working since the chart milestone. What is missing is `sweep`, which is the loop that runs the other ten thousand cells, and the hardware gate that says all seven servers come up and go away again on a real Linux box. The [milestones](https://github.com/tamnd/cache-bench/milestones) say what each stage has to land and what it is gated on.
 
 No results have been published. When they are, they will come with the raw `output.json` next to them, so anyone can redraw every chart without trusting us.
 
@@ -51,6 +51,7 @@ crates/cb-cli       the cache-bench binary
 
 ```
 cache-bench doctor  --profile wsl32        what this host can and cannot measure
+cache-bench doctor  --profile wsl32 --deep every server started once and stopped again
 cache-bench run     redis --threads 8 --pipeline 10 --perf no --run 1
 cache-bench sweep   --profile wsl32        the whole matrix, restartable
 cache-bench choose  --dir results/wsl32
@@ -59,6 +60,8 @@ cache-bench chart   --dir results/wsl32 --profile wsl32
 cache-bench docs    --dir results/wsl32
 cache-bench verify  --against /path/to/cache-benchmarks/results
 ```
+
+`doctor` refuses rather than warns. A machine with fewer cores than the profile names, a profile that sweeps cycles on a host with no counters, a working set that would not fit in memory, a load average that says somebody else is using the box: each of those is a sweep that produces numbers rather than an error, so each of them stops here instead. `--write` records what the machine is in `host.json` next to the results, and `--deep` starts each of the seven servers in turn and stops it again, which is the check no file can make.
 
 `sweep` takes days. It is restartable, it skips runs whose result file already exists, and it prints an ETA once it has enough completed runs to derive one.
 
