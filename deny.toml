@@ -26,6 +26,10 @@ confidence-threshold = 0.93
 [bans]
 multiple-versions = "warn"
 wildcards = "deny"
+# The exception is the eight crates in this workspace, which depend on each other by path with no version requirement.
+# A version requirement on a path dependency has to move in lockstep with the workspace version or the build stops resolving, and it buys nothing when the crate is never resolved from a registry.
+# Every crate here sets publish = false, which is what makes this allowance apply to them and to nothing else.
+allow-wildcard-paths = true
 
 deny = [
     # No async runtime.
