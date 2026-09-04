@@ -5,11 +5,18 @@ are hard to get right can be tested without a cache server, a load generator or
 a PMU anywhere near them.
 
 `golden/` holds real `memtier_benchmark` and `perf stat` output captured from an
-actual run, the result files derived from it, and the `output.json` that the
-aggregation produces. The statistics tests read these rather than synthesising
-numbers, because the failures worth catching are the ones that come from what
-these tools actually print, not from what the parser's author assumed they
-print.
+actual run, and a handful of the result files derived from it. The statistics
+tests read these rather than synthesising numbers, because the failures worth
+catching are the ones that come from what these tools actually print, not from
+what the parser's author assumed they print.
+
+A handful and not all of them. The parity test needs the original's published
+`output.json`, which is 1.7 MB, and the golden fixtures for the whole matrix
+would be thousands of files. None of that is committed. Raw measurement data
+does not go in this repository at all, in `testdata/` any more than in
+`results/`: the fixtures here are the smallest set that makes a failure
+diagnosable, and the bulk data is fetched from the original at a pinned commit
+when the parity test runs.
 
 `manifest.json` holds a SHA-256 for every chart drawn from the golden data. CI
 redraws all of them and fails if any hash moves. When a hash does move it is
