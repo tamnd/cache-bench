@@ -4,12 +4,30 @@ What each release costs you, in the order the releases happened. New entries go 
 
 ## Unreleased
 
+Nothing yet.
+
+## 0.2.0 - 2026-09-04
+
+M2 is done, which means the statistics are finished and both modes are proved against the original's own data. Still nothing measures anything.
+
+The milestone exits on a gate and the gate holds in one command. From the original's 20160 committed run files, upstream mode reproduces all 2304 of its chosen files byte for byte and the whole 1.7 MB of its published `output.json` byte for byte. Run `cache-bench verify --against` a checkout of the original and it will say so, in under a second, along with how far the corrected numbers sit from the ones it just reproduced.
+
+That last part is the point of shipping both modes. The four defects now have sizes instead of descriptions. The typical median moves by a tenth of a percent on GET and a quarter of a percent on SET, and the worst median SET moves by 61 percent, which is Garnet at 8 threads and pipeline 50 published at 19.86 million operations per second where the median of its 31 runs is 12.30 million. The published median GET is the higher of the two in 576 of 576 cells, on every engine at every thread count and every pipeline depth, which is a chart that reads slightly fast everywhere rather than a chart with noise in it.
+
+Worth saying plainly, because it is the argument for having built the gate at all: two of the four defects were described incorrectly when they were read off the Go source at the start of the milestone, and byte parity is what corrected them. Two more behaviours were not visible in the source at all. The info block of a chosen file comes from the last run read rather than from the run selected, and `cleanperf` rewrites exactly six counters and leaves the others alone. Neither is guessable and both are needed.
+
+M3 is the charts, which is where the numbers finally become something to look at.
+
 ### Added
 
 - `cache-bench choose`, which reduces every cell in a results directory to its median, best, worst and average. `--compat=upstream` reproduces the original's four defects, `--out` writes somewhere else so that two modes can be compared without either overwriting the other, and `--cell` does one cell for when you are looking at a single number rather than a sweep.
 - `cache-bench combine`, which gathers the chosen files into the `output.json` the charts read. No computation in it. Every number was decided by `choose` and this collects them in the order a directory listing gives them, which is the original's order because the original builds the file straight out of one.
 - `cache-bench verify`, which is the claim this port makes about itself run as a command. With no arguments it checks the golden files committed here and runs anywhere in under a second, which is why it is in CI. Pointed at a checkout of the original with `--against` it reads all 20160 committed run files, reproduces all 2304 chosen files and the whole published `output.json` byte for byte, and then prints how far the corrected statistics sit from the original's. The numbers in `divergences.md` under D1 to D4 are that output rather than an assertion about it.
 - The results directory layer the two of them share. A gap in a cell's run numbering stops that cell at the gap and says how many files sit above it, rather than reducing 30 runs and calling them 31.
+
+### Changed
+
+- The eight crates in the workspace are marked as not published, and the version requirements on the paths between them are gone. Those requirements have to move in lockstep with the workspace version or the build stops resolving, which is what happened when this release was first cut, and they buy nothing when the crate is never resolved from a registry. Nothing here goes to crates.io and the manifests now say so.
 
 ### Notes
 

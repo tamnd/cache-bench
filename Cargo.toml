@@ -13,7 +13,7 @@ members = [
 ]
 
 [workspace.package]
-version = "0.1.1"
+version = "0.2.0"
 edition = "2024"
 # Held behind stable, and it matches the floor in tamnd/yo so the two trees agree on what a supported compiler is.
 rust-version = "1.94"
@@ -23,15 +23,19 @@ authors = ["tamnd <tamnd87@gmail.com>"]
 readme = "README.md"
 keywords = ["benchmark", "cache", "redis", "valkey", "memcached"]
 categories = ["caching", "development-tools::profiling"]
+# Nothing here goes to crates.io. This is a harness, not a library, and the only useful artefact is a binary that runs on the box the sweep will happen on.
+publish = false
 
+# Paths only, with no version requirement, because none of these is published and none of them will be.
+# A version here has to be bumped in lockstep with the workspace version or the build stops resolving, which is a chore that buys nothing when the only consumer of a crate is the binary next to it.
 [workspace.dependencies]
-cb-cache = { path = "crates/cb-cache", version = "0.1.0" }
-cb-chart = { path = "crates/cb-chart", version = "0.1.0" }
-cb-core = { path = "crates/cb-core", version = "0.1.0" }
-cb-docs = { path = "crates/cb-docs", version = "0.1.0" }
-cb-memtier = { path = "crates/cb-memtier", version = "0.1.0" }
-cb-perf = { path = "crates/cb-perf", version = "0.1.0" }
-cb-stats = { path = "crates/cb-stats", version = "0.1.0" }
+cb-cache = { path = "crates/cb-cache" }
+cb-chart = { path = "crates/cb-chart" }
+cb-core = { path = "crates/cb-core" }
+cb-docs = { path = "crates/cb-docs" }
+cb-memtier = { path = "crates/cb-memtier" }
+cb-perf = { path = "crates/cb-perf" }
+cb-stats = { path = "crates/cb-stats" }
 
 [workspace.lints.rust]
 missing_docs = "warn"
