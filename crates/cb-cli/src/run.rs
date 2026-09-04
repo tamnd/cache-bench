@@ -100,6 +100,54 @@ pub(crate) struct Args {
     force: bool,
 }
 
+/// Everything a run needs that is the same for every cell in a sweep.
+///
+/// Split out from the arguments because `sweep` measures ten thousand cells against one of these and one lock, and a sweep that re-read the config between cells could measure the first half of the matrix against one build of a server and the second half against another.
+pub(crate) struct Setup<'a> {
+    /// Where the binaries are.
+    pub(crate) config: &'a Config,
+    /// The machine shape being measured.
+    pub(crate) profile: &'a Profile,
+    /// Its name, which goes in every result file.
+    pub(crate) profile_name: &'a str,
+    /// The results directory.
+    pub(crate) dir: &'a Path,
+    /// The socket every server binds in turn.
+    pub(crate) socket: &'a Path,
+    /// Corrected, or the original's behaviour with its defects.
+    pub(crate) compat: Compat,
+    /// Which perf to use for the cells that want counters.
+    pub(crate) perf_binary: &'a Path,
+}
+
+/// Which cell, and which run of it.
+#[derive(Debug, Clone, Copy)]
+pub(crate) struct Cell {
+    /// Which server.
+    pub(crate) cache: CacheKind,
+    /// How many I/O threads it gets.
+    pub(crate) threads: u32,
+    /// memtier's pipeline depth.
+    pub(crate) pipeline: u32,
+    /// Whether counters are attached.
+    pub(crate) perf: bool,
+    /// Which run of the cell, numbered from one as the filenames are.
+    pub(crate) run: u32,
+}
+
+impl Cell {
+    /// The filename this run will be written under, which is also how it is named everywhere else.
+    pub(crate) const fn name(self) -> RunName {
+        RunName {
+            cache: self.cache,
+            threads: self.threads,
+            pipeline: self.pipeline,
+            perf: self.perf,
+            slot: Slot::Run(self.run),
+        }
+    }
+}
+
 /// Measure the cell and write the file.
 ///
 /// # Errors
@@ -112,16 +160,16 @@ pub(crate) fn run(args: &Args) -> Result<(), String> {
     let profiles = Profiles::parse(&profiles).map_err(|e| why(&args.profiles, &e))?;
     let profile = profiles.get(&args.profile).map_err(|e| e.to_string())?;
     profile.check().map_err(|e| why(&args.profiles, &e))?;
-    check_threads(args.threads, profile)?;
     check_machine(profile, cpus())?;
 
-    let name = RunName {
+    let cell = Cell {
         cache: args.cache,
         threads: args.threads,
         pipeline: args.pipeline,
         perf: args.perf,
-        slot: Slot::Run(args.run),
+        run: args.run,
     };
+    let name = cell.name();
     let path = results::runs_dir(&args.dir).join(name.to_string());
     // A sweep is restartable by file existence and nothing else, so a run that is already on disk is left alone rather than measured again.
     if path.exists() && !args.force {
@@ -131,19 +179,43 @@ pub(crate) fn run(args: &Args) -> Result<(), String> {
 
     // Held for the whole run and given back on the way out, whether the run worked or not.
     let _held = Lock::take(&args.dir)?;
+    once(
+        &Setup {
+            config: &config,
+            profile,
+            profile_name: &args.profile,
+            dir: &args.dir,
+            socket: &args.socket,
+            compat: args.compat,
+            perf_binary: &args.perf_binary,
+        },
+        cell,
+    )
+}
+
+/// One cell, measured once, with the caller holding the results directory.
+///
+/// The lock and the check for a file that is already there belong to the caller, because `sweep` takes the directory once and then measures ten thousand cells inside it rather than taking and giving it back between each one.
+///
+/// # Errors
+///
+/// On anything that would make the number wrong rather than late.
+pub(crate) fn once(setup: &Setup<'_>, cell: Cell) -> Result<(), String> {
+    check_threads(cell.threads, setup.profile)?;
 
     // The stray check. A server left over from an earlier cell would answer this whole run, and every number in it would be a real number belonging to a different engine.
-    if cb_cache::anybody_there(Endpoint::Unix(&args.socket)) {
+    if cb_cache::anybody_there(Endpoint::Unix(setup.socket)) {
         return Err(format!(
             "something is already answering on {}, so a server from an earlier run is still up and this run would have measured that one instead",
-            args.socket.display()
+            setup.socket.display()
         ));
     }
 
-    let binary = config.binary(args.cache).map_err(|e| e.to_string())?;
-    let memtier = config.memtier().map_err(|e| e.to_string())?;
-    let logs = args.dir.join("logs");
+    let binary = setup.config.binary(cell.cache).map_err(|e| e.to_string())?;
+    let memtier = setup.config.memtier().map_err(|e| e.to_string())?;
+    let logs = setup.dir.join("logs");
     make(&logs)?;
+    let name = cell.name();
     let stem = name.to_string().trim_end_matches(".json").to_owned();
     let at = |what: &str| logs.join(format!("{stem}-{what}"));
 
@@ -151,7 +223,7 @@ pub(crate) fn run(args: &Args) -> Result<(), String> {
     let version = cb_cache::version(binary, &at("version.txt")).map_err(|e| e.to_string())?;
 
     // A perf cell on a machine with no usable counters would write a file full of missing counters that looks exactly like a machine where one counter is unsupported, and the chart layer cannot tell those apart.
-    if args.perf {
+    if cell.perf {
         let probe = cb_perf::probe();
         if !probe.counted {
             return Err(format!(
@@ -163,31 +235,31 @@ pub(crate) fn run(args: &Args) -> Result<(), String> {
 
     let launch = Launch {
         binary,
-        threads: args.threads,
-        maxmemory: profile.maxmemory,
-        endpoint: Endpoint::Unix(&args.socket),
-        compat: args.compat,
+        threads: cell.threads,
+        maxmemory: setup.profile.maxmemory,
+        endpoint: Endpoint::Unix(setup.socket),
+        compat: setup.compat,
         as_root: cb_cache::as_root(),
     };
     let started = cb_core::now();
     let mut server = Server::start(
-        args.cache,
+        cell.cache,
         &launch,
-        pin(&profile.cache_pin),
+        pin(&setup.profile.cache_pin),
         &at("server.log"),
         READY,
     )
     .map_err(|e| e.to_string())?;
     println!(
         "{} up in {:?} as pid {}",
-        args.cache,
+        cell.cache,
         server.ready(),
         server.pid()
     );
     // The original's flat sleep after startup, kept. It is not needed here, because the wait above is a round trip rather than a guess, but it is a tenth of a second in a run that lasts minutes and dropping it would be a change to the sequence for no measurable gain.
     std::thread::sleep(SETTLE);
 
-    let measured = measure(args, profile, memtier, &at, &mut server);
+    let measured = measure(setup, cell, memtier, &at, &mut server);
 
     // The server is stopped whether the passes worked or not, and a group that outlived its run is a failure in its own right, because the next run would be measured against it.
     let stopped = server.stop(STOP).map_err(|e| e.to_string());
@@ -196,17 +268,17 @@ pub(crate) fn run(args: &Args) -> Result<(), String> {
 
     let run = Run {
         info: Info {
-            cache: args.cache.name().to_owned(),
+            cache: cell.cache.name().to_owned(),
             version,
-            threads: args.threads,
-            bench_threads: profile.bench_threads,
-            connections: profile.connections(),
-            operations: profile.total_operations(),
-            sizerange: profile.size_range.to_string(),
-            pipeline: args.pipeline,
+            threads: cell.threads,
+            bench_threads: setup.profile.bench_threads,
+            connections: setup.profile.connections(),
+            operations: setup.profile.total_operations(),
+            sizerange: setup.profile.size_range.to_string(),
+            pipeline: cell.pipeline,
             // Both of these are ours, and upstream mode writes the original's file exactly.
-            profile: ours(args.compat, || args.profile.clone()),
-            run_started: ours(args.compat, || started.clone()),
+            profile: ours(setup.compat, || setup.profile_name.to_owned()),
+            run_started: ours(setup.compat, || started.clone()),
             kind: None,
         },
         sets,
@@ -214,6 +286,7 @@ pub(crate) fn run(args: &Args) -> Result<(), String> {
         perf: counters,
         spread: None,
     };
+    let path = results::runs_dir(setup.dir).join(name.to_string());
     results::write(&path, &run.emit())?;
     println!("wrote {}", path.display());
     Ok(())
@@ -221,27 +294,27 @@ pub(crate) fn run(args: &Args) -> Result<(), String> {
 
 /// The three passes, with perf attached across the two that are kept.
 ///
-/// Split out from [`run`] so that a failure in here still stops the server, rather than leaving one holding the cores because the run gave up early.
+/// Split out from [`once`] so that a failure in here still stops the server, rather than leaving one holding the cores because the run gave up early.
 fn measure(
-    args: &Args,
-    profile: &Profile,
+    setup: &Setup<'_>,
+    cell: Cell,
     memtier: &Path,
     at: &dyn Fn(&str) -> PathBuf,
     server: &mut Server,
 ) -> Result<(cb_core::Op, cb_core::Op, Perf), String> {
     let pass = |pass: Pass, json_out: &Path| -> Result<cb_memtier::Load, String> {
         let invocation = Invocation {
-            profile,
-            pipeline: args.pipeline,
+            profile: setup.profile,
+            pipeline: cell.pipeline,
             pass,
-            protocol: args.cache.protocol(),
-            socket: &args.socket,
+            protocol: cell.cache.protocol(),
+            socket: setup.socket,
             json_out,
         };
         cb_memtier::run(
             memtier,
             &invocation,
-            pin(&profile.bench_pin),
+            pin(&setup.profile.bench_pin),
             &at(&format!("{}.log", pass.label())),
             PASS,
         )
@@ -253,9 +326,9 @@ fn measure(
     println!("warmup done in {:?}", warmup.took);
 
     // Attached here rather than before the warmup, which is where the original attaches it, so the counters cover the two measured passes and the short gap between them and nothing else.
-    let session = if args.perf {
+    let session = if cell.perf {
         Some(
-            cb_perf::Session::attach(&args.perf_binary, server.pid(), &at("perf.csv"))
+            cb_perf::Session::attach(setup.perf_binary, server.pid(), &at("perf.csv"))
                 .map_err(|e| e.to_string())?,
         )
     } else {
@@ -274,7 +347,7 @@ fn measure(
     if !server.alive().map_err(|e| e.to_string())? {
         return Err(format!(
             "{} exited during its own run, so these numbers are a fraction of a run rather than a measurement",
-            args.cache
+            cell.cache
         ));
     }
 
@@ -322,7 +395,7 @@ pub(crate) fn check_machine(profile: &Profile, cpus: Option<u32>) -> Result<(), 
 /// How many logical CPUs this machine has, where it says.
 ///
 /// A machine with more cores than a u32 can hold does not exist, and if one turns up it is not the machine anything here refuses.
-fn cpus() -> Option<u32> {
+pub(crate) fn cpus() -> Option<u32> {
     std::thread::available_parallelism()
         .ok()
         .map(|here| u32::try_from(here.get()).unwrap_or(u32::MAX))
