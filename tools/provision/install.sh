@@ -62,6 +62,15 @@ say() {
     printf '\n== %s\n' "$*"
 }
 
+# What .NET calls this machine, which is not what uname calls it.
+dotnet_arch() {
+    case "$(uname -m)" in
+        x86_64) echo x64 ;;
+        aarch64 | arm64) echo arm64 ;;
+        *) uname -m ;;
+    esac
+}
+
 have() {
     command -v "$1" >/dev/null 2>&1
 }
@@ -142,6 +151,16 @@ if wanted dotnet; then
         curl -sSL https://dot.net/v1/dotnet-install.sh -o /tmp/dotnet-install.sh
         bash /tmp/dotnet-install.sh --channel "$DOTNET_CHANNEL" --install-dir "$HOME/.dotnet"
     fi
+    # Tell the machine where that runtime went.
+    #
+    # A .NET binary is a small native launcher that goes looking for a runtime, and an install into a home directory is not one of the places it looks. The harness starts GarnetServer as a child process, so the alternative to this is every parent of that process carrying DOTNET_ROOT, which means a sweep started from a shell that has it works and one started from anything else does not, and the difference shows up as an engine missing from a chart.
+    #
+    # This file is the documented way to say it once for the whole machine. The launcher reads the arch suffixed name first and the bare one after it, so both are written.
+    sudo mkdir -p /etc/dotnet
+    for name in "install_location_$(dotnet_arch)" install_location; do
+        echo "$HOME/.dotnet" | sudo tee "/etc/dotnet/$name" >/dev/null
+    done
+    echo "runtime registered at $HOME/.dotnet"
 fi
 
 if wanted memtier; then
