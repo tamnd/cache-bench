@@ -142,6 +142,10 @@ dependencies = [
 [[package]]
 name = "cb-docs"
 version = "0.3.0"
+dependencies = [
+ "cb-chart",
+ "cb-core",
+]
 
 [[package]]
 name = "cb-memtier"

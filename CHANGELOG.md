@@ -4,6 +4,15 @@ What each release costs you, in the order the releases happened. New entries go 
 
 ## Unreleased
 
+### Added
+
+- `cache-bench docs`, which writes the documents that go with a results directory. So far that is the two chart indexes, `LINEAR.md` and `LOGARITHMIC.md`. Both come out of the same table the charts are drawn from, so a document cannot name a chart that was never specified, and both are built against the list of PNGs actually sitting in `graphs`, so a chart that was specified but not drawn is named rather than left out. `--check` writes nothing and fails if a document on disk is not the one that would be generated.
+- The anchor numbering GitHub appends to repeated headings, as a counter with a unit test on it rather than as suffixes typed by hand. Each index has the same ten headings under each of four pipeline blocks, so nearly every link in it points at a heading that appears four times, and getting the numbering wrong produces a document whose links all land in the first block.
+
+### Changed
+
+- The chart indexes cover all 154 charts rather than 120. The MIN and AVG latency sections are new, the two charts drawn with Garnet's single thread bar left off are linked from the P99 section they are a redraw of, and every image carries a real alt text instead of the `Alt text` placeholder. Recorded as D16.
+
 ## 0.3.0 - 2026-09-04
 
 The charts.

@@ -6,6 +6,7 @@
 mod chart;
 mod choose;
 mod combine;
+mod docs;
 mod doctor;
 mod results;
 mod verify;
@@ -34,6 +35,8 @@ enum Command {
     Combine(combine::Args),
     /// Draw the charts.
     Chart(chart::Args),
+    /// Write the documents that go with a results directory.
+    Docs(docs::Args),
     /// Check this port against the original's own files.
     Verify(verify::Args),
 }
@@ -45,6 +48,7 @@ fn main() -> ExitCode {
         Command::Choose(args) => choose::run(args),
         Command::Combine(args) => combine::run(args),
         Command::Chart(args) => chart::run(args),
+        Command::Docs(args) => docs::run(args),
         Command::Verify(args) => verify::run(args),
     };
     match result {
