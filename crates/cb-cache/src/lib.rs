@@ -7,7 +7,11 @@
 //! On other platforms it compiles to a stub that reports the platform is unsupported, which keeps the chart and statistics crates testable on a laptop.
 
 pub mod ready;
+pub mod server;
 pub mod supervise;
+pub mod version;
 
 pub use ready::{NotReady, wait};
+pub use server::{NotRunning, Server};
 pub use supervise::{BadProcess, Running, Stopped, Supervisor};
+pub use version::{NoVersion, version};
