@@ -70,6 +70,11 @@ jobs:
       # This used to be a Python approximation of the same checks, which could only look at shape. doctor reads the files with the parser the harness uses and applies the checks that matter, including whether a profile's working set fits inside its own memory limit.
       - name: doctor reads the config, the profiles and the hosts file
         run: cargo run --locked --package cb-cli -- doctor --files-only
+      # The claim the whole port rests on, checked on every push rather than on the days somebody remembers to check it.
+      # This is the half that needs nothing: the golden files committed here round trip byte for byte, and the two golden cells reduce to the original's own chosen files byte for byte.
+      # The other half needs a checkout of the original and 20160 of its run files, which is not something CI should be downloading, so it is run by hand with --against.
+      - name: verify reproduces the original's own files
+        run: cargo run --locked --package cb-cli -- verify
 
   # Two things that must never be in the tree, checked against what git is actually tracking rather than against what .gitignore says it should be.
   # A file that was committed before the ignore rule existed stays tracked and the ignore rule has no effect on it, which is exactly how both of these get in by accident.

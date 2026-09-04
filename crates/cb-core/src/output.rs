@@ -138,7 +138,7 @@ mod tests {
 
     // The real proof, against the whole 1.7 MB file rather than three entries of it.
     // That file is not committed, because raw measurement data does not go in this repository, so this runs on demand against a checkout of the original.
-    // Ignored by default and wired up properly by `cache-bench verify` in M8.
+    // Ignored by default. `cache-bench verify --against` covers the same ground without an environment variable, and this stays because it is the one that fails inside `cargo test`.
     #[test]
     #[ignore = "needs a checkout of the original, see CB_PARITY_OUTPUT"]
     fn the_whole_published_output_round_trips() {
