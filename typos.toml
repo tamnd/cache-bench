@@ -1,6 +1,8 @@
 [default.extend-words]
 # The original spells memcached this way in its filenames and we match it.
 memcache = "memcache"
+# numpy's function for a half open range, named after the builtin it mirrors.
+arange = "arange"
 
 [files]
 extend-exclude = ["testdata/", "assets/fonts/", "Cargo.lock"]
