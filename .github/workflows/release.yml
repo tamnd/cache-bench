@@ -7,8 +7,8 @@ name: release
 # Dispatching this from main with a tag input is how a half finished release gets finished, using main's workflow against the tag's code.
 # The ref on every checkout below is the half that makes it the tag's code.
 #
-# Nothing is published to crates.io.
-# This is a harness, not a library, and the only thing anyone wants from a release is a binary that runs on the box the sweep is going to happen on.
+# Two things come out of a tag. Binaries attached to a GitHub release, which is what somebody renting a box for an afternoon wants, and the eight crates on crates.io, which is what makes `cargo install cache-bench` work and lets the file model and the statistics be read on their own.
+# The crates go last, because a GitHub release can be deleted and a version on crates.io cannot.
 
 on:
   push:
@@ -57,6 +57,14 @@ jobs:
           fi
           if ! grep -q "^## $version " CHANGELOG.md; then
             echo "CHANGELOG.md has no section for $version" >&2
+            exit 1
+          fi
+          # The crates depend on each other by version as well as by path, and those versions are what a published crate resolves against.
+          # One of them left behind means a release that builds here and does not build for anybody who installs it.
+          stale=$(awk '/^\[workspace.dependencies\]/ { on = 1; next } on && /^\[/ { exit } on' Cargo.toml \
+            | grep -o 'version = "[^"]*"' | grep -v "\"$version\"" || true)
+          if [ -n "$stale" ]; then
+            echo "workspace dependencies still ask for $stale, and this release is $version" >&2
             exit 1
           fi
 
@@ -113,7 +121,7 @@ jobs:
       - uses: Swatinem/rust-cache@v2.9.2
         with:
           save-if: false
-      - run: cargo build --release --locked -p cb-cli --target ${{ matrix.target }}
+      - run: cargo build --release --locked -p cache-bench --target ${{ matrix.target }}
       - name: Package
         shell: bash
         run: |
@@ -174,3 +182,50 @@ jobs:
             --notes-file release-notes.md \
             --verify-tag \
             dist/*
+
+  # crates.io, in dependency order, last of all.
+  #
+  # A version on crates.io cannot be deleted or replaced, so this runs after every gate has passed and after the GitHub release exists.
+  # It is safe to run twice: a crate whose version is already up there is skipped rather than retried, which is what makes finishing a half published release a matter of dispatching this workflow again.
+  #
+  # The sleeps are for the rate limit on new crates, which is a burst of five and then one every ten minutes. The first release publishes eight crates that have never existed, so it will sit and wait for three of them, and there is nothing to do about that but wait.
+  crates:
+    needs: [check, verify, build, publish]
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          ref: ${{ inputs.tag || github.ref }}
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Publish the crates
+        env:
+          CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
+          VERSION: ${{ needs.check.outputs.version }}
+        run: |
+          set -euo pipefail
+          agent="cache-bench release (https://github.com/tamnd/cache-bench)"
+          # Dependency order. cargo waits for each one to appear in the index before it returns, so the next crate in the list can resolve it.
+          for crate in cb-core cb-cache cb-chart cb-memtier cb-perf cb-stats cb-docs cache-bench; do
+            code=$(curl -sS -o /dev/null -w '%{http_code}' -A "$agent" \
+              "https://crates.io/api/v1/crates/$crate/$VERSION")
+            if [ "$code" = "200" ]; then
+              echo "$crate $VERSION is already published"
+              continue
+            fi
+            for attempt in 1 2 3 4 5 6; do
+              if cargo publish --locked -p "$crate" 2>&1 | tee /tmp/publish.log; then
+                break
+              fi
+              if ! grep -qi "too many\|rate limit\|429" /tmp/publish.log; then
+                echo "$crate failed for a reason that waiting will not fix" >&2
+                exit 1
+              fi
+              if [ "$attempt" = "6" ]; then
+                echo "$crate is still rate limited after an hour of waiting" >&2
+                exit 1
+              fi
+              echo "rate limited on $crate, waiting ten minutes before attempt $((attempt + 1))"
+              sleep 600
+            done
+          done

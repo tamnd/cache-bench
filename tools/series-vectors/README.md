@@ -1,6 +1,6 @@
 # series-vectors
 
-Produces `testdata/golden/series.json`, which is what the chart layer is tested against.
+Produces `crates/cb-core/golden/series.json`, which is what the chart layer is tested against.
 
 The original's `graph` tool decides what goes on a chart, pastes the numbers into a Python script, runs `python3` on it and then deletes the script. The PNG is the only thing that survives, and a PNG is not something a test can compare against. So this stands in for Python: a shell script on `PATH` named `python3` that copies the script it was handed and draws nothing. The Go side sees a successful render and carries on, and what lands in the fixture is the original's own answer for all 154 charts rather than a description of one.
 

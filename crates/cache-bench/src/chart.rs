@@ -13,7 +13,7 @@ use cb_chart::{Axis, Chart, Corpus, Scale, Spec};
 use cb_core::{Compat, Output, Profiles};
 
 /// All 154 charts as the original drew them, which is what `--golden` draws from.
-const SERIES: &str = include_str!("../../../testdata/golden/series.json");
+use cb_core::golden::SERIES;
 
 /// What to draw and where to put it.
 #[derive(Debug, clap::Args)]

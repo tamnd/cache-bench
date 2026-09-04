@@ -134,9 +134,7 @@ mod tests {
         struct Cell {
             runs: Vec<Run>,
         }
-        const GOLDEN: &str = include_str!(
-            "../../../testdata/golden/cells/dragonfly-threads_1-pipeline_1-perf_yes.json"
-        );
+        use cb_core::golden::CELL_PERF as GOLDEN;
         let cell: Cell = serde_json::from_str(GOLDEN).unwrap();
         let dir = std::env::temp_dir().join(format!("cache-bench-choose-{tag}"));
         let _ = std::fs::remove_dir_all(&dir);
@@ -164,9 +162,7 @@ mod tests {
         struct Cell {
             upstream: std::collections::BTreeMap<String, Run>,
         }
-        const GOLDEN: &str = include_str!(
-            "../../../testdata/golden/cells/dragonfly-threads_1-pipeline_1-perf_yes.json"
-        );
+        use cb_core::golden::CELL_PERF as GOLDEN;
         let want: Cell = serde_json::from_str(GOLDEN).unwrap();
 
         let dir = sample("upstream");

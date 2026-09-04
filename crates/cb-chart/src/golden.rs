@@ -1,6 +1,6 @@
 //! The two fixtures the chart layer is checked against, and what checking against them means.
 //!
-//! `series.json` is what the original put on each of its 154 charts and `axes.json` is where it put it. Both were taken from the original by standing in for the thing it hands its work to, matplotlib in one case and Python itself in the other, so both are its own answers rather than a reading of them. `tools/series-vectors` and `tools/axis-vectors` are how, and `testdata/golden/README.md` is why.
+//! `series.json` is what the original put on each of its 154 charts and `axes.json` is where it put it. Both were taken from the original by standing in for the thing it hands its work to, matplotlib in one case and Python itself in the other, so both are its own answers rather than a reading of them. `tools/series-vectors` and `tools/axis-vectors` are how, and `crates/cb-core/golden/README.md` is why.
 //!
 //! The shape of the fixtures lives here rather than in a test, because two callers check against them: `cargo test`, which fails a pull request, and `cache-bench verify`, which is the same claim made as a command.
 

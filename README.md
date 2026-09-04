@@ -42,10 +42,22 @@ crates/cb-perf      the perf driver, the PMU probe, CSV parsing
 crates/cb-stats     run selection and aggregation
 crates/cb-chart     the chart engine, axes and layout and its own rasterizer
 crates/cb-docs      generated LINEAR.md, LOGARITHMIC.md and README.md
-crates/cb-cli       the cache-bench binary
+crates/cache-bench  the binary
 ```
 
+`crates/cb-core/golden` holds the original's own files, which is what every test in the workspace and `cache-bench verify` are checked against, and `crates/cb-chart/assets/fonts` holds the three faces the charts are drawn with. Both are in the crates that read them rather than beside them, because a published crate can only carry what is inside it.
+
 `cb-chart`, `cb-stats`, `cb-core` and `cb-docs` build and test on any platform with no cache server installed, which is where the work that is hard to get right lives. `cb-cache` needs Linux.
+
+## Install
+
+```
+cargo install cache-bench
+```
+
+That builds the binary from source and needs nothing else. A release also carries a tarball per platform on its [releases page](https://github.com/tamnd/cache-bench/releases), with a SHA-256 next to each one, which is what to fetch on a box that has no Rust toolchain on it and no reason to grow one.
+
+The seven cache servers and `memtier_benchmark` are not installed by any of this. They are named in `config.jsonc` by path, and `cache-bench doctor` says which ones it found.
 
 ## Usage
 
@@ -91,4 +103,4 @@ The README in a results directory is generated too, and none of the facts in it 
 
 Apache-2.0.
 
-The three fonts in the binary are not. Jost is under the SIL Open Font License 1.1 and DejaVu Sans is under the Bitstream Vera Fonts Copyright, both permissive enough to embed, and both licence texts ship in the directory beside the font file they cover. See [assets/fonts/README.md](assets/fonts/README.md) for which release each file came from.
+The three fonts in the binary are not. Jost is under the SIL Open Font License 1.1 and DejaVu Sans is under the Bitstream Vera Fonts Copyright, both permissive enough to embed, and both licence texts ship in the directory beside the font file they cover. See [crates/cb-chart/assets/fonts/README.md](crates/cb-chart/assets/fonts/README.md) for which release each file came from.

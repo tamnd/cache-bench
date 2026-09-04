@@ -1,6 +1,6 @@
 //! The geometry of all 154 charts, checked against the numbers matplotlib was given.
 //!
-//! The fixture is the original's own arithmetic rather than a reading of it. `tools/axis-vectors` slices the two chart scripts out of `cmd/graph/main.go`, runs them against the same 154 charts with matplotlib replaced by something that records what it was told, and writes down the answers. See `testdata/golden/README.md`.
+//! The fixture is the original's own arithmetic rather than a reading of it. `tools/axis-vectors` slices the two chart scripts out of `cmd/graph/main.go`, runs them against the same 154 charts with matplotlib replaced by something that records what it was told, and writes down the answers. See `crates/cb-core/golden/README.md`.
 //!
 //! Nothing here needs measurement data. The series fixture already holds every bar height the original plotted, and the axis is a function of those, so this runs in CI on a checkout with no results in it.
 //!
@@ -11,8 +11,7 @@
 use cb_chart::{Chart, Golden};
 use std::collections::BTreeMap;
 
-const SERIES: &str = include_str!("../../../testdata/golden/series.json");
-const AXES: &str = include_str!("../../../testdata/golden/axes.json");
+use cb_core::golden::{AXES, SERIES};
 
 fn golden() -> Golden {
     Golden::parse(AXES).unwrap()

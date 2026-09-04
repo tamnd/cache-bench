@@ -307,9 +307,7 @@ mod tests {
     use super::{Corpus, kops, nearest};
     use crate::spec::{Case, Metric, Percentile, Scale, Spec, Which};
 
-    const CHOSEN: &str = include_str!(
-        "../../../testdata/golden/bench_dragonfly-threads_1-pipeline_1-perf_yes-run_median.json"
-    );
+    use cb_core::golden::CHOSEN;
 
     // A cell built out of a real chosen file with the numbers moved, so that the shape is the original's and the values are ones a test can reason about.
     fn cell(cache: &str, threads: u32, pipeline: u32, perf: bool, gets: f64, cycles: f64) -> Entry {

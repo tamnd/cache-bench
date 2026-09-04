@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Produces testdata/golden/series.json from a checkout of the original.
+# Produces crates/cb-core/golden/series.json from a checkout of the original.
 #
 # The original's graph tool pastes its numbers into a Python script, runs python3 on it and deletes the script.
 # Nothing else ever sees what went on a chart, so the way to get the original's own series is to stand in for python3, keep the script and throw away the drawing.
@@ -13,7 +13,7 @@ set -euo pipefail
 upstream=${1:?usage: capture.sh /path/to/cache-benchmarks}
 upstream=$(cd "$upstream" && pwd)
 here=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
-out="$here/../../testdata/golden/series.json"
+out="$here/../../crates/cb-core/golden/series.json"
 
 if [[ ! -f "$upstream/results/output.json" ]]; then
     echo "no results/output.json under $upstream" >&2

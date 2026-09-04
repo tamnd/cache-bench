@@ -9,6 +9,7 @@ use std::collections::BTreeMap;
 use std::path::{Path, PathBuf};
 
 use cb_chart::{Chart, Corpus, Golden, Spec};
+use cb_core::golden::{AXES, CELL_PERF, CELL_PLAIN, CHOSEN, COMBINED, RUN_PERF, RUN_PLAIN, SERIES};
 use cb_core::{Compat, Entry, Output, Run};
 use cb_stats::{Kind, correct, upstream};
 
@@ -26,31 +27,6 @@ pub(crate) struct Args {
     #[arg(long)]
     no_compare: bool,
 }
-
-/// The run file with counters attached, where every counter is a JSON string and one of them is not a number at all.
-const RUN_PERF: &str = include_str!(
-    "../../../testdata/golden/bench_dragonfly-threads_1-pipeline_1-perf_yes-run_1.json"
-);
-/// The run file without counters, where `perf` has to come back as an empty object rather than as null.
-const RUN_PLAIN: &str = include_str!(
-    "../../../testdata/golden/bench_dragonfly-threads_1-pipeline_1-perf_no-run_1.json"
-);
-/// A chosen file, where the same counters are JSON numbers and `kind` has been appended last.
-const CHOSEN: &str = include_str!(
-    "../../../testdata/golden/bench_dragonfly-threads_1-pipeline_1-perf_yes-run_median.json"
-);
-/// Three entries of the published combined file, which pins the layout and its odd indentation.
-const COMBINED: &str = include_str!("../../../testdata/golden/output-three-cells.json");
-/// One whole cell with counters, its 31 runs and the four files the original reduced them to.
-const CELL_PERF: &str =
-    include_str!("../../../testdata/golden/cells/dragonfly-threads_1-pipeline_1-perf_yes.json");
-/// The same cell measured without counters, which escapes one of the four defects by accident.
-const CELL_PLAIN: &str =
-    include_str!("../../../testdata/golden/cells/dragonfly-threads_1-pipeline_1-perf_no.json");
-/// All 154 charts as the original drew them, taken out of its own generated drawing scripts.
-const SERIES: &str = include_str!("../../../testdata/golden/series.json");
-/// Where the original put all of that, taken by standing in for matplotlib while the same scripts ran.
-const AXES: &str = include_str!("../../../testdata/golden/axes.json");
 
 /// A cell as the golden files hold it, which is the runs and the answers side by side.
 #[derive(serde::Deserialize)]

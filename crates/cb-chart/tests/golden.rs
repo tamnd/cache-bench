@@ -11,7 +11,7 @@
 use cb_chart::{Chart, Corpus, Spec};
 use cb_core::{Compat, Entry, Info, Latency, Op, Output, Perf, Run};
 
-const SERIES: &str = include_str!("../../../testdata/golden/series.json");
+use cb_core::golden::SERIES;
 
 /// The six the original measured, in the order sorted result filenames produce.
 const CACHES: [&str; 6] = [

@@ -160,9 +160,7 @@ mod tests {
 
     /// A results directory holding one cell of `n` runs, plus whatever extra files the caller names.
     fn sample(tag: &str, n: u32, extra: &[&str]) -> PathBuf {
-        const RUN: &str = include_str!(
-            "../../../testdata/golden/bench_dragonfly-threads_1-pipeline_1-perf_yes-run_1.json"
-        );
+        use cb_core::golden::RUN_PERF as RUN;
         let dir = std::env::temp_dir().join(format!("cache-bench-results-{tag}"));
         let _ = std::fs::remove_dir_all(&dir);
         for at in 1..=n {

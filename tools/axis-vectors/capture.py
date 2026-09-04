@@ -318,7 +318,7 @@ def render(fixture):
 def main():
     upstream = sys.argv[1]
     here = os.path.dirname(os.path.abspath(__file__))
-    golden = os.path.join(here, "../../testdata/golden")
+    golden = os.path.join(here, "../../crates/cb-core/golden")
     series = json.load(open(os.path.join(golden, "series.json"), encoding="utf-8"))
     scripts = templates(os.path.join(upstream, "cmd/graph/main.go"))
 

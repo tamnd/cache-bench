@@ -52,7 +52,7 @@ The file format is the original's, byte for byte, in both directions. That is no
 
 Charts are drawn from `output.json`, which is committed next to them. Redrawing every chart from that file is one command and needs nothing installed but Rust. The point of that is that nobody has to trust us. If you think the selection is wrong, or the scale is misleading, or a colour choice is doing work it should not, you have the data to redraw it your way.
 
-Chart output is deterministic. The same input produces a byte identical PNG on Linux, macOS and Windows, the fonts are embedded in the binary rather than taken from the host, and a hash manifest in `testdata/` fails CI if that stops being true.
+Chart output is deterministic. The same input produces a byte identical PNG on Linux, macOS and Windows, the fonts are embedded in the binary rather than taken from the host, and a hash manifest in `crates/cb-core/golden` fails CI if that stops being true.
 
 ## Hardware, and why it is the hardest part
 

@@ -94,6 +94,23 @@ dependencies = [
 ]
 
 [[package]]
+name = "cache-bench"
+version = "0.5.0"
+dependencies = [
+ "cb-cache",
+ "cb-chart",
+ "cb-core",
+ "cb-docs",
+ "cb-memtier",
+ "cb-perf",
+ "cb-stats",
+ "clap",
+ "serde",
+ "serde_json",
+ "sha2",
+]
+
+[[package]]
 name = "cb-cache"
 version = "0.5.0"
 dependencies = [
@@ -114,23 +131,6 @@ dependencies = [
  "skrifa",
  "thiserror",
  "zeno",
-]
-
-[[package]]
-name = "cb-cli"
-version = "0.5.0"
-dependencies = [
- "cb-cache",
- "cb-chart",
- "cb-core",
- "cb-docs",
- "cb-memtier",
- "cb-perf",
- "cb-stats",
- "clap",
- "serde",
- "serde_json",
- "sha2",
 ]
 
 [[package]]

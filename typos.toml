@@ -9,4 +9,4 @@ arange = "arange"
 PNGs = "PNGs"
 
 [files]
-extend-exclude = ["testdata/", "assets/fonts/", "Cargo.lock"]
+extend-exclude = ["crates/cb-core/golden/", "crates/cb-chart/assets/fonts/", "Cargo.lock"]

@@ -73,9 +73,7 @@ mod tests {
     use super::{Args, run};
     use crate::results::{runs_dir, write};
 
-    const CHOSEN: &str = include_str!(
-        "../../../testdata/golden/bench_dragonfly-threads_1-pipeline_1-perf_yes-run_median.json"
-    );
+    use cb_core::golden::CHOSEN;
 
     fn sample(tag: &str, names: &[&str]) -> PathBuf {
         let dir = std::env::temp_dir().join(format!("cache-bench-combine-{tag}"));
