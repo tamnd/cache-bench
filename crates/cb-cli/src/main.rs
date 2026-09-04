@@ -7,6 +7,7 @@ mod choose;
 mod combine;
 mod doctor;
 mod results;
+mod verify;
 
 use std::process::ExitCode;
 
@@ -30,6 +31,8 @@ enum Command {
     Choose(choose::Args),
     /// Gather every chosen file into the one file the charts read.
     Combine(combine::Args),
+    /// Check this port against the original's own files.
+    Verify(verify::Args),
 }
 
 fn main() -> ExitCode {
@@ -38,6 +41,7 @@ fn main() -> ExitCode {
         Command::Doctor(args) => doctor::run(args),
         Command::Choose(args) => choose::run(args),
         Command::Combine(args) => combine::run(args),
+        Command::Verify(args) => verify::run(args),
     };
     match result {
         Ok(()) => ExitCode::SUCCESS,

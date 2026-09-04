@@ -8,6 +8,7 @@ What each release costs you, in the order the releases happened. New entries go 
 
 - `cache-bench choose`, which reduces every cell in a results directory to its median, best, worst and average. `--compat=upstream` reproduces the original's four defects, `--out` writes somewhere else so that two modes can be compared without either overwriting the other, and `--cell` does one cell for when you are looking at a single number rather than a sweep.
 - `cache-bench combine`, which gathers the chosen files into the `output.json` the charts read. No computation in it. Every number was decided by `choose` and this collects them in the order a directory listing gives them, which is the original's order because the original builds the file straight out of one.
+- `cache-bench verify`, which is the claim this port makes about itself run as a command. With no arguments it checks the golden files committed here and runs anywhere in under a second, which is why it is in CI. Pointed at a checkout of the original with `--against` it reads all 20160 committed run files, reproduces all 2304 chosen files and the whole published `output.json` byte for byte, and then prints how far the corrected statistics sit from the original's. The numbers in `divergences.md` under D1 to D4 are that output rather than an assertion about it.
 - The results directory layer the two of them share. A gap in a cell's run numbering stops that cell at the gap and says how many files sit above it, rather than reducing 30 runs and calling them 31.
 
 ### Notes

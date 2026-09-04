@@ -58,6 +58,14 @@ cmp /tmp/gate/output.json /path/to/cache-benchmarks/results/output.json
 
 `--out` is what keeps the original's directory untouched, since `choose` would otherwise write its four files next to the runs it read. Dropping `--compat upstream` from the first line writes the corrected numbers to the same place, so diffing two runs of it is a like for like comparison of the statistics and of nothing else.
 
+All three of those in one command, reading nothing and writing nothing:
+
+```
+cache-bench verify --against /path/to/cache-benchmarks/results
+```
+
+It checks the files in this directory first, which needs no checkout and is what CI runs, and then does the whole corpus and prints how far the corrected statistics sit from the original's. The numbers quoted in `divergences.md` under D1 to D4 are that output.
+
 ## gosort.json
 
 142 cases produced by Go's `sort.Slice`, which is the one fixture here that is generated rather than copied. Upstream mode has to reproduce the original's SET numbers, and those come out of a sort whose comparator reads a slice it is not sorting, so the result depends on the exact sequence of comparisons and swaps rather than on the values. Matching it means matching Go's `pdqsort`, and the only way to know we do is to ask Go.
