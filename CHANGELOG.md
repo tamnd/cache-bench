@@ -4,7 +4,20 @@ What each release costs you, in the order the releases happened. New entries go 
 
 ## Unreleased
 
-Nothing yet.
+### Added
+
+- The series layer, which is the half of the chart engine with no pixels in it. A results file goes in and what comes out is a title, both axis labels, a thread count for each group of bars, and one number per bar, for each of the 154 charts. Everything a reader could disagree with is decided here, so it is a pure function and it is tested before anything is drawn.
+- `testdata/golden/series.json`, which is all 154 charts as the original worked them out. Its `graph` tool pastes the numbers into a Python script and deletes the script after drawing, so `tools/series-vectors` stands in for Python, keeps the script and throws the picture away. The fixture is the original's answer rather than a description of it.
+- Two levels of check on that fixture. The filenames, titles, axes, legend order and colours are checked in `cargo test` against a results file with the original's shape and none of its numbers, so it runs in CI on a checkout with nothing measured in it. The bar heights go through `cache-bench verify --against`, where they come out of our own reduction of the original's run files, which makes a matching chart one where every bar survived the run files, the selection, the combining and the extraction.
+
+### Fixed
+
+- `Kind` now formats through `pad`, so a width in a format string does what it says. `verify` prints the four aggregates in a column and asks for eight characters, and the old implementation threw the width away without complaining, which is why that column was never a column.
+
+### Notes
+
+- All 154 charts and all 11088 bars come back as the original's. That is the first half of the M3 gate met, and it is met before a single pixel has been drawn, which was the point of splitting the layer in two.
+- A bar can now be absent rather than zero. The original has no way to say that a cell was never measured or that the machine could not count cycles, so it says zero, and a zero bar claims an engine scored nothing rather than that it was not tested. On a logarithmic chart one of those takes the whole y axis with it. `--compat=upstream` still writes the zero.
 
 ## 0.2.0 - 2026-09-04
 

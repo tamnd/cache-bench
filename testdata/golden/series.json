@@ -1,0 +1,2312 @@
+[
+  {
+    "file": "graph_cpucycles-pipeline_1-kind_median-scale_linear.png",
+    "title": "GET+SET - 256 Clients - 51200000 Ops - Pipeline 1",
+    "xtitle": "Threads",
+    "ytitle": "CPU Cycles (cycles/op)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [12501, 13650, 13718, 13818, 14058, 14399, 14413, 14385, 14653, 14830, 14564, 14417]},
+      {"cache": "garnet", "color": "#d62728", "points": [12660, 13024, 13164, 13449, 13508, 13471, 13639, 13396, 14104, 15030, 15146, 17929]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [10589, 11634, 12538, 13165, 13064, 13185, 13232, 13400, 13541, 13788, 13381, 13663]},
+      {"cache": "pogocache", "color": "#e64098", "points": [7244, 7036, 7227, 7378, 7508, 7449, 7232, 7053, 7148, 7309, 7364, 7256]},
+      {"cache": "redis", "color": "#8c564b", "points": [9363, 9924, 10018, 10083, 9794, 9851, 9877, 9957, 10063, 10289, 10454, 10730]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [9431, 15571, 12957, 11943, 11866, 12277, 13596, 15752, 19316, 23672, 26307, 30482]}
+    ]
+  },
+  {
+    "file": "graph_cpucycles-pipeline_1-kind_median-scale_logarithmic.png",
+    "title": "GET+SET - 256 Clients - 51200000 Ops - Pipeline 1",
+    "xtitle": "Threads",
+    "ytitle": "CPU Cycles (cycles/op)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [12501, 13650, 13718, 13818, 14058, 14399, 14413, 14385, 14653, 14830, 14564, 14417]},
+      {"cache": "garnet", "color": "#d62728", "points": [12660, 13024, 13164, 13449, 13508, 13471, 13639, 13396, 14104, 15030, 15146, 17929]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [10589, 11634, 12538, 13165, 13064, 13185, 13232, 13400, 13541, 13788, 13381, 13663]},
+      {"cache": "pogocache", "color": "#e64098", "points": [7244, 7036, 7227, 7378, 7508, 7449, 7232, 7053, 7148, 7309, 7364, 7256]},
+      {"cache": "redis", "color": "#8c564b", "points": [9363, 9924, 10018, 10083, 9794, 9851, 9877, 9957, 10063, 10289, 10454, 10730]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [9431, 15571, 12957, 11943, 11866, 12277, 13596, 15752, 19316, 23672, 26307, 30482]}
+    ]
+  },
+  {
+    "file": "graph_cpucycles-pipeline_10-kind_median-scale_linear.png",
+    "title": "GET+SET - 256 Clients - 51200000 Ops - Pipeline 10",
+    "xtitle": "Threads",
+    "ytitle": "CPU Cycles (cycles/op)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [7946, 8409, 8857, 8935, 9241, 9449, 9577, 9584, 9777, 9967, 9865, 9754]},
+      {"cache": "garnet", "color": "#d62728", "points": [2643, 2698, 2771, 2854, 2911, 2886, 2878, 2876, 2919, 2860, 3032, 3461]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [5112, 6726, 7287, 7444, 7523, 7683, 7851, 8087, 8612, 8711, 8507, 8515]},
+      {"cache": "pogocache", "color": "#e64098", "points": [2710, 2597, 2654, 2772, 2737, 2713, 2623, 2405, 2498, 2534, 2573, 2494]},
+      {"cache": "redis", "color": "#8c564b", "points": [4031, 4619, 5655, 6502, 6291, 6664, 6901, 8693, 7222, 5927, 7184, 10443]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [3354, 4353, 7389, 9959, 13134, 18150, 21133, 23951, 30011, 35251, 39409, 45040]}
+    ]
+  },
+  {
+    "file": "graph_cpucycles-pipeline_10-kind_median-scale_logarithmic.png",
+    "title": "GET+SET - 256 Clients - 51200000 Ops - Pipeline 10",
+    "xtitle": "Threads",
+    "ytitle": "CPU Cycles (cycles/op)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [7946, 8409, 8857, 8935, 9241, 9449, 9577, 9584, 9777, 9967, 9865, 9754]},
+      {"cache": "garnet", "color": "#d62728", "points": [2643, 2698, 2771, 2854, 2911, 2886, 2878, 2876, 2919, 2860, 3032, 3461]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [5112, 6726, 7287, 7444, 7523, 7683, 7851, 8087, 8612, 8711, 8507, 8515]},
+      {"cache": "pogocache", "color": "#e64098", "points": [2710, 2597, 2654, 2772, 2737, 2713, 2623, 2405, 2498, 2534, 2573, 2494]},
+      {"cache": "redis", "color": "#8c564b", "points": [4031, 4619, 5655, 6502, 6291, 6664, 6901, 8693, 7222, 5927, 7184, 10443]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [3354, 4353, 7389, 9959, 13134, 18150, 21133, 23951, 30011, 35251, 39409, 45040]}
+    ]
+  },
+  {
+    "file": "graph_cpucycles-pipeline_25-kind_median-scale_linear.png",
+    "title": "GET+SET - 256 Clients - 51200000 Ops - Pipeline 25",
+    "xtitle": "Threads",
+    "ytitle": "CPU Cycles (cycles/op)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [9289, 7996, 8402, 8278, 8618, 8854, 9035, 9041, 9375, 9634, 9833, 9865]},
+      {"cache": "garnet", "color": "#d62728", "points": [1790, 1883, 1947, 2009, 2060, 2178, 2209, 2230, 2343, 2279, 2431, 2592]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [5590, 7127, 7391, 7961, 7535, 7798, 7844, 8313, 8845, 9461, 9033, 8672]},
+      {"cache": "pogocache", "color": "#e64098", "points": [2469, 2329, 2227, 2425, 2341, 2263, 2193, 2011, 2098, 2084, 2183, 2130]},
+      {"cache": "redis", "color": "#8c564b", "points": [3343, 4320, 6996, 6503, 7653, 7862, 9421, 6877, 11144, 11651, 6113, 6322]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [2975, 4613, 7665, 11363, 13028, 17946, 20892, 23644, 29322, 35085, 37045, 48173]}
+    ]
+  },
+  {
+    "file": "graph_cpucycles-pipeline_25-kind_median-scale_logarithmic.png",
+    "title": "GET+SET - 256 Clients - 51200000 Ops - Pipeline 25",
+    "xtitle": "Threads",
+    "ytitle": "CPU Cycles (cycles/op)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [9289, 7996, 8402, 8278, 8618, 8854, 9035, 9041, 9375, 9634, 9833, 9865]},
+      {"cache": "garnet", "color": "#d62728", "points": [1790, 1883, 1947, 2009, 2060, 2178, 2209, 2230, 2343, 2279, 2431, 2592]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [5590, 7127, 7391, 7961, 7535, 7798, 7844, 8313, 8845, 9461, 9033, 8672]},
+      {"cache": "pogocache", "color": "#e64098", "points": [2469, 2329, 2227, 2425, 2341, 2263, 2193, 2011, 2098, 2084, 2183, 2130]},
+      {"cache": "redis", "color": "#8c564b", "points": [3343, 4320, 6996, 6503, 7653, 7862, 9421, 6877, 11144, 11651, 6113, 6322]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [2975, 4613, 7665, 11363, 13028, 17946, 20892, 23644, 29322, 35085, 37045, 48173]}
+    ]
+  },
+  {
+    "file": "graph_cpucycles-pipeline_50-kind_median-scale_linear.png",
+    "title": "GET+SET - 256 Clients - 51200000 Ops - Pipeline 50",
+    "xtitle": "Threads",
+    "ytitle": "CPU Cycles (cycles/op)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [9264, 8065, 8498, 8064, 8444, 8480, 8424, 8635, 8827, 9017, 9110, 9031]},
+      {"cache": "garnet", "color": "#d62728", "points": [1446, 1563, 1715, 1839, 1876, 1988, 2151, 2032, 2102, 2271, 2322, 2363]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [5780, 6960, 7523, 7563, 7126, 7585, 7919, 8174, 8870, 8965, 8625, 8652]},
+      {"cache": "pogocache", "color": "#e64098", "points": [2567, 2043, 2187, 2191, 2269, 2279, 2183, 2033, 2065, 2040, 2231, 2148]},
+      {"cache": "redis", "color": "#8c564b", "points": [3256, 5791, 8923, 12058, 12557, 14044, 18243, 21565, 24058, 33060, 35292, 32831]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [2831, 5382, 7620, 10602, 13328, 17898, 21036, 24003, 30109, 35892, 37131, 48561]}
+    ]
+  },
+  {
+    "file": "graph_cpucycles-pipeline_50-kind_median-scale_logarithmic.png",
+    "title": "GET+SET - 256 Clients - 51200000 Ops - Pipeline 50",
+    "xtitle": "Threads",
+    "ytitle": "CPU Cycles (cycles/op)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [9264, 8065, 8498, 8064, 8444, 8480, 8424, 8635, 8827, 9017, 9110, 9031]},
+      {"cache": "garnet", "color": "#d62728", "points": [1446, 1563, 1715, 1839, 1876, 1988, 2151, 2032, 2102, 2271, 2322, 2363]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [5780, 6960, 7523, 7563, 7126, 7585, 7919, 8174, 8870, 8965, 8625, 8652]},
+      {"cache": "pogocache", "color": "#e64098", "points": [2567, 2043, 2187, 2191, 2269, 2279, 2183, 2033, 2065, 2040, 2231, 2148]},
+      {"cache": "redis", "color": "#8c564b", "points": [3256, 5791, 8923, 12058, 12557, 14044, 18243, 21565, 24058, 33060, 35292, 32831]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [2831, 5382, 7620, 10602, 13328, 17898, 21036, 24003, 30109, 35892, 37131, 48561]}
+    ]
+  },
+  {
+    "file": "graph_latency_avg-which_gets-pipeline_1-kind_median-scale_linear.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 1",
+    "xtitle": "Threads",
+    "ytitle": "AVG Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [1176, 709, 474, 357, 293, 246, 209, 184, 152, 124, 103, 85]},
+      {"cache": "garnet", "color": "#d62728", "points": [1266, 633, 447, 336, 273, 222, 193, 165, 128, 104, 94, 122]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [807, 412, 292, 223, 179, 147, 119, 97, 80, 83, 83, 82]},
+      {"cache": "pogocache", "color": "#e64098", "points": [630, 342, 243, 171, 135, 111, 94, 82, 70, 72, 74, 75]},
+      {"cache": "redis", "color": "#8c564b", "points": [848, 755, 434, 290, 209, 164, 162, 168, 167, 174, 180, 193]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [881, 711, 435, 281, 206, 193, 200, 191, 183, 183, 173, 185]}
+    ]
+  },
+  {
+    "file": "graph_latency_avg-which_gets-pipeline_1-kind_median-scale_logarithmic.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 1",
+    "xtitle": "Threads",
+    "ytitle": "AVG Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [1176, 709, 474, 357, 293, 246, 209, 184, 152, 124, 103, 85]},
+      {"cache": "garnet", "color": "#d62728", "points": [1266, 633, 447, 336, 273, 222, 193, 165, 128, 104, 94, 122]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [807, 412, 292, 223, 179, 147, 119, 97, 80, 83, 83, 82]},
+      {"cache": "pogocache", "color": "#e64098", "points": [630, 342, 243, 171, 135, 111, 94, 82, 70, 72, 74, 75]},
+      {"cache": "redis", "color": "#8c564b", "points": [848, 755, 434, 290, 209, 164, 162, 168, 167, 174, 180, 193]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [881, 711, 435, 281, 206, 193, 200, 191, 183, 183, 173, 185]}
+    ]
+  },
+  {
+    "file": "graph_latency_avg-which_gets-pipeline_10-kind_median-scale_linear.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 10",
+    "xtitle": "Threads",
+    "ytitle": "AVG Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [7923, 4002, 2806, 2182, 1816, 1551, 1350, 1183, 970, 823, 694, 608]},
+      {"cache": "garnet", "color": "#d62728", "points": [2168, 1037, 727, 563, 496, 430, 375, 331, 274, 230, 205, 202]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [3020, 1609, 1078, 807, 601, 529, 447, 398, 318, 250, 230, 235]},
+      {"cache": "pogocache", "color": "#e64098", "points": [2826, 1160, 788, 620, 469, 379, 319, 271, 217, 189, 185, 189]},
+      {"cache": "redis", "color": "#8c564b", "points": [3431, 2253, 2236, 2346, 2139, 2122, 2186, 2236, 2199, 2170, 2197, 2561]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [3655, 2142, 2530, 2631, 2250, 2525, 2552, 2518, 2485, 2616, 2203, 2495]}
+    ]
+  },
+  {
+    "file": "graph_latency_avg-which_gets-pipeline_10-kind_median-scale_logarithmic.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 10",
+    "xtitle": "Threads",
+    "ytitle": "AVG Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [7923, 4002, 2806, 2182, 1816, 1551, 1350, 1183, 970, 823, 694, 608]},
+      {"cache": "garnet", "color": "#d62728", "points": [2168, 1037, 727, 563, 496, 430, 375, 331, 274, 230, 205, 202]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [3020, 1609, 1078, 807, 601, 529, 447, 398, 318, 250, 230, 235]},
+      {"cache": "pogocache", "color": "#e64098", "points": [2826, 1160, 788, 620, 469, 379, 319, 271, 217, 189, 185, 189]},
+      {"cache": "redis", "color": "#8c564b", "points": [3431, 2253, 2236, 2346, 2139, 2122, 2186, 2236, 2199, 2170, 2197, 2561]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [3655, 2142, 2530, 2631, 2250, 2525, 2552, 2518, 2485, 2616, 2203, 2495]}
+    ]
+  },
+  {
+    "file": "graph_latency_avg-which_gets-pipeline_25-kind_median-scale_linear.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 25",
+    "xtitle": "Threads",
+    "ytitle": "AVG Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [22729, 9851, 6785, 5087, 4261, 3675, 3212, 2859, 2362, 2023, 1759, 1567]},
+      {"cache": "garnet", "color": "#d62728", "points": [3132, 1491, 1198, 996, 831, 726, 630, 569, 466, 423, 383, 438]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [8430, 4390, 2932, 2157, 1655, 1393, 1240, 1077, 880, 687, 595, 566]},
+      {"cache": "pogocache", "color": "#e64098", "points": [5325, 2401, 1581, 1284, 1013, 813, 682, 581, 462, 398, 379, 404]},
+      {"cache": "redis", "color": "#8c564b", "points": [7334, 5794, 6028, 6028, 5285, 5270, 5407, 5337, 5364, 5396, 5336, 6097]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [7694, 5638, 6164, 6353, 5540, 6144, 6237, 6132, 6047, 6218, 5408, 5667]}
+    ]
+  },
+  {
+    "file": "graph_latency_avg-which_gets-pipeline_25-kind_median-scale_logarithmic.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 25",
+    "xtitle": "Threads",
+    "ytitle": "AVG Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [22729, 9851, 6785, 5087, 4261, 3675, 3212, 2859, 2362, 2023, 1759, 1567]},
+      {"cache": "garnet", "color": "#d62728", "points": [3132, 1491, 1198, 996, 831, 726, 630, 569, 466, 423, 383, 438]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [8430, 4390, 2932, 2157, 1655, 1393, 1240, 1077, 880, 687, 595, 566]},
+      {"cache": "pogocache", "color": "#e64098", "points": [5325, 2401, 1581, 1284, 1013, 813, 682, 581, 462, 398, 379, 404]},
+      {"cache": "redis", "color": "#8c564b", "points": [7334, 5794, 6028, 6028, 5285, 5270, 5407, 5337, 5364, 5396, 5336, 6097]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [7694, 5638, 6164, 6353, 5540, 6144, 6237, 6132, 6047, 6218, 5408, 5667]}
+    ]
+  },
+  {
+    "file": "graph_latency_avg-which_gets-pipeline_50-kind_median-scale_linear.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 50",
+    "xtitle": "Threads",
+    "ytitle": "AVG Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [45025, 19680, 13514, 9973, 8265, 6985, 5988, 5373, 4351, 3710, 3237, 2905]},
+      {"cache": "garnet", "color": "#d62728", "points": [5522, 2656, 2154, 1787, 1462, 1314, 1123, 1012, 825, 743, 837, 800]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [15236, 7990, 5335, 3908, 3007, 2597, 2299, 2071, 1666, 1299, 1105, 1050]},
+      {"cache": "pogocache", "color": "#e64098", "points": [10079, 4260, 2982, 2360, 1869, 1543, 1310, 1119, 881, 735, 772, 806]},
+      {"cache": "redis", "color": "#8c564b", "points": [13784, 12037, 12052, 12024, 12267, 11379, 10932, 10900, 10848, 10656, 11051, 12477]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [14199, 12757, 12796, 13192, 11473, 12974, 13035, 12553, 12555, 13095, 11299, 13384]}
+    ]
+  },
+  {
+    "file": "graph_latency_avg-which_gets-pipeline_50-kind_median-scale_logarithmic.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 50",
+    "xtitle": "Threads",
+    "ytitle": "AVG Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [45025, 19680, 13514, 9973, 8265, 6985, 5988, 5373, 4351, 3710, 3237, 2905]},
+      {"cache": "garnet", "color": "#d62728", "points": [5522, 2656, 2154, 1787, 1462, 1314, 1123, 1012, 825, 743, 837, 800]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [15236, 7990, 5335, 3908, 3007, 2597, 2299, 2071, 1666, 1299, 1105, 1050]},
+      {"cache": "pogocache", "color": "#e64098", "points": [10079, 4260, 2982, 2360, 1869, 1543, 1310, 1119, 881, 735, 772, 806]},
+      {"cache": "redis", "color": "#8c564b", "points": [13784, 12037, 12052, 12024, 12267, 11379, 10932, 10900, 10848, 10656, 11051, 12477]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [14199, 12757, 12796, 13192, 11473, 12974, 13035, 12553, 12555, 13095, 11299, 13384]}
+    ]
+  },
+  {
+    "file": "graph_latency_avg-which_sets-pipeline_1-kind_median-scale_linear.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 1",
+    "xtitle": "Threads",
+    "ytitle": "AVG Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [1287, 738, 486, 361, 291, 247, 206, 182, 143, 123, 99, 83]},
+      {"cache": "garnet", "color": "#d62728", "points": [1339, 661, 457, 347, 278, 229, 198, 168, 130, 106, 84, 110]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [1063, 575, 413, 331, 280, 241, 222, 199, 182, 181, 190, 185]},
+      {"cache": "pogocache", "color": "#e64098", "points": [657, 382, 265, 188, 151, 124, 102, 86, 68, 76, 74, 75]},
+      {"cache": "redis", "color": "#8c564b", "points": [940, 884, 492, 324, 236, 177, 145, 153, 150, 158, 164, 174]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [977, 804, 482, 309, 220, 209, 184, 180, 179, 181, 177, 183]}
+    ]
+  },
+  {
+    "file": "graph_latency_avg-which_sets-pipeline_1-kind_median-scale_logarithmic.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 1",
+    "xtitle": "Threads",
+    "ytitle": "AVG Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [1287, 738, 486, 361, 291, 247, 206, 182, 143, 123, 99, 83]},
+      {"cache": "garnet", "color": "#d62728", "points": [1339, 661, 457, 347, 278, 229, 198, 168, 130, 106, 84, 110]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [1063, 575, 413, 331, 280, 241, 222, 199, 182, 181, 190, 185]},
+      {"cache": "pogocache", "color": "#e64098", "points": [657, 382, 265, 188, 151, 124, 102, 86, 68, 76, 74, 75]},
+      {"cache": "redis", "color": "#8c564b", "points": [940, 884, 492, 324, 236, 177, 145, 153, 150, 158, 164, 174]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [977, 804, 482, 309, 220, 209, 184, 180, 179, 181, 177, 183]}
+    ]
+  },
+  {
+    "file": "graph_latency_avg-which_sets-pipeline_10-kind_median-scale_linear.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 10",
+    "xtitle": "Threads",
+    "ytitle": "AVG Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [7878, 4005, 2738, 2093, 1724, 1455, 1263, 1099, 920, 757, 647, 557]},
+      {"cache": "garnet", "color": "#d62728", "points": [2843, 1454, 969, 730, 590, 491, 422, 366, 290, 237, 196, 188]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [4214, 3324, 2531, 2135, 1798, 1798, 1725, 1712, 1729, 1652, 1772, 1704]},
+      {"cache": "pogocache", "color": "#e64098", "points": [3209, 1337, 912, 713, 568, 456, 376, 294, 252, 204, 171, 153]},
+      {"cache": "redis", "color": "#8c564b", "points": [4028, 2795, 2749, 2859, 2627, 2616, 2646, 2704, 2654, 2633, 2660, 2955]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [4201, 2438, 2882, 2982, 2630, 2866, 2879, 2835, 2806, 2903, 2605, 2796]}
+    ]
+  },
+  {
+    "file": "graph_latency_avg-which_sets-pipeline_10-kind_median-scale_logarithmic.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 10",
+    "xtitle": "Threads",
+    "ytitle": "AVG Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [7878, 4005, 2738, 2093, 1724, 1455, 1263, 1099, 920, 757, 647, 557]},
+      {"cache": "garnet", "color": "#d62728", "points": [2843, 1454, 969, 730, 590, 491, 422, 366, 290, 237, 196, 188]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [4214, 3324, 2531, 2135, 1798, 1798, 1725, 1712, 1729, 1652, 1772, 1704]},
+      {"cache": "pogocache", "color": "#e64098", "points": [3209, 1337, 912, 713, 568, 456, 376, 294, 252, 204, 171, 153]},
+      {"cache": "redis", "color": "#8c564b", "points": [4028, 2795, 2749, 2859, 2627, 2616, 2646, 2704, 2654, 2633, 2660, 2955]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [4201, 2438, 2882, 2982, 2630, 2866, 2879, 2835, 2806, 2903, 2605, 2796]}
+    ]
+  },
+  {
+    "file": "graph_latency_avg-which_sets-pipeline_25-kind_median-scale_linear.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 25",
+    "xtitle": "Threads",
+    "ytitle": "AVG Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [18484, 9193, 6193, 4471, 3760, 3153, 2778, 2434, 2029, 1724, 1500, 1326]},
+      {"cache": "garnet", "color": "#d62728", "points": [4424, 2298, 1644, 1267, 1016, 847, 735, 650, 518, 443, 363, 337]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [11193, 8397, 6425, 5157, 4696, 4463, 4269, 4571, 4442, 4508, 4294, 4870]},
+      {"cache": "pogocache", "color": "#e64098", "points": [6037, 2916, 1879, 1520, 1184, 921, 766, 608, 523, 426, 364, 311]},
+      {"cache": "redis", "color": "#8c564b", "points": [8622, 7257, 7328, 7407, 6522, 6489, 6646, 6503, 6489, 6510, 6416, 7130]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [8853, 6409, 6974, 7241, 6645, 7074, 7192, 7121, 7118, 7217, 6618, 6857]}
+    ]
+  },
+  {
+    "file": "graph_latency_avg-which_sets-pipeline_25-kind_median-scale_logarithmic.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 25",
+    "xtitle": "Threads",
+    "ytitle": "AVG Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [18484, 9193, 6193, 4471, 3760, 3153, 2778, 2434, 2029, 1724, 1500, 1326]},
+      {"cache": "garnet", "color": "#d62728", "points": [4424, 2298, 1644, 1267, 1016, 847, 735, 650, 518, 443, 363, 337]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [11193, 8397, 6425, 5157, 4696, 4463, 4269, 4571, 4442, 4508, 4294, 4870]},
+      {"cache": "pogocache", "color": "#e64098", "points": [6037, 2916, 1879, 1520, 1184, 921, 766, 608, 523, 426, 364, 311]},
+      {"cache": "redis", "color": "#8c564b", "points": [8622, 7257, 7328, 7407, 6522, 6489, 6646, 6503, 6489, 6510, 6416, 7130]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [8853, 6409, 6974, 7241, 6645, 7074, 7192, 7121, 7118, 7217, 6618, 6857]}
+    ]
+  },
+  {
+    "file": "graph_latency_avg-which_sets-pipeline_50-kind_median-scale_linear.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 50",
+    "xtitle": "Threads",
+    "ytitle": "AVG Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [39446, 17758, 12076, 8926, 7219, 6104, 5249, 4639, 3823, 3229, 2814, 2471]},
+      {"cache": "garnet", "color": "#d62728", "points": [6685, 3593, 2589, 1953, 1587, 1329, 1178, 1027, 780, 685, 625, 590]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [22800, 16812, 12859, 10411, 9109, 8818, 8480, 8563, 8705, 9061, 9295, 9145]},
+      {"cache": "pogocache", "color": "#e64098", "points": [13618, 5157, 3668, 2813, 2360, 1958, 1567, 1238, 1050, 882, 749, 657]},
+      {"cache": "redis", "color": "#8c564b", "points": [15807, 15699, 15717, 15816, 15856, 14955, 14274, 14327, 13895, 14186, 13984, 15380]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [16662, 14220, 14046, 14488, 13296, 14364, 14320, 14053, 14161, 14510, 13314, 14789]}
+    ]
+  },
+  {
+    "file": "graph_latency_avg-which_sets-pipeline_50-kind_median-scale_logarithmic.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 50",
+    "xtitle": "Threads",
+    "ytitle": "AVG Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [39446, 17758, 12076, 8926, 7219, 6104, 5249, 4639, 3823, 3229, 2814, 2471]},
+      {"cache": "garnet", "color": "#d62728", "points": [6685, 3593, 2589, 1953, 1587, 1329, 1178, 1027, 780, 685, 625, 590]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [22800, 16812, 12859, 10411, 9109, 8818, 8480, 8563, 8705, 9061, 9295, 9145]},
+      {"cache": "pogocache", "color": "#e64098", "points": [13618, 5157, 3668, 2813, 2360, 1958, 1567, 1238, 1050, 882, 749, 657]},
+      {"cache": "redis", "color": "#8c564b", "points": [15807, 15699, 15717, 15816, 15856, 14955, 14274, 14327, 13895, 14186, 13984, 15380]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [16662, 14220, 14046, 14488, 13296, 14364, 14320, 14053, 14161, 14510, 13314, 14789]}
+    ]
+  },
+  {
+    "file": "graph_latency_max-which_gets-pipeline_1-kind_median-scale_linear.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 1",
+    "xtitle": "Threads",
+    "ytitle": "MAX Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [2047, 1799, 1167, 1207, 1007, 991, 951, 847, 839, 791, 815, 831]},
+      {"cache": "garnet", "color": "#d62728", "points": [36607, 11647, 20095, 19967, 20863, 19967, 20095, 20095, 10239, 7007, 20095, 38911]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [2271, 1511, 1167, 6495, 943, 911, 855, 831, 1407, 991, 1319, 16063]},
+      {"cache": "pogocache", "color": "#e64098", "points": [1647, 1335, 1151, 927, 871, 8159, 2143, 847, 1879, 4735, 5695, 823]},
+      {"cache": "redis", "color": "#8c564b", "points": [2431, 2255, 1343, 1143, 895, 855, 887, 823, 879, 903, 895, 879]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [3183, 1919, 1239, 1015, 1015, 895, 959, 935, 863, 879, 847, 1039]}
+    ]
+  },
+  {
+    "file": "graph_latency_max-which_gets-pipeline_1-kind_median-scale_logarithmic.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 1",
+    "xtitle": "Threads",
+    "ytitle": "MAX Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [2047, 1799, 1167, 1207, 1007, 991, 951, 847, 839, 791, 815, 831]},
+      {"cache": "garnet", "color": "#d62728", "points": [36607, 11647, 20095, 19967, 20863, 19967, 20095, 20095, 10239, 7007, 20095, 38911]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [2271, 1511, 1167, 6495, 943, 911, 855, 831, 1407, 991, 1319, 16063]},
+      {"cache": "pogocache", "color": "#e64098", "points": [1647, 1335, 1151, 927, 871, 8159, 2143, 847, 1879, 4735, 5695, 823]},
+      {"cache": "redis", "color": "#8c564b", "points": [2431, 2255, 1343, 1143, 895, 855, 887, 823, 879, 903, 895, 879]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [3183, 1919, 1239, 1015, 1015, 895, 959, 935, 863, 879, 847, 1039]}
+    ]
+  },
+  {
+    "file": "graph_latency_max-which_gets-pipeline_10-kind_median-scale_linear.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 10",
+    "xtitle": "Threads",
+    "ytitle": "MAX Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [19967, 15167, 8127, 6591, 5055, 4015, 3775, 3263, 2671, 2143, 1951, 2271]},
+      {"cache": "garnet", "color": "#d62728", "points": [36351, 28415, 23679, 9663, 39935, 13695, 7327, 33023, 7583, 7583, 34303, 20735]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [6815, 3727, 2815, 2287, 1831, 1783, 1615, 1655, 1535, 1367, 3167, 11327]},
+      {"cache": "pogocache", "color": "#e64098", "points": [4927, 3039, 2287, 2127, 1719, 1951, 3135, 1303, 1175, 1151, 1127, 1199]},
+      {"cache": "redis", "color": "#8c564b", "points": [8127, 5535, 5599, 5823, 5279, 6271, 5215, 6847, 5023, 5407, 6527, 7935]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [8319, 2895, 5247, 5759, 3967, 5567, 4671, 4703, 4095, 5599, 4671, 5343]}
+    ]
+  },
+  {
+    "file": "graph_latency_max-which_gets-pipeline_10-kind_median-scale_logarithmic.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 10",
+    "xtitle": "Threads",
+    "ytitle": "MAX Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [19967, 15167, 8127, 6591, 5055, 4015, 3775, 3263, 2671, 2143, 1951, 2271]},
+      {"cache": "garnet", "color": "#d62728", "points": [36351, 28415, 23679, 9663, 39935, 13695, 7327, 33023, 7583, 7583, 34303, 20735]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [6815, 3727, 2815, 2287, 1831, 1783, 1615, 1655, 1535, 1367, 3167, 11327]},
+      {"cache": "pogocache", "color": "#e64098", "points": [4927, 3039, 2287, 2127, 1719, 1951, 3135, 1303, 1175, 1151, 1127, 1199]},
+      {"cache": "redis", "color": "#8c564b", "points": [8127, 5535, 5599, 5823, 5279, 6271, 5215, 6847, 5023, 5407, 6527, 7935]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [8319, 2895, 5247, 5759, 3967, 5567, 4671, 4703, 4095, 5599, 4671, 5343]}
+    ]
+  },
+  {
+    "file": "graph_latency_max-which_gets-pipeline_25-kind_median-scale_linear.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 25",
+    "xtitle": "Threads",
+    "ytitle": "MAX Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [460799, 135167, 39167, 22399, 14527, 11327, 8959, 7871, 6143, 4831, 4127, 4991]},
+      {"cache": "garnet", "color": "#d62728", "points": [4259839, 1204223, 401407, 250879, 282623, 220159, 232447, 262143, 251903, 352255, 220159, 272383]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [11391, 5727, 4671, 3327, 3295, 2607, 2383, 2527, 2575, 3199, 2271, 30847]},
+      {"cache": "pogocache", "color": "#e64098", "points": [9855, 5951, 4191, 3551, 2863, 2143, 2023, 1959, 1743, 3055, 4543, 2031]},
+      {"cache": "redis", "color": "#8c564b", "points": [16511, 12991, 14079, 17791, 12223, 15871, 12543, 16319, 12735, 12479, 15807, 17919]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [16767, 8959, 11967, 11007, 7999, 10623, 13951, 13119, 10559, 12799, 11007, 11647]}
+    ]
+  },
+  {
+    "file": "graph_latency_max-which_gets-pipeline_25-kind_median-scale_logarithmic.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 25",
+    "xtitle": "Threads",
+    "ytitle": "MAX Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [460799, 135167, 39167, 22399, 14527, 11327, 8959, 7871, 6143, 4831, 4127, 4991]},
+      {"cache": "garnet", "color": "#d62728", "points": [4259839, 1204223, 401407, 250879, 282623, 220159, 232447, 262143, 251903, 352255, 220159, 272383]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [11391, 5727, 4671, 3327, 3295, 2607, 2383, 2527, 2575, 3199, 2271, 30847]},
+      {"cache": "pogocache", "color": "#e64098", "points": [9855, 5951, 4191, 3551, 2863, 2143, 2023, 1959, 1743, 3055, 4543, 2031]},
+      {"cache": "redis", "color": "#8c564b", "points": [16511, 12991, 14079, 17791, 12223, 15871, 12543, 16319, 12735, 12479, 15807, 17919]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [16767, 8959, 11967, 11007, 7999, 10623, 13951, 13119, 10559, 12799, 11007, 11647]}
+    ]
+  },
+  {
+    "file": "graph_latency_max-which_gets-pipeline_50-kind_median-scale_linear.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 50",
+    "xtitle": "Threads",
+    "ytitle": "MAX Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [1974271, 80895, 38911, 26239, 19327, 18303, 12735, 10559, 11391, 8831, 7903, 5727]},
+      {"cache": "garnet", "color": "#d62728", "points": [6782975, 2260991, 1269759, 946175, 671743, 491519, 765951, 356351, 391167, 309247, 253951, 335871]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [17663, 9343, 11455, 4767, 4575, 3871, 3631, 3375, 3007, 2735, 7615, 27647]},
+      {"cache": "pogocache", "color": "#e64098", "points": [14399, 9215, 7167, 5631, 4767, 3903, 9535, 2671, 6879, 1999, 9599, 2719]},
+      {"cache": "redis", "color": "#8c564b", "points": [29695, 26111, 26495, 26367, 26239, 34815, 24575, 35839, 24447, 23679, 32255, 36863]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [32639, 14719, 27903, 16127, 22143, 27775, 27519, 29311, 26111, 27263, 23679, 27391]}
+    ]
+  },
+  {
+    "file": "graph_latency_max-which_gets-pipeline_50-kind_median-scale_logarithmic.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 50",
+    "xtitle": "Threads",
+    "ytitle": "MAX Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [1974271, 80895, 38911, 26239, 19327, 18303, 12735, 10559, 11391, 8831, 7903, 5727]},
+      {"cache": "garnet", "color": "#d62728", "points": [6782975, 2260991, 1269759, 946175, 671743, 491519, 765951, 356351, 391167, 309247, 253951, 335871]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [17663, 9343, 11455, 4767, 4575, 3871, 3631, 3375, 3007, 2735, 7615, 27647]},
+      {"cache": "pogocache", "color": "#e64098", "points": [14399, 9215, 7167, 5631, 4767, 3903, 9535, 2671, 6879, 1999, 9599, 2719]},
+      {"cache": "redis", "color": "#8c564b", "points": [29695, 26111, 26495, 26367, 26239, 34815, 24575, 35839, 24447, 23679, 32255, 36863]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [32639, 14719, 27903, 16127, 22143, 27775, 27519, 29311, 26111, 27263, 23679, 27391]}
+    ]
+  },
+  {
+    "file": "graph_latency_max-which_sets-pipeline_1-kind_median-scale_linear.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 1",
+    "xtitle": "Threads",
+    "ytitle": "MAX Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [2799, 1999, 1255, 1047, 975, 927, 911, 855, 831, 815, 807, 959]},
+      {"cache": "garnet", "color": "#d62728", "points": [36351, 17279, 19455, 20095, 20095, 10111, 10111, 20223, 9919, 20095, 19967, 43007]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [2671, 1815, 1487, 1175, 1207, 1119, 6495, 991, 1063, 1039, 2879, 14719]},
+      {"cache": "pogocache", "color": "#e64098", "points": [1623, 2007, 1295, 5439, 1407, 2223, 8063, 815, 8031, 1719, 2991, 823]},
+      {"cache": "redis", "color": "#8c564b", "points": [2751, 2703, 1503, 1151, 967, 887, 1039, 839, 823, 831, 871, 871]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [3119, 1543, 1103, 1639, 959, 911, 839, 895, 911, 879, 1055, 1063]}
+    ]
+  },
+  {
+    "file": "graph_latency_max-which_sets-pipeline_1-kind_median-scale_logarithmic.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 1",
+    "xtitle": "Threads",
+    "ytitle": "MAX Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [2799, 1999, 1255, 1047, 975, 927, 911, 855, 831, 815, 807, 959]},
+      {"cache": "garnet", "color": "#d62728", "points": [36351, 17279, 19455, 20095, 20095, 10111, 10111, 20223, 9919, 20095, 19967, 43007]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [2671, 1815, 1487, 1175, 1207, 1119, 6495, 991, 1063, 1039, 2879, 14719]},
+      {"cache": "pogocache", "color": "#e64098", "points": [1623, 2007, 1295, 5439, 1407, 2223, 8063, 815, 8031, 1719, 2991, 823]},
+      {"cache": "redis", "color": "#8c564b", "points": [2751, 2703, 1503, 1151, 967, 887, 1039, 839, 823, 831, 871, 871]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [3119, 1543, 1103, 1639, 959, 911, 839, 895, 911, 879, 1055, 1063]}
+    ]
+  },
+  {
+    "file": "graph_latency_max-which_sets-pipeline_10-kind_median-scale_linear.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 10",
+    "xtitle": "Threads",
+    "ytitle": "MAX Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [16319, 10495, 5727, 4079, 3311, 2559, 2431, 2207, 1751, 2031, 1311, 1383]},
+      {"cache": "garnet", "color": "#d62728", "points": [38655, 6271, 16383, 10623, 11711, 4383, 7455, 3839, 10047, 9279, 22271, 30335]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [8959, 7039, 5599, 5471, 4575, 4607, 4671, 4127, 4447, 4255, 14335, 20735]},
+      {"cache": "pogocache", "color": "#e64098", "points": [5183, 3503, 3663, 2255, 2463, 2023, 1287, 1111, 2367, 4479, 4959, 951]},
+      {"cache": "redis", "color": "#8c564b", "points": [9471, 6303, 5951, 6271, 5631, 5695, 5695, 5791, 5695, 5663, 5727, 6623]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [9535, 4319, 5823, 6207, 5343, 5791, 7839, 6303, 6207, 5663, 5503, 8063]}
+    ]
+  },
+  {
+    "file": "graph_latency_max-which_sets-pipeline_10-kind_median-scale_logarithmic.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 10",
+    "xtitle": "Threads",
+    "ytitle": "MAX Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [16319, 10495, 5727, 4079, 3311, 2559, 2431, 2207, 1751, 2031, 1311, 1383]},
+      {"cache": "garnet", "color": "#d62728", "points": [38655, 6271, 16383, 10623, 11711, 4383, 7455, 3839, 10047, 9279, 22271, 30335]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [8959, 7039, 5599, 5471, 4575, 4607, 4671, 4127, 4447, 4255, 14335, 20735]},
+      {"cache": "pogocache", "color": "#e64098", "points": [5183, 3503, 3663, 2255, 2463, 2023, 1287, 1111, 2367, 4479, 4959, 951]},
+      {"cache": "redis", "color": "#8c564b", "points": [9471, 6303, 5951, 6271, 5631, 5695, 5695, 5791, 5695, 5663, 5727, 6623]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [9535, 4319, 5823, 6207, 5343, 5791, 7839, 6303, 6207, 5663, 5503, 8063]}
+    ]
+  },
+  {
+    "file": "graph_latency_max-which_sets-pipeline_25-kind_median-scale_linear.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 25",
+    "xtitle": "Threads",
+    "ytitle": "MAX Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [22020095, 152575, 36863, 21119, 19967, 14975, 15039, 11711, 9727, 8703, 6751, 7231]},
+      {"cache": "garnet", "color": "#d62728", "points": [25343, 25599, 7519, 8319, 5119, 5119, 12607, 11711, 19711, 5087, 22143, 20479]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [23167, 17151, 12927, 10815, 9663, 9215, 9215, 10879, 9855, 9279, 10623, 22015]},
+      {"cache": "pogocache", "color": "#e64098", "points": [15679, 9663, 7711, 5055, 3951, 2591, 9919, 1895, 7167, 2895, 2479, 1799]},
+      {"cache": "redis", "color": "#8c564b", "points": [19071, 16063, 16511, 16767, 14399, 14527, 15103, 14591, 14207, 14911, 14015, 15487]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [20991, 12031, 13119, 13183, 7871, 14463, 11647, 14335, 11775, 12415, 13311, 15743]}
+    ]
+  },
+  {
+    "file": "graph_latency_max-which_sets-pipeline_25-kind_median-scale_logarithmic.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 25",
+    "xtitle": "Threads",
+    "ytitle": "MAX Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [22020095, 152575, 36863, 21119, 19967, 14975, 15039, 11711, 9727, 8703, 6751, 7231]},
+      {"cache": "garnet", "color": "#d62728", "points": [25343, 25599, 7519, 8319, 5119, 5119, 12607, 11711, 19711, 5087, 22143, 20479]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [23167, 17151, 12927, 10815, 9663, 9215, 9215, 10879, 9855, 9279, 10623, 22015]},
+      {"cache": "pogocache", "color": "#e64098", "points": [15679, 9663, 7711, 5055, 3951, 2591, 9919, 1895, 7167, 2895, 2479, 1799]},
+      {"cache": "redis", "color": "#8c564b", "points": [19071, 16063, 16511, 16767, 14399, 14527, 15103, 14591, 14207, 14911, 14015, 15487]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [20991, 12031, 13119, 13183, 7871, 14463, 11647, 14335, 11775, 12415, 13311, 15743]}
+    ]
+  },
+  {
+    "file": "graph_latency_max-which_sets-pipeline_50-kind_median-scale_linear.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 50",
+    "xtitle": "Threads",
+    "ytitle": "MAX Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [7307263, 237567, 77311, 60415, 46847, 37631, 33279, 28927, 27903, 19711, 17791, 15167]},
+      {"cache": "garnet", "color": "#d62728", "points": [44031, 26751, 19967, 13119, 13183, 12415, 8383, 7199, 5855, 13567, 20223, 20479]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [41727, 31359, 24575, 21887, 17535, 16063, 16191, 17279, 15487, 18047, 19711, 27775]},
+      {"cache": "pogocache", "color": "#e64098", "points": [29567, 9983, 7551, 5727, 4831, 4031, 3903, 3215, 13183, 7327, 5695, 3359]},
+      {"cache": "redis", "color": "#8c564b", "points": [37631, 37631, 37119, 45055, 36607, 43519, 32767, 44543, 31743, 32127, 40447, 42239]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [39423, 42239, 42751, 44031, 39935, 42751, 43519, 41983, 43263, 43519, 39935, 44543]}
+    ]
+  },
+  {
+    "file": "graph_latency_max-which_sets-pipeline_50-kind_median-scale_logarithmic.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 50",
+    "xtitle": "Threads",
+    "ytitle": "MAX Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [7307263, 237567, 77311, 60415, 46847, 37631, 33279, 28927, 27903, 19711, 17791, 15167]},
+      {"cache": "garnet", "color": "#d62728", "points": [44031, 26751, 19967, 13119, 13183, 12415, 8383, 7199, 5855, 13567, 20223, 20479]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [41727, 31359, 24575, 21887, 17535, 16063, 16191, 17279, 15487, 18047, 19711, 27775]},
+      {"cache": "pogocache", "color": "#e64098", "points": [29567, 9983, 7551, 5727, 4831, 4031, 3903, 3215, 13183, 7327, 5695, 3359]},
+      {"cache": "redis", "color": "#8c564b", "points": [37631, 37631, 37119, 45055, 36607, 43519, 32767, 44543, 31743, 32127, 40447, 42239]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [39423, 42239, 42751, 44031, 39935, 42751, 43519, 41983, 43263, 43519, 39935, 44543]}
+    ]
+  },
+  {
+    "file": "graph_latency_min-which_gets-pipeline_1-kind_median-scale_linear.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 1",
+    "xtitle": "Threads",
+    "ytitle": "MIN Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [104, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8]},
+      {"cache": "garnet", "color": "#d62728", "points": [8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8]},
+      {"cache": "pogocache", "color": "#e64098", "points": [8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8]},
+      {"cache": "redis", "color": "#8c564b", "points": [8, 8, 8, 8, 8, 8, 8, 16, 16, 8, 16, 16]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [8, 32, 16, 8, 8, 8, 8, 8, 8, 8, 8, 8]}
+    ]
+  },
+  {
+    "file": "graph_latency_min-which_gets-pipeline_1-kind_median-scale_logarithmic.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 1",
+    "xtitle": "Threads",
+    "ytitle": "MIN Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [104, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8]},
+      {"cache": "garnet", "color": "#d62728", "points": [8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8]},
+      {"cache": "pogocache", "color": "#e64098", "points": [8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8]},
+      {"cache": "redis", "color": "#8c564b", "points": [8, 8, 8, 8, 8, 8, 8, 16, 16, 8, 16, 16]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [8, 32, 16, 8, 8, 8, 8, 8, 8, 8, 8, 8]}
+    ]
+  },
+  {
+    "file": "graph_latency_min-which_gets-pipeline_10-kind_median-scale_linear.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 10",
+    "xtitle": "Threads",
+    "ytitle": "MIN Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [16, 40, 32, 16, 24, 64, 24, 24, 16, 40, 16, 32]},
+      {"cache": "garnet", "color": "#d62728", "points": [8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8]},
+      {"cache": "pogocache", "color": "#e64098", "points": [192, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8]},
+      {"cache": "redis", "color": "#8c564b", "points": [8, 16, 16, 16, 16, 16, 16, 16, 16, 16, 24, 16]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [16, 128, 32, 72, 40, 24, 48, 24, 32, 24, 32, 24]}
+    ]
+  },
+  {
+    "file": "graph_latency_min-which_gets-pipeline_10-kind_median-scale_logarithmic.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 10",
+    "xtitle": "Threads",
+    "ytitle": "MIN Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [16, 40, 32, 16, 24, 64, 24, 24, 16, 40, 16, 32]},
+      {"cache": "garnet", "color": "#d62728", "points": [8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8]},
+      {"cache": "pogocache", "color": "#e64098", "points": [192, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8]},
+      {"cache": "redis", "color": "#8c564b", "points": [8, 16, 16, 16, 16, 16, 16, 16, 16, 16, 24, 16]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [16, 128, 32, 72, 40, 24, 48, 24, 32, 24, 32, 24]}
+    ]
+  },
+  {
+    "file": "graph_latency_min-which_gets-pipeline_25-kind_median-scale_linear.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 25",
+    "xtitle": "Threads",
+    "ytitle": "MIN Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [32, 56, 40, 40, 48, 64, 56, 40, 40, 72, 32, 64]},
+      {"cache": "garnet", "color": "#d62728", "points": [8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [176, 152, 168, 152, 152, 136, 168, 64, 16, 8, 16, 8]},
+      {"cache": "pogocache", "color": "#e64098", "points": [208, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8]},
+      {"cache": "redis", "color": "#8c564b", "points": [16, 24, 24, 24, 24, 24, 32, 24, 24, 24, 32, 32]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [16, 184, 104, 96, 72, 72, 96, 32, 40, 64, 64, 72]}
+    ]
+  },
+  {
+    "file": "graph_latency_min-which_gets-pipeline_25-kind_median-scale_logarithmic.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 25",
+    "xtitle": "Threads",
+    "ytitle": "MIN Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [32, 56, 40, 40, 48, 64, 56, 40, 40, 72, 32, 64]},
+      {"cache": "garnet", "color": "#d62728", "points": [8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [176, 152, 168, 152, 152, 136, 168, 64, 16, 8, 16, 8]},
+      {"cache": "pogocache", "color": "#e64098", "points": [208, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8]},
+      {"cache": "redis", "color": "#8c564b", "points": [16, 24, 24, 24, 24, 24, 32, 24, 24, 24, 32, 32]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [16, 184, 104, 96, 72, 72, 96, 32, 40, 64, 64, 72]}
+    ]
+  },
+  {
+    "file": "graph_latency_min-which_gets-pipeline_50-kind_median-scale_linear.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 50",
+    "xtitle": "Threads",
+    "ytitle": "MIN Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [72, 80, 72, 104, 112, 80, 72, 80, 96, 120, 56, 80]},
+      {"cache": "garnet", "color": "#d62728", "points": [16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [296, 240, 296, 288, 256, 280, 240, 280, 128, 136, 32, 32]},
+      {"cache": "pogocache", "color": "#e64098", "points": [336, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16]},
+      {"cache": "redis", "color": "#8c564b", "points": [24, 40, 40, 40, 56, 32, 48, 32, 48, 40, 56, 40]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [32, 352, 152, 32, 304, 168, 216, 184, 136, 184, 104, 136]}
+    ]
+  },
+  {
+    "file": "graph_latency_min-which_gets-pipeline_50-kind_median-scale_logarithmic.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 50",
+    "xtitle": "Threads",
+    "ytitle": "MIN Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [72, 80, 72, 104, 112, 80, 72, 80, 96, 120, 56, 80]},
+      {"cache": "garnet", "color": "#d62728", "points": [16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [296, 240, 296, 288, 256, 280, 240, 280, 128, 136, 32, 32]},
+      {"cache": "pogocache", "color": "#e64098", "points": [336, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16]},
+      {"cache": "redis", "color": "#8c564b", "points": [24, 40, 40, 40, 56, 32, 48, 32, 48, 40, 56, 40]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [32, 352, 152, 32, 304, 168, 216, 184, 136, 184, 104, 136]}
+    ]
+  },
+  {
+    "file": "graph_latency_min-which_sets-pipeline_1-kind_median-scale_linear.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 1",
+    "xtitle": "Threads",
+    "ytitle": "MIN Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [64, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8]},
+      {"cache": "garnet", "color": "#d62728", "points": [8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8]},
+      {"cache": "pogocache", "color": "#e64098", "points": [8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8]},
+      {"cache": "redis", "color": "#8c564b", "points": [8, 8, 8, 8, 8, 8, 8, 8, 16, 16, 16, 16]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [8, 56, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8]}
+    ]
+  },
+  {
+    "file": "graph_latency_min-which_sets-pipeline_1-kind_median-scale_logarithmic.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 1",
+    "xtitle": "Threads",
+    "ytitle": "MIN Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [64, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8]},
+      {"cache": "garnet", "color": "#d62728", "points": [8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8]},
+      {"cache": "pogocache", "color": "#e64098", "points": [8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8]},
+      {"cache": "redis", "color": "#8c564b", "points": [8, 8, 8, 8, 8, 8, 8, 8, 16, 16, 16, 16]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [8, 56, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8]}
+    ]
+  },
+  {
+    "file": "graph_latency_min-which_sets-pipeline_10-kind_median-scale_linear.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 10",
+    "xtitle": "Threads",
+    "ytitle": "MIN Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [32, 56, 56, 72, 64, 80, 96, 96, 80, 56, 88, 96]},
+      {"cache": "garnet", "color": "#d62728", "points": [16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24]},
+      {"cache": "pogocache", "color": "#e64098", "points": [160, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16]},
+      {"cache": "redis", "color": "#8c564b", "points": [24, 40, 40, 32, 32, 32, 32, 32, 40, 32, 32, 32]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [24, 152, 24, 24, 24, 48, 24, 32, 24, 32, 32, 40]}
+    ]
+  },
+  {
+    "file": "graph_latency_min-which_sets-pipeline_10-kind_median-scale_logarithmic.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 10",
+    "xtitle": "Threads",
+    "ytitle": "MIN Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [32, 56, 56, 72, 64, 80, 96, 96, 80, 56, 88, 96]},
+      {"cache": "garnet", "color": "#d62728", "points": [16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24]},
+      {"cache": "pogocache", "color": "#e64098", "points": [160, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16]},
+      {"cache": "redis", "color": "#8c564b", "points": [24, 40, 40, 32, 32, 32, 32, 32, 40, 32, 32, 32]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [24, 152, 24, 24, 24, 48, 24, 32, 24, 32, 32, 40]}
+    ]
+  },
+  {
+    "file": "graph_latency_min-which_sets-pipeline_25-kind_median-scale_linear.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 25",
+    "xtitle": "Threads",
+    "ytitle": "MIN Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [80, 96, 56, 64, 56, 56, 64, 64, 64, 56, 64, 72]},
+      {"cache": "garnet", "color": "#d62728", "points": [24, 24, 24, 24, 24, 24, 24, 24, 24, 32, 24, 32]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [240, 208, 144, 160, 176, 96, 80, 96, 128, 176, 56, 216]},
+      {"cache": "pogocache", "color": "#e64098", "points": [192, 8, 24, 8, 24, 8, 16, 16, 8, 8, 16, 8]},
+      {"cache": "redis", "color": "#8c564b", "points": [48, 24, 16, 32, 56, 40, 56, 48, 32, 16, 56, 56]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [48, 56, 48, 112, 232, 112, 104, 144, 104, 112, 112, 80]}
+    ]
+  },
+  {
+    "file": "graph_latency_min-which_sets-pipeline_25-kind_median-scale_logarithmic.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 25",
+    "xtitle": "Threads",
+    "ytitle": "MIN Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [80, 96, 56, 64, 56, 56, 64, 64, 64, 56, 64, 72]},
+      {"cache": "garnet", "color": "#d62728", "points": [24, 24, 24, 24, 24, 24, 24, 24, 24, 32, 24, 32]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [240, 208, 144, 160, 176, 96, 80, 96, 128, 176, 56, 216]},
+      {"cache": "pogocache", "color": "#e64098", "points": [192, 8, 24, 8, 24, 8, 16, 16, 8, 8, 16, 8]},
+      {"cache": "redis", "color": "#8c564b", "points": [48, 24, 16, 32, 56, 40, 56, 48, 32, 16, 56, 56]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [48, 56, 48, 112, 232, 112, 104, 144, 104, 112, 112, 80]}
+    ]
+  },
+  {
+    "file": "graph_latency_min-which_sets-pipeline_50-kind_median-scale_linear.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 50",
+    "xtitle": "Threads",
+    "ytitle": "MIN Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [144, 64, 104, 56, 96, 104, 64, 104, 64, 64, 72, 80]},
+      {"cache": "garnet", "color": "#d62728", "points": [32, 16, 16, 24, 16, 8, 16, 16, 16, 16, 16, 16]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [48, 72, 72, 48, 72, 88, 64, 64, 80, 72, 56, 72]},
+      {"cache": "pogocache", "color": "#e64098", "points": [24, 32, 24, 16, 16, 24, 16, 56, 32, 32, 16, 24]},
+      {"cache": "redis", "color": "#8c564b", "points": [56, 64, 72, 56, 72, 56, 72, 72, 72, 56, 72, 80]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [48, 32, 80, 56, 56, 56, 56, 56, 112, 120, 112, 72]}
+    ]
+  },
+  {
+    "file": "graph_latency_min-which_sets-pipeline_50-kind_median-scale_logarithmic.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 50",
+    "xtitle": "Threads",
+    "ytitle": "MIN Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [144, 64, 104, 56, 96, 104, 64, 104, 64, 64, 72, 80]},
+      {"cache": "garnet", "color": "#d62728", "points": [32, 16, 16, 24, 16, 8, 16, 16, 16, 16, 16, 16]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [48, 72, 72, 48, 72, 88, 64, 64, 80, 72, 56, 72]},
+      {"cache": "pogocache", "color": "#e64098", "points": [24, 32, 24, 16, 16, 24, 16, 56, 32, 32, 16, 24]},
+      {"cache": "redis", "color": "#8c564b", "points": [56, 64, 72, 56, 72, 56, 72, 72, 72, 56, 72, 80]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [48, 32, 80, 56, 56, 56, 56, 56, 112, 120, 112, 72]}
+    ]
+  },
+  {
+    "file": "graph_latency_p50_00-which_gets-pipeline_1-kind_median-scale_linear.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 1",
+    "xtitle": "Threads",
+    "ytitle": "P50 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [1175, 703, 495, 367, 303, 255, 215, 191, 159, 127, 103, 87]},
+      {"cache": "garnet", "color": "#d62728", "points": [639, 639, 359, 343, 239, 223, 175, 167, 135, 103, 79, 79]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [807, 415, 295, 223, 183, 143, 119, 95, 79, 79, 87, 79]},
+      {"cache": "pogocache", "color": "#e64098", "points": [631, 343, 247, 135, 159, 127, 103, 95, 71, 71, 71, 71]},
+      {"cache": "redis", "color": "#8c564b", "points": [839, 719, 391, 247, 223, 167, 167, 175, 167, 175, 183, 199]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [871, 711, 439, 295, 223, 199, 199, 199, 191, 191, 175, 191]}
+    ]
+  },
+  {
+    "file": "graph_latency_p50_00-which_gets-pipeline_1-kind_median-scale_logarithmic.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 1",
+    "xtitle": "Threads",
+    "ytitle": "P50 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [1175, 703, 495, 367, 303, 255, 215, 191, 159, 127, 103, 87]},
+      {"cache": "garnet", "color": "#d62728", "points": [639, 639, 359, 343, 239, 223, 175, 167, 135, 103, 79, 79]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [807, 415, 295, 223, 183, 143, 119, 95, 79, 79, 87, 79]},
+      {"cache": "pogocache", "color": "#e64098", "points": [631, 343, 247, 135, 159, 127, 103, 95, 71, 71, 71, 71]},
+      {"cache": "redis", "color": "#8c564b", "points": [839, 719, 391, 247, 223, 167, 167, 175, 167, 175, 183, 199]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [871, 711, 439, 295, 223, 199, 199, 199, 191, 191, 175, 191]}
+    ]
+  },
+  {
+    "file": "graph_latency_p50_00-which_gets-pipeline_10-kind_median-scale_linear.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 10",
+    "xtitle": "Threads",
+    "ytitle": "P50 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [6495, 3791, 2655, 2063, 1711, 1463, 1271, 1119, 919, 783, 663, 583]},
+      {"cache": "garnet", "color": "#d62728", "points": [71, 31, 55, 55, 79, 87, 111, 119, 191, 207, 199, 143]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [3023, 1615, 1087, 807, 607, 527, 447, 391, 303, 231, 231, 215]},
+      {"cache": "pogocache", "color": "#e64098", "points": [2847, 1159, 791, 623, 479, 415, 335, 279, 223, 191, 175, 183]},
+      {"cache": "redis", "color": "#8c564b", "points": [3423, 2255, 2239, 2351, 2143, 2127, 2191, 2239, 2207, 2175, 2207, 2559]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [3679, 2159, 2543, 2655, 2255, 2559, 2575, 2527, 2479, 2623, 2191, 2559]}
+    ]
+  },
+  {
+    "file": "graph_latency_p50_00-which_gets-pipeline_10-kind_median-scale_logarithmic.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 10",
+    "xtitle": "Threads",
+    "ytitle": "P50 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [6495, 3791, 2655, 2063, 1711, 1463, 1271, 1119, 919, 783, 663, 583]},
+      {"cache": "garnet", "color": "#d62728", "points": [71, 31, 55, 55, 79, 87, 111, 119, 191, 207, 199, 143]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [3023, 1615, 1087, 807, 607, 527, 447, 391, 303, 231, 231, 215]},
+      {"cache": "pogocache", "color": "#e64098", "points": [2847, 1159, 791, 623, 479, 415, 335, 279, 223, 191, 175, 183]},
+      {"cache": "redis", "color": "#8c564b", "points": [3423, 2255, 2239, 2351, 2143, 2127, 2191, 2239, 2207, 2175, 2207, 2559]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [3679, 2159, 2543, 2655, 2255, 2559, 2575, 2527, 2479, 2623, 2191, 2559]}
+    ]
+  },
+  {
+    "file": "graph_latency_p50_00-which_gets-pipeline_25-kind_median-scale_linear.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 25",
+    "xtitle": "Threads",
+    "ytitle": "P50 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [20223, 9215, 6687, 5055, 4255, 3679, 3231, 2879, 2383, 2039, 1767, 1567]},
+      {"cache": "garnet", "color": "#d62728", "points": [31, 39, 39, 39, 47, 47, 55, 55, 63, 71, 143, 311]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [8447, 4415, 2927, 2159, 1655, 1391, 1255, 1095, 879, 687, 599, 535]},
+      {"cache": "pogocache", "color": "#e64098", "points": [5375, 2383, 1567, 1279, 991, 847, 703, 583, 479, 399, 359, 391]},
+      {"cache": "redis", "color": "#8c564b", "points": [7327, 5823, 6047, 6047, 5311, 5279, 5407, 5311, 5375, 5375, 5279, 6111]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [7711, 5695, 6239, 6399, 5535, 6271, 6271, 6111, 6047, 6207, 5407, 5663]}
+    ]
+  },
+  {
+    "file": "graph_latency_p50_00-which_gets-pipeline_25-kind_median-scale_logarithmic.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 25",
+    "xtitle": "Threads",
+    "ytitle": "P50 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [20223, 9215, 6687, 5055, 4255, 3679, 3231, 2879, 2383, 2039, 1767, 1567]},
+      {"cache": "garnet", "color": "#d62728", "points": [31, 39, 39, 39, 47, 47, 55, 55, 63, 71, 143, 311]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [8447, 4415, 2927, 2159, 1655, 1391, 1255, 1095, 879, 687, 599, 535]},
+      {"cache": "pogocache", "color": "#e64098", "points": [5375, 2383, 1567, 1279, 991, 847, 703, 583, 479, 399, 359, 391]},
+      {"cache": "redis", "color": "#8c564b", "points": [7327, 5823, 6047, 6047, 5311, 5279, 5407, 5311, 5375, 5375, 5279, 6111]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [7711, 5695, 6239, 6399, 5535, 6271, 6271, 6111, 6047, 6207, 5407, 5663]}
+    ]
+  },
+  {
+    "file": "graph_latency_p50_00-which_gets-pipeline_50-kind_median-scale_linear.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 50",
+    "xtitle": "Threads",
+    "ytitle": "P50 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [35071, 18943, 13055, 9663, 7999, 6815, 5887, 5215, 4255, 3615, 3167, 2847]},
+      {"cache": "garnet", "color": "#d62728", "points": [55, 55, 55, 55, 63, 63, 63, 63, 111, 159, 751, 655]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [15295, 8063, 5375, 3919, 3007, 2607, 2335, 2111, 1679, 1311, 1127, 999]},
+      {"cache": "pogocache", "color": "#e64098", "points": [10047, 4287, 2959, 2335, 1791, 1543, 1335, 1127, 903, 743, 743, 775]},
+      {"cache": "redis", "color": "#8c564b", "points": [13823, 12095, 12031, 12031, 12223, 11327, 10879, 10623, 10815, 10367, 10495, 12479]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [14207, 12799, 12799, 13311, 11519, 13119, 13119, 12543, 12543, 13055, 11135, 13375]}
+    ]
+  },
+  {
+    "file": "graph_latency_p50_00-which_gets-pipeline_50-kind_median-scale_logarithmic.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 50",
+    "xtitle": "Threads",
+    "ytitle": "P50 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [35071, 18943, 13055, 9663, 7999, 6815, 5887, 5215, 4255, 3615, 3167, 2847]},
+      {"cache": "garnet", "color": "#d62728", "points": [55, 55, 55, 55, 63, 63, 63, 63, 111, 159, 751, 655]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [15295, 8063, 5375, 3919, 3007, 2607, 2335, 2111, 1679, 1311, 1127, 999]},
+      {"cache": "pogocache", "color": "#e64098", "points": [10047, 4287, 2959, 2335, 1791, 1543, 1335, 1127, 903, 743, 743, 775]},
+      {"cache": "redis", "color": "#8c564b", "points": [13823, 12095, 12031, 12031, 12223, 11327, 10879, 10623, 10815, 10367, 10495, 12479]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [14207, 12799, 12799, 13311, 11519, 13119, 13119, 12543, 12543, 13055, 11135, 13375]}
+    ]
+  },
+  {
+    "file": "graph_latency_p50_00-which_sets-pipeline_1-kind_median-scale_linear.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 1",
+    "xtitle": "Threads",
+    "ytitle": "P50 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [1287, 727, 503, 375, 295, 255, 207, 183, 151, 127, 103, 87]},
+      {"cache": "garnet", "color": "#d62728", "points": [671, 663, 359, 351, 239, 231, 183, 175, 135, 111, 87, 63]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [1063, 575, 415, 335, 279, 239, 223, 199, 183, 175, 183, 167]},
+      {"cache": "pogocache", "color": "#e64098", "points": [655, 383, 263, 143, 183, 143, 111, 95, 71, 71, 71, 71]},
+      {"cache": "redis", "color": "#8c564b", "points": [927, 839, 447, 263, 231, 183, 143, 159, 151, 159, 167, 175]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [967, 807, 487, 319, 239, 215, 191, 183, 183, 183, 183, 183]}
+    ]
+  },
+  {
+    "file": "graph_latency_p50_00-which_sets-pipeline_1-kind_median-scale_logarithmic.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 1",
+    "xtitle": "Threads",
+    "ytitle": "P50 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [1287, 727, 503, 375, 295, 255, 207, 183, 151, 127, 103, 87]},
+      {"cache": "garnet", "color": "#d62728", "points": [671, 663, 359, 351, 239, 231, 183, 175, 135, 111, 87, 63]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [1063, 575, 415, 335, 279, 239, 223, 199, 183, 175, 183, 167]},
+      {"cache": "pogocache", "color": "#e64098", "points": [655, 383, 263, 143, 183, 143, 111, 95, 71, 71, 71, 71]},
+      {"cache": "redis", "color": "#8c564b", "points": [927, 839, 447, 263, 231, 183, 143, 159, 151, 159, 167, 175]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [967, 807, 487, 319, 239, 215, 191, 183, 183, 183, 183, 183]}
+    ]
+  },
+  {
+    "file": "graph_latency_p50_00-which_sets-pipeline_10-kind_median-scale_linear.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 10",
+    "xtitle": "Threads",
+    "ytitle": "P50 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [7903, 3967, 2751, 2111, 1735, 1471, 1271, 1111, 927, 767, 655, 559]},
+      {"cache": "garnet", "color": "#d62728", "points": [1423, 1463, 743, 735, 511, 495, 383, 367, 295, 239, 199, 191]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [4223, 3343, 2543, 2143, 1799, 1799, 1735, 1703, 1727, 1639, 1759, 1647]},
+      {"cache": "pogocache", "color": "#e64098", "points": [3183, 1311, 887, 671, 527, 463, 383, 295, 255, 207, 175, 159]},
+      {"cache": "redis", "color": "#8c564b", "points": [3999, 2799, 2751, 2863, 2639, 2623, 2655, 2719, 2671, 2639, 2671, 2959]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [4223, 2447, 2927, 3055, 2655, 2943, 2911, 2863, 2831, 2927, 2607, 2847]}
+    ]
+  },
+  {
+    "file": "graph_latency_p50_00-which_sets-pipeline_10-kind_median-scale_logarithmic.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 10",
+    "xtitle": "Threads",
+    "ytitle": "P50 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [7903, 3967, 2751, 2111, 1735, 1471, 1271, 1111, 927, 767, 655, 559]},
+      {"cache": "garnet", "color": "#d62728", "points": [1423, 1463, 743, 735, 511, 495, 383, 367, 295, 239, 199, 191]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [4223, 3343, 2543, 2143, 1799, 1799, 1735, 1703, 1727, 1639, 1759, 1647]},
+      {"cache": "pogocache", "color": "#e64098", "points": [3183, 1311, 887, 671, 527, 463, 383, 295, 255, 207, 175, 159]},
+      {"cache": "redis", "color": "#8c564b", "points": [3999, 2799, 2751, 2863, 2639, 2623, 2655, 2719, 2671, 2639, 2671, 2959]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [4223, 2447, 2927, 3055, 2655, 2943, 2911, 2863, 2831, 2927, 2607, 2847]}
+    ]
+  },
+  {
+    "file": "graph_latency_p50_00-which_sets-pipeline_25-kind_median-scale_linear.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 25",
+    "xtitle": "Threads",
+    "ytitle": "P50 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [10879, 7999, 5855, 4319, 3647, 3071, 2719, 2383, 1999, 1703, 1487, 1311]},
+      {"cache": "garnet", "color": "#d62728", "points": [2255, 2383, 1295, 1295, 903, 879, 703, 671, 535, 447, 375, 167]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [11071, 8447, 6463, 5183, 4703, 4479, 4287, 4639, 4479, 4543, 4351, 4831]},
+      {"cache": "pogocache", "color": "#e64098", "points": [6143, 2639, 1719, 1327, 1175, 943, 775, 615, 527, 431, 367, 311]},
+      {"cache": "redis", "color": "#8c564b", "points": [8511, 7295, 7359, 7423, 6527, 6527, 6687, 6527, 6495, 6527, 6431, 7167]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [8767, 6431, 7007, 7263, 6687, 7167, 7231, 7103, 7135, 7231, 6559, 6815]}
+    ]
+  },
+  {
+    "file": "graph_latency_p50_00-which_sets-pipeline_25-kind_median-scale_logarithmic.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 25",
+    "xtitle": "Threads",
+    "ytitle": "P50 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [10879, 7999, 5855, 4319, 3647, 3071, 2719, 2383, 1999, 1703, 1487, 1311]},
+      {"cache": "garnet", "color": "#d62728", "points": [2255, 2383, 1295, 1295, 903, 879, 703, 671, 535, 447, 375, 167]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [11071, 8447, 6463, 5183, 4703, 4479, 4287, 4639, 4479, 4543, 4351, 4831]},
+      {"cache": "pogocache", "color": "#e64098", "points": [6143, 2639, 1719, 1327, 1175, 943, 775, 615, 527, 431, 367, 311]},
+      {"cache": "redis", "color": "#8c564b", "points": [8511, 7295, 7359, 7423, 6527, 6527, 6687, 6527, 6495, 6527, 6431, 7167]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [8767, 6431, 7007, 7263, 6687, 7167, 7231, 7103, 7135, 7231, 6559, 6815]}
+    ]
+  },
+  {
+    "file": "graph_latency_p50_00-which_sets-pipeline_50-kind_median-scale_linear.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 50",
+    "xtitle": "Threads",
+    "ytitle": "P50 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [20607, 15423, 11199, 8511, 6943, 5887, 5087, 4511, 3727, 3167, 2767, 2415]},
+      {"cache": "garnet", "color": "#d62728", "points": [3423, 1871, 2111, 1919, 1567, 1399, 1215, 1007, 575, 599, 727, 295]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [21631, 15999, 12159, 9919, 8703, 8383, 8127, 8159, 8383, 8767, 9087, 8767]},
+      {"cache": "pogocache", "color": "#e64098", "points": [15103, 6111, 4351, 3263, 2751, 2239, 1583, 1239, 1047, 879, 751, 655]},
+      {"cache": "redis", "color": "#8c564b", "points": [12095, 11839, 11775, 11775, 11839, 11007, 10559, 10623, 10239, 10367, 10175, 11327]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [12671, 10687, 10623, 10943, 9983, 10879, 10815, 10559, 10623, 10879, 9983, 11135]}
+    ]
+  },
+  {
+    "file": "graph_latency_p50_00-which_sets-pipeline_50-kind_median-scale_logarithmic.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 50",
+    "xtitle": "Threads",
+    "ytitle": "P50 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [20607, 15423, 11199, 8511, 6943, 5887, 5087, 4511, 3727, 3167, 2767, 2415]},
+      {"cache": "garnet", "color": "#d62728", "points": [3423, 1871, 2111, 1919, 1567, 1399, 1215, 1007, 575, 599, 727, 295]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [21631, 15999, 12159, 9919, 8703, 8383, 8127, 8159, 8383, 8767, 9087, 8767]},
+      {"cache": "pogocache", "color": "#e64098", "points": [15103, 6111, 4351, 3263, 2751, 2239, 1583, 1239, 1047, 879, 751, 655]},
+      {"cache": "redis", "color": "#8c564b", "points": [12095, 11839, 11775, 11775, 11839, 11007, 10559, 10623, 10239, 10367, 10175, 11327]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [12671, 10687, 10623, 10943, 9983, 10879, 10815, 10559, 10623, 10879, 9983, 11135]}
+    ]
+  },
+  {
+    "file": "graph_latency_p90_00-which_gets-pipeline_1-kind_median-scale_linear.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 1",
+    "xtitle": "Threads",
+    "ytitle": "P90 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [1311, 863, 583, 447, 367, 311, 263, 231, 191, 159, 127, 111]},
+      {"cache": "garnet", "color": "#d62728", "points": [671, 655, 647, 351, 343, 231, 231, 175, 135, 111, 103, 111]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [863, 439, 327, 239, 191, 159, 127, 167, 111, 119, 119, 119]},
+      {"cache": "pogocache", "color": "#e64098", "points": [663, 359, 263, 263, 191, 143, 119, 103, 95, 103, 103, 103]},
+      {"cache": "redis", "color": "#8c564b", "points": [887, 791, 735, 439, 279, 215, 191, 199, 191, 199, 207, 223]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [919, 735, 479, 327, 263, 223, 255, 207, 191, 191, 183, 199]}
+    ]
+  },
+  {
+    "file": "graph_latency_p90_00-which_gets-pipeline_1-kind_median-scale_logarithmic.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 1",
+    "xtitle": "Threads",
+    "ytitle": "P90 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [1311, 863, 583, 447, 367, 311, 263, 231, 191, 159, 127, 111]},
+      {"cache": "garnet", "color": "#d62728", "points": [671, 655, 647, 351, 343, 231, 231, 175, 135, 111, 103, 111]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [863, 439, 327, 239, 191, 159, 127, 167, 111, 119, 119, 119]},
+      {"cache": "pogocache", "color": "#e64098", "points": [663, 359, 263, 263, 191, 143, 119, 103, 95, 103, 103, 103]},
+      {"cache": "redis", "color": "#8c564b", "points": [887, 791, 735, 439, 279, 215, 191, 199, 191, 199, 207, 223]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [919, 735, 479, 327, 263, 223, 255, 207, 191, 191, 183, 199]}
+    ]
+  },
+  {
+    "file": "graph_latency_p90_00-which_gets-pipeline_10-kind_median-scale_linear.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 10",
+    "xtitle": "Threads",
+    "ytitle": "P90 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [11775, 6143, 4159, 3231, 2687, 2287, 1983, 1735, 1407, 1191, 991, 871]},
+      {"cache": "garnet", "color": "#d62728", "points": [4351, 2223, 2271, 2039, 1711, 1503, 1183, 887, 607, 463, 255, 319]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [3343, 1735, 1143, 855, 631, 551, 471, 423, 343, 431, 311, 319]},
+      {"cache": "pogocache", "color": "#e64098", "points": [3103, 1191, 815, 655, 639, 495, 415, 351, 263, 239, 255, 271]},
+      {"cache": "redis", "color": "#8c564b", "points": [3567, 2367, 2351, 2463, 2223, 2207, 2287, 2351, 2287, 2255, 2271, 2703]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [3887, 2271, 2671, 2751, 2319, 2687, 2703, 2671, 2559, 2687, 2271, 2687]}
+    ]
+  },
+  {
+    "file": "graph_latency_p90_00-which_gets-pipeline_10-kind_median-scale_logarithmic.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 10",
+    "xtitle": "Threads",
+    "ytitle": "P90 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [11775, 6143, 4159, 3231, 2687, 2287, 1983, 1735, 1407, 1191, 991, 871]},
+      {"cache": "garnet", "color": "#d62728", "points": [4351, 2223, 2271, 2039, 1711, 1503, 1183, 887, 607, 463, 255, 319]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [3343, 1735, 1143, 855, 631, 551, 471, 423, 343, 431, 311, 319]},
+      {"cache": "pogocache", "color": "#e64098", "points": [3103, 1191, 815, 655, 639, 495, 415, 351, 263, 239, 255, 271]},
+      {"cache": "redis", "color": "#8c564b", "points": [3567, 2367, 2351, 2463, 2223, 2207, 2287, 2351, 2287, 2255, 2271, 2703]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [3887, 2271, 2671, 2751, 2319, 2687, 2703, 2671, 2559, 2687, 2271, 2687]}
+    ]
+  },
+  {
+    "file": "graph_latency_p90_00-which_gets-pipeline_25-kind_median-scale_linear.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 25",
+    "xtitle": "Threads",
+    "ytitle": "P90 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [37631, 14335, 9215, 6783, 5663, 4863, 4223, 3743, 3103, 2639, 2303, 2047]},
+      {"cache": "garnet", "color": "#d62728", "points": [39, 47, 103, 87, 119, 111, 135, 143, 159, 191, 287, 583]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [9215, 4575, 3039, 2287, 1719, 1447, 1359, 1159, 919, 727, 647, 591]},
+      {"cache": "pogocache", "color": "#e64098", "points": [6303, 2447, 1615, 1319, 1447, 1055, 879, 743, 559, 487, 479, 511]},
+      {"cache": "redis", "color": "#8c564b", "points": [7583, 6047, 6303, 6271, 5503, 5471, 5631, 5567, 5567, 5567, 5535, 6431]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [7999, 5951, 6495, 6655, 5727, 6591, 6623, 6431, 6271, 6431, 5567, 5855]}
+    ]
+  },
+  {
+    "file": "graph_latency_p90_00-which_gets-pipeline_25-kind_median-scale_logarithmic.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 25",
+    "xtitle": "Threads",
+    "ytitle": "P90 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [37631, 14335, 9215, 6783, 5663, 4863, 4223, 3743, 3103, 2639, 2303, 2047]},
+      {"cache": "garnet", "color": "#d62728", "points": [39, 47, 103, 87, 119, 111, 135, 143, 159, 191, 287, 583]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [9215, 4575, 3039, 2287, 1719, 1447, 1359, 1159, 919, 727, 647, 591]},
+      {"cache": "pogocache", "color": "#e64098", "points": [6303, 2447, 1615, 1319, 1447, 1055, 879, 743, 559, 487, 479, 511]},
+      {"cache": "redis", "color": "#8c564b", "points": [7583, 6047, 6303, 6271, 5503, 5471, 5631, 5567, 5567, 5567, 5535, 6431]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [7999, 5951, 6495, 6655, 5727, 6591, 6623, 6431, 6271, 6431, 5567, 5855]}
+    ]
+  },
+  {
+    "file": "graph_latency_p90_00-which_gets-pipeline_50-kind_median-scale_linear.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 50",
+    "xtitle": "Threads",
+    "ytitle": "P90 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [46335, 23551, 16191, 11967, 9919, 8447, 7327, 6463, 5279, 4511, 3935, 3519]},
+      {"cache": "garnet", "color": "#d62728", "points": [63, 63, 127, 103, 143, 135, 199, 159, 295, 375, 895, 847]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [16767, 8319, 5567, 4031, 3119, 2703, 2479, 2207, 1823, 1447, 1215, 1071]},
+      {"cache": "pogocache", "color": "#e64098", "points": [11391, 4351, 3103, 3071, 2735, 2063, 1695, 1383, 1055, 847, 863, 903]},
+      {"cache": "redis", "color": "#8c564b", "points": [14335, 12415, 12415, 12415, 12799, 11775, 11263, 11711, 11199, 10815, 11071, 13055]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [14847, 13503, 13631, 13823, 12031, 13823, 13823, 12991, 13055, 13631, 11967, 13823]}
+    ]
+  },
+  {
+    "file": "graph_latency_p90_00-which_gets-pipeline_50-kind_median-scale_logarithmic.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 50",
+    "xtitle": "Threads",
+    "ytitle": "P90 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [46335, 23551, 16191, 11967, 9919, 8447, 7327, 6463, 5279, 4511, 3935, 3519]},
+      {"cache": "garnet", "color": "#d62728", "points": [63, 63, 127, 103, 143, 135, 199, 159, 295, 375, 895, 847]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [16767, 8319, 5567, 4031, 3119, 2703, 2479, 2207, 1823, 1447, 1215, 1071]},
+      {"cache": "pogocache", "color": "#e64098", "points": [11391, 4351, 3103, 3071, 2735, 2063, 1695, 1383, 1055, 847, 863, 903]},
+      {"cache": "redis", "color": "#8c564b", "points": [14335, 12415, 12415, 12415, 12799, 11775, 11263, 11711, 11199, 10815, 11071, 13055]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [14847, 13503, 13631, 13823, 12031, 13823, 13823, 12991, 13055, 13631, 11967, 13823]}
+    ]
+  },
+  {
+    "file": "graph_latency_p90_00-which_sets-pipeline_1-kind_median-scale_linear.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 1",
+    "xtitle": "Threads",
+    "ytitle": "P90 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [1439, 903, 607, 455, 367, 311, 263, 231, 183, 159, 127, 111]},
+      {"cache": "garnet", "color": "#d62728", "points": [695, 679, 671, 359, 351, 239, 239, 175, 143, 119, 95, 95]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [1103, 615, 447, 359, 303, 255, 239, 215, 199, 207, 223, 279]},
+      {"cache": "pogocache", "color": "#e64098", "points": [679, 415, 287, 271, 207, 159, 127, 111, 79, 111, 103, 103]},
+      {"cache": "redis", "color": "#8c564b", "points": [991, 919, 847, 511, 343, 239, 191, 183, 175, 183, 191, 207]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [1031, 839, 535, 343, 263, 231, 207, 199, 191, 199, 191, 191]}
+    ]
+  },
+  {
+    "file": "graph_latency_p90_00-which_sets-pipeline_1-kind_median-scale_logarithmic.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 1",
+    "xtitle": "Threads",
+    "ytitle": "P90 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [1439, 903, 607, 455, 367, 311, 263, 231, 183, 159, 127, 111]},
+      {"cache": "garnet", "color": "#d62728", "points": [695, 679, 671, 359, 351, 239, 239, 175, 143, 119, 95, 95]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [1103, 615, 447, 359, 303, 255, 239, 215, 199, 207, 223, 279]},
+      {"cache": "pogocache", "color": "#e64098", "points": [679, 415, 287, 271, 207, 159, 127, 111, 79, 111, 103, 103]},
+      {"cache": "redis", "color": "#8c564b", "points": [991, 919, 847, 511, 343, 239, 191, 183, 175, 183, 191, 207]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [1031, 839, 535, 343, 263, 231, 207, 199, 191, 199, 191, 191]}
+    ]
+  },
+  {
+    "file": "graph_latency_p90_00-which_sets-pipeline_10-kind_median-scale_linear.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 10",
+    "xtitle": "Threads",
+    "ytitle": "P90 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [8191, 5567, 3391, 2511, 2039, 1695, 1463, 1263, 1055, 863, 735, 631]},
+      {"cache": "garnet", "color": "#d62728", "points": [1527, 1519, 1479, 759, 751, 511, 503, 383, 303, 255, 215, 215]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [4575, 3439, 2623, 2207, 1855, 1887, 1871, 1823, 1911, 1831, 1967, 2015]},
+      {"cache": "pogocache", "color": "#e64098", "points": [3503, 1383, 951, 1055, 847, 615, 455, 351, 295, 231, 191, 207]},
+      {"cache": "redis", "color": "#8c564b", "points": [4191, 2911, 2879, 2991, 2735, 2719, 2751, 2815, 2751, 2735, 2767, 3103]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [4415, 2543, 3103, 3263, 2767, 3103, 3135, 3071, 2975, 3039, 2703, 2991]}
+    ]
+  },
+  {
+    "file": "graph_latency_p90_00-which_sets-pipeline_10-kind_median-scale_logarithmic.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 10",
+    "xtitle": "Threads",
+    "ytitle": "P90 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [8191, 5567, 3391, 2511, 2039, 1695, 1463, 1263, 1055, 863, 735, 631]},
+      {"cache": "garnet", "color": "#d62728", "points": [1527, 1519, 1479, 759, 751, 511, 503, 383, 303, 255, 215, 215]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [4575, 3439, 2623, 2207, 1855, 1887, 1871, 1823, 1911, 1831, 1967, 2015]},
+      {"cache": "pogocache", "color": "#e64098", "points": [3503, 1383, 951, 1055, 847, 615, 455, 351, 295, 231, 191, 207]},
+      {"cache": "redis", "color": "#8c564b", "points": [4191, 2911, 2879, 2991, 2735, 2719, 2751, 2815, 2751, 2735, 2767, 3103]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [4415, 2543, 3103, 3263, 2767, 3103, 3135, 3071, 2975, 3039, 2703, 2991]}
+    ]
+  },
+  {
+    "file": "graph_latency_p90_00-which_sets-pipeline_25-kind_median-scale_linear.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 25",
+    "xtitle": "Threads",
+    "ytitle": "P90 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [11135, 13311, 8383, 6079, 5215, 4383, 3823, 3327, 2735, 2287, 1975, 1727]},
+      {"cache": "garnet", "color": "#d62728", "points": [22143, 2559, 2591, 1343, 1335, 919, 919, 703, 567, 471, 399, 311]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [12031, 8703, 6623, 5407, 4959, 4671, 4607, 4831, 4831, 4831, 4639, 5343]},
+      {"cache": "pogocache", "color": "#e64098", "points": [7071, 4479, 3007, 2367, 1735, 1087, 863, 663, 575, 471, 407, 343]},
+      {"cache": "redis", "color": "#8c564b", "points": [8895, 7615, 7711, 7711, 6783, 6751, 6911, 6751, 6751, 6751, 6687, 7487]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [9087, 6687, 7231, 7519, 6815, 7423, 7487, 7327, 7327, 7391, 6783, 7071]}
+    ]
+  },
+  {
+    "file": "graph_latency_p90_00-which_sets-pipeline_25-kind_median-scale_logarithmic.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 25",
+    "xtitle": "Threads",
+    "ytitle": "P90 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [11135, 13311, 8383, 6079, 5215, 4383, 3823, 3327, 2735, 2287, 1975, 1727]},
+      {"cache": "garnet", "color": "#d62728", "points": [22143, 2559, 2591, 1343, 1335, 919, 919, 703, 567, 471, 399, 311]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [12031, 8703, 6623, 5407, 4959, 4671, 4607, 4831, 4831, 4831, 4639, 5343]},
+      {"cache": "pogocache", "color": "#e64098", "points": [7071, 4479, 3007, 2367, 1735, 1087, 863, 663, 575, 471, 407, 343]},
+      {"cache": "redis", "color": "#8c564b", "points": [8895, 7615, 7711, 7711, 6783, 6751, 6911, 6751, 6751, 6751, 6687, 7487]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [9087, 6687, 7231, 7519, 6815, 7423, 7487, 7327, 7327, 7391, 6783, 7071]}
+    ]
+  },
+  {
+    "file": "graph_latency_p90_00-which_sets-pipeline_50-kind_median-scale_linear.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 50",
+    "xtitle": "Threads",
+    "ytitle": "P90 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [49663, 27007, 17151, 12415, 10111, 8511, 7327, 6431, 5279, 4415, 3823, 3311]},
+      {"cache": "garnet", "color": "#d62728", "points": [24831, 10047, 5919, 3839, 2959, 2303, 2143, 1975, 1695, 1351, 895, 343]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [28799, 21375, 16191, 13183, 11519, 11135, 10815, 10815, 11071, 11583, 12095, 11583]},
+      {"cache": "pogocache", "color": "#e64098", "points": [18175, 6335, 4511, 3519, 2927, 2431, 1911, 1327, 1159, 975, 823, 759]},
+      {"cache": "redis", "color": "#8c564b", "points": [23935, 23551, 23423, 23295, 23551, 21759, 20863, 20607, 20095, 20351, 19839, 22271]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [25215, 21247, 21119, 21887, 19967, 21631, 21503, 20991, 21119, 21631, 19839, 22143]}
+    ]
+  },
+  {
+    "file": "graph_latency_p90_00-which_sets-pipeline_50-kind_median-scale_logarithmic.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 50",
+    "xtitle": "Threads",
+    "ytitle": "P90 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [49663, 27007, 17151, 12415, 10111, 8511, 7327, 6431, 5279, 4415, 3823, 3311]},
+      {"cache": "garnet", "color": "#d62728", "points": [24831, 10047, 5919, 3839, 2959, 2303, 2143, 1975, 1695, 1351, 895, 343]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [28799, 21375, 16191, 13183, 11519, 11135, 10815, 10815, 11071, 11583, 12095, 11583]},
+      {"cache": "pogocache", "color": "#e64098", "points": [18175, 6335, 4511, 3519, 2927, 2431, 1911, 1327, 1159, 975, 823, 759]},
+      {"cache": "redis", "color": "#8c564b", "points": [23935, 23551, 23423, 23295, 23551, 21759, 20863, 20607, 20095, 20351, 19839, 22271]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [25215, 21247, 21119, 21887, 19967, 21631, 21503, 20991, 21119, 21631, 19839, 22143]}
+    ]
+  },
+  {
+    "file": "graph_latency_p99_00-which_gets-pipeline_1-kind_median-scale_linear-case_1.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 1",
+    "xtitle": "Threads",
+    "ytitle": "P99 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [1375, 1055, 687, 503, 415, 343, 295, 255, 215, 175, 151, 127]},
+      {"cache": "garnet", "color": "#d62728", "points": [0, 727, 671, 407, 359, 327, 239, 231, 167, 135, 527, 503]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [959, 487, 391, 431, 359, 295, 239, 191, 127, 127, 127, 127]},
+      {"cache": "pogocache", "color": "#e64098", "points": [695, 647, 295, 279, 199, 159, 135, 119, 111, 111, 111, 119]},
+      {"cache": "redis", "color": "#8c564b", "points": [1647, 1503, 807, 487, 327, 247, 199, 207, 207, 215, 223, 239]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [1711, 767, 591, 351, 287, 271, 279, 263, 215, 207, 191, 215]}
+    ]
+  },
+  {
+    "file": "graph_latency_p99_00-which_gets-pipeline_1-kind_median-scale_linear.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 1",
+    "xtitle": "Threads",
+    "ytitle": "P99 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [1375, 1055, 687, 503, 415, 343, 295, 255, 215, 175, 151, 127]},
+      {"cache": "garnet", "color": "#d62728", "points": [20735, 727, 671, 407, 359, 327, 239, 231, 167, 135, 527, 503]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [959, 487, 391, 431, 359, 295, 239, 191, 127, 127, 127, 127]},
+      {"cache": "pogocache", "color": "#e64098", "points": [695, 647, 295, 279, 199, 159, 135, 119, 111, 111, 111, 119]},
+      {"cache": "redis", "color": "#8c564b", "points": [1647, 1503, 807, 487, 327, 247, 199, 207, 207, 215, 223, 239]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [1711, 767, 591, 351, 287, 271, 279, 263, 215, 207, 191, 215]}
+    ]
+  },
+  {
+    "file": "graph_latency_p99_00-which_gets-pipeline_1-kind_median-scale_logarithmic.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 1",
+    "xtitle": "Threads",
+    "ytitle": "P99 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [1375, 1055, 687, 503, 415, 343, 295, 255, 215, 175, 151, 127]},
+      {"cache": "garnet", "color": "#d62728", "points": [20735, 727, 671, 407, 359, 327, 239, 231, 167, 135, 527, 503]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [959, 487, 391, 431, 359, 295, 239, 191, 127, 127, 127, 127]},
+      {"cache": "pogocache", "color": "#e64098", "points": [695, 647, 295, 279, 199, 159, 135, 119, 111, 111, 111, 119]},
+      {"cache": "redis", "color": "#8c564b", "points": [1647, 1503, 807, 487, 327, 247, 199, 207, 207, 215, 223, 239]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [1711, 767, 591, 351, 287, 271, 279, 263, 215, 207, 191, 215]}
+    ]
+  },
+  {
+    "file": "graph_latency_p99_00-which_gets-pipeline_10-kind_median-scale_linear.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 10",
+    "xtitle": "Threads",
+    "ytitle": "P99 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [14783, 8639, 5503, 4191, 3455, 2911, 2527, 2191, 1783, 1503, 1263, 1103]},
+      {"cache": "garnet", "color": "#d62728", "points": [25343, 18175, 10815, 7039, 4735, 3327, 2175, 1623, 983, 695, 463, 1215]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [3455, 1807, 1191, 1591, 1207, 1063, 911, 807, 631, 487, 383, 455]},
+      {"cache": "pogocache", "color": "#e64098", "points": [3279, 2207, 1511, 1223, 855, 551, 471, 407, 311, 287, 335, 351]},
+      {"cache": "redis", "color": "#8c564b", "points": [6239, 2495, 2511, 2655, 2399, 2399, 2447, 2543, 2495, 2447, 2495, 3039]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [6463, 2383, 2783, 2879, 2415, 2815, 2847, 2815, 2751, 2911, 2495, 2943]}
+    ]
+  },
+  {
+    "file": "graph_latency_p99_00-which_gets-pipeline_10-kind_median-scale_logarithmic.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 10",
+    "xtitle": "Threads",
+    "ytitle": "P99 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [14783, 8639, 5503, 4191, 3455, 2911, 2527, 2191, 1783, 1503, 1263, 1103]},
+      {"cache": "garnet", "color": "#d62728", "points": [25343, 18175, 10815, 7039, 4735, 3327, 2175, 1623, 983, 695, 463, 1215]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [3455, 1807, 1191, 1591, 1207, 1063, 911, 807, 631, 487, 383, 455]},
+      {"cache": "pogocache", "color": "#e64098", "points": [3279, 2207, 1511, 1223, 855, 551, 471, 407, 311, 287, 335, 351]},
+      {"cache": "redis", "color": "#8c564b", "points": [6239, 2495, 2511, 2655, 2399, 2399, 2447, 2543, 2495, 2447, 2495, 3039]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [6463, 2383, 2783, 2879, 2415, 2815, 2847, 2815, 2751, 2911, 2495, 2943]}
+    ]
+  },
+  {
+    "file": "graph_latency_p99_00-which_gets-pipeline_25-kind_median-scale_linear.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 25",
+    "xtitle": "Threads",
+    "ytitle": "P99 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [70143, 24063, 12223, 8447, 6975, 5919, 5119, 4511, 3711, 3167, 2751, 2463]},
+      {"cache": "garnet", "color": "#d62728", "points": [4223, 255, 24831, 30335, 15359, 20479, 12863, 14911, 5279, 3071, 2335, 1343]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [9791, 4799, 3263, 2495, 1975, 1703, 1551, 1367, 1143, 919, 775, 1399]},
+      {"cache": "pogocache", "color": "#e64098", "points": [6783, 4735, 3119, 2527, 1911, 1191, 991, 863, 663, 567, 503, 527]},
+      {"cache": "redis", "color": "#8c564b", "points": [14143, 6303, 7999, 8447, 5791, 7167, 7391, 10431, 6975, 10687, 10495, 6783]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [14719, 6143, 6687, 6879, 5887, 6815, 6879, 6783, 6527, 6655, 5823, 6207]}
+    ]
+  },
+  {
+    "file": "graph_latency_p99_00-which_gets-pipeline_25-kind_median-scale_logarithmic.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 25",
+    "xtitle": "Threads",
+    "ytitle": "P99 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [70143, 24063, 12223, 8447, 6975, 5919, 5119, 4511, 3711, 3167, 2751, 2463]},
+      {"cache": "garnet", "color": "#d62728", "points": [4223, 255, 24831, 30335, 15359, 20479, 12863, 14911, 5279, 3071, 2335, 1343]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [9791, 4799, 3263, 2495, 1975, 1703, 1551, 1367, 1143, 919, 775, 1399]},
+      {"cache": "pogocache", "color": "#e64098", "points": [6783, 4735, 3119, 2527, 1911, 1191, 991, 863, 663, 567, 503, 527]},
+      {"cache": "redis", "color": "#8c564b", "points": [14143, 6303, 7999, 8447, 5791, 7167, 7391, 10431, 6975, 10687, 10495, 6783]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [14719, 6143, 6687, 6879, 5887, 6815, 6879, 6783, 6527, 6655, 5823, 6207]}
+    ]
+  },
+  {
+    "file": "graph_latency_p99_00-which_gets-pipeline_50-kind_median-scale_linear.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 50",
+    "xtitle": "Threads",
+    "ytitle": "P99 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [288767, 27519, 18303, 13247, 11007, 9407, 8159, 7167, 5887, 4991, 4351, 3903]},
+      {"cache": "garnet", "color": "#d62728", "points": [151, 159, 2143, 1127, 12351, 14655, 4863, 13631, 3423, 9023, 1071, 1287]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [17407, 8511, 5727, 4159, 3263, 2815, 2591, 2319, 1935, 1559, 1351, 2911]},
+      {"cache": "pogocache", "color": "#e64098", "points": [11839, 8319, 5823, 4575, 3519, 2655, 1935, 1591, 1263, 959, 975, 1023]},
+      {"cache": "redis", "color": "#8c564b", "points": [15103, 16511, 23295, 23935, 16127, 22655, 21887, 21503, 21503, 21119, 21375, 13567]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [15359, 14271, 14335, 14527, 12607, 14591, 14399, 13887, 13695, 14207, 20479, 14591]}
+    ]
+  },
+  {
+    "file": "graph_latency_p99_00-which_gets-pipeline_50-kind_median-scale_logarithmic.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 50",
+    "xtitle": "Threads",
+    "ytitle": "P99 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [288767, 27519, 18303, 13247, 11007, 9407, 8159, 7167, 5887, 4991, 4351, 3903]},
+      {"cache": "garnet", "color": "#d62728", "points": [151, 159, 2143, 1127, 12351, 14655, 4863, 13631, 3423, 9023, 1071, 1287]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [17407, 8511, 5727, 4159, 3263, 2815, 2591, 2319, 1935, 1559, 1351, 2911]},
+      {"cache": "pogocache", "color": "#e64098", "points": [11839, 8319, 5823, 4575, 3519, 2655, 1935, 1591, 1263, 959, 975, 1023]},
+      {"cache": "redis", "color": "#8c564b", "points": [15103, 16511, 23295, 23935, 16127, 22655, 21887, 21503, 21503, 21119, 21375, 13567]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [15359, 14271, 14335, 14527, 12607, 14591, 14399, 13887, 13695, 14207, 20479, 14591]}
+    ]
+  },
+  {
+    "file": "graph_latency_p99_00-which_sets-pipeline_1-kind_median-scale_linear-case_1.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 1",
+    "xtitle": "Threads",
+    "ytitle": "P99 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [1495, 1119, 711, 519, 415, 351, 295, 263, 207, 183, 151, 127]},
+      {"cache": "garnet", "color": "#d62728", "points": [0, 727, 687, 375, 367, 335, 247, 231, 175, 135, 159, 775]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [1151, 639, 471, 391, 559, 479, 447, 399, 367, 375, 399, 423]},
+      {"cache": "pogocache", "color": "#e64098", "points": [767, 727, 319, 295, 223, 175, 143, 119, 95, 119, 119, 119]},
+      {"cache": "redis", "color": "#8c564b", "points": [1831, 1767, 927, 567, 391, 287, 215, 191, 191, 199, 207, 215]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [1887, 887, 687, 375, 295, 255, 247, 287, 239, 215, 199, 207]}
+    ]
+  },
+  {
+    "file": "graph_latency_p99_00-which_sets-pipeline_1-kind_median-scale_linear.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 1",
+    "xtitle": "Threads",
+    "ytitle": "P99 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [1495, 1119, 711, 519, 415, 351, 295, 263, 207, 183, 151, 127]},
+      {"cache": "garnet", "color": "#d62728", "points": [20863, 727, 687, 375, 367, 335, 247, 231, 175, 135, 159, 775]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [1151, 639, 471, 391, 559, 479, 447, 399, 367, 375, 399, 423]},
+      {"cache": "pogocache", "color": "#e64098", "points": [767, 727, 319, 295, 223, 175, 143, 119, 95, 119, 119, 119]},
+      {"cache": "redis", "color": "#8c564b", "points": [1831, 1767, 927, 567, 391, 287, 215, 191, 191, 199, 207, 215]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [1887, 887, 687, 375, 295, 255, 247, 287, 239, 215, 199, 207]}
+    ]
+  },
+  {
+    "file": "graph_latency_p99_00-which_sets-pipeline_1-kind_median-scale_logarithmic.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 1",
+    "xtitle": "Threads",
+    "ytitle": "P99 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [1495, 1119, 711, 519, 415, 351, 295, 263, 207, 183, 151, 127]},
+      {"cache": "garnet", "color": "#d62728", "points": [20863, 727, 687, 375, 367, 335, 247, 231, 175, 135, 159, 775]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [1151, 639, 471, 391, 559, 479, 447, 399, 367, 375, 399, 423]},
+      {"cache": "pogocache", "color": "#e64098", "points": [767, 727, 319, 295, 223, 175, 143, 119, 95, 119, 119, 119]},
+      {"cache": "redis", "color": "#8c564b", "points": [1831, 1767, 927, 567, 391, 287, 215, 191, 191, 199, 207, 215]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [1887, 887, 687, 375, 295, 255, 247, 287, 239, 215, 199, 207]}
+    ]
+  },
+  {
+    "file": "graph_latency_p99_00-which_sets-pipeline_10-kind_median-scale_linear.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 10",
+    "xtitle": "Threads",
+    "ytitle": "P99 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [8447, 6911, 3871, 2799, 2255, 1863, 1599, 1383, 1151, 951, 815, 695]},
+      {"cache": "garnet", "color": "#d62728", "points": [21631, 1575, 1535, 783, 783, 535, 527, 487, 319, 287, 247, 239]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [4895, 3519, 2687, 4255, 3599, 3615, 3567, 3471, 3599, 3423, 3727, 3663]},
+      {"cache": "pogocache", "color": "#e64098", "points": [3855, 2559, 1807, 1383, 1063, 791, 527, 407, 343, 271, 231, 247]},
+      {"cache": "redis", "color": "#8c564b", "points": [7871, 3039, 3007, 3135, 2863, 2847, 2895, 2975, 2927, 2927, 2975, 3359]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [8127, 2655, 4223, 3631, 2991, 3455, 5119, 4255, 3391, 3391, 2943, 3327]}
+    ]
+  },
+  {
+    "file": "graph_latency_p99_00-which_sets-pipeline_10-kind_median-scale_logarithmic.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 10",
+    "xtitle": "Threads",
+    "ytitle": "P99 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [8447, 6911, 3871, 2799, 2255, 1863, 1599, 1383, 1151, 951, 815, 695]},
+      {"cache": "garnet", "color": "#d62728", "points": [21631, 1575, 1535, 783, 783, 535, 527, 487, 319, 287, 247, 239]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [4895, 3519, 2687, 4255, 3599, 3615, 3567, 3471, 3599, 3423, 3727, 3663]},
+      {"cache": "pogocache", "color": "#e64098", "points": [3855, 2559, 1807, 1383, 1063, 791, 527, 407, 343, 271, 231, 247]},
+      {"cache": "redis", "color": "#8c564b", "points": [7871, 3039, 3007, 3135, 2863, 2847, 2895, 2975, 2927, 2927, 2975, 3359]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [8127, 2655, 4223, 3631, 2991, 3455, 5119, 4255, 3391, 3391, 2943, 3327]}
+    ]
+  },
+  {
+    "file": "graph_latency_p99_00-which_sets-pipeline_25-kind_median-scale_linear.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 25",
+    "xtitle": "Threads",
+    "ytitle": "P99 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [11711, 36607, 14463, 9023, 7231, 5919, 5119, 4447, 3583, 2975, 2543, 2207]},
+      {"cache": "garnet", "color": "#d62728", "points": [22527, 2639, 2703, 1383, 1383, 999, 959, 775, 631, 551, 463, 4383]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [12863, 9023, 6751, 5535, 5119, 4831, 4799, 4991, 5055, 5055, 4895, 7231]},
+      {"cache": "pogocache", "color": "#e64098", "points": [7679, 5823, 3583, 2815, 2023, 1295, 975, 751, 679, 535, 471, 407]},
+      {"cache": "redis", "color": "#8c564b", "points": [17151, 7903, 7999, 7967, 7071, 7039, 7231, 6975, 12031, 7039, 6943, 7839]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [17663, 6847, 7423, 7679, 6975, 7615, 7679, 7583, 7551, 7647, 12031, 10623]}
+    ]
+  },
+  {
+    "file": "graph_latency_p99_00-which_sets-pipeline_25-kind_median-scale_logarithmic.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 25",
+    "xtitle": "Threads",
+    "ytitle": "P99 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [11711, 36607, 14463, 9023, 7231, 5919, 5119, 4447, 3583, 2975, 2543, 2207]},
+      {"cache": "garnet", "color": "#d62728", "points": [22527, 2639, 2703, 1383, 1383, 999, 959, 775, 631, 551, 463, 4383]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [12863, 9023, 6751, 5535, 5119, 4831, 4799, 4991, 5055, 5055, 4895, 7231]},
+      {"cache": "pogocache", "color": "#e64098", "points": [7679, 5823, 3583, 2815, 2023, 1295, 975, 751, 679, 535, 471, 407]},
+      {"cache": "redis", "color": "#8c564b", "points": [17151, 7903, 7999, 7967, 7071, 7039, 7231, 6975, 12031, 7039, 6943, 7839]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [17663, 6847, 7423, 7679, 6975, 7615, 7679, 7583, 7551, 7647, 12031, 10623]}
+    ]
+  },
+  {
+    "file": "graph_latency_p99_00-which_sets-pipeline_50-kind_median-scale_linear.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 50",
+    "xtitle": "Threads",
+    "ytitle": "P99 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [444415, 67583, 28287, 18175, 14143, 11775, 10047, 8895, 7295, 6143, 5375, 4703]},
+      {"cache": "garnet", "color": "#d62728", "points": [28287, 13119, 9727, 4703, 4191, 2943, 3023, 2847, 2847, 2095, 1415, 13311]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [31743, 22143, 16639, 13631, 12031, 11583, 11199, 11711, 11967, 12863, 13055, 13695]},
+      {"cache": "pogocache", "color": "#e64098", "points": [19327, 6527, 4639, 3711, 3039, 2543, 2287, 1695, 1439, 1199, 1015, 911]},
+      {"cache": "redis", "color": "#8c564b", "points": [24959, 24063, 23935, 24063, 24063, 22399, 21503, 22783, 20735, 20863, 20479, 23039]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [26111, 29055, 21759, 22399, 20351, 22143, 22143, 21503, 21759, 22271, 20351, 22783]}
+    ]
+  },
+  {
+    "file": "graph_latency_p99_00-which_sets-pipeline_50-kind_median-scale_logarithmic.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 50",
+    "xtitle": "Threads",
+    "ytitle": "P99 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [444415, 67583, 28287, 18175, 14143, 11775, 10047, 8895, 7295, 6143, 5375, 4703]},
+      {"cache": "garnet", "color": "#d62728", "points": [28287, 13119, 9727, 4703, 4191, 2943, 3023, 2847, 2847, 2095, 1415, 13311]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [31743, 22143, 16639, 13631, 12031, 11583, 11199, 11711, 11967, 12863, 13055, 13695]},
+      {"cache": "pogocache", "color": "#e64098", "points": [19327, 6527, 4639, 3711, 3039, 2543, 2287, 1695, 1439, 1199, 1015, 911]},
+      {"cache": "redis", "color": "#8c564b", "points": [24959, 24063, 23935, 24063, 24063, 22399, 21503, 22783, 20735, 20863, 20479, 23039]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [26111, 29055, 21759, 22399, 20351, 22143, 22143, 21503, 21759, 22271, 20351, 22783]}
+    ]
+  },
+  {
+    "file": "graph_latency_p99_90-which_gets-pipeline_1-kind_median-scale_linear.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 1",
+    "xtitle": "Threads",
+    "ytitle": "P999 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [1423, 1143, 735, 543, 439, 375, 319, 279, 231, 191, 167, 167]},
+      {"cache": "garnet", "color": "#d62728", "points": [20863, 807, 823, 639, 439, 591, 327, 239, 215, 303, 1543, 19455]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [1303, 847, 615, 479, 383, 311, 255, 199, 159, 135, 135, 151]},
+      {"cache": "pogocache", "color": "#e64098", "points": [703, 711, 503, 295, 207, 175, 143, 127, 119, 119, 119, 119]},
+      {"cache": "redis", "color": "#8c564b", "points": [1823, 1599, 831, 519, 391, 335, 351, 367, 375, 399, 423, 463]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [1839, 791, 663, 391, 335, 343, 375, 367, 391, 415, 423, 495]}
+    ]
+  },
+  {
+    "file": "graph_latency_p99_90-which_gets-pipeline_1-kind_median-scale_logarithmic.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 1",
+    "xtitle": "Threads",
+    "ytitle": "P999 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [1423, 1143, 735, 543, 439, 375, 319, 279, 231, 191, 167, 167]},
+      {"cache": "garnet", "color": "#d62728", "points": [20863, 807, 823, 639, 439, 591, 327, 239, 215, 303, 1543, 19455]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [1303, 847, 615, 479, 383, 311, 255, 199, 159, 135, 135, 151]},
+      {"cache": "pogocache", "color": "#e64098", "points": [703, 711, 503, 295, 207, 175, 143, 127, 119, 119, 119, 119]},
+      {"cache": "redis", "color": "#8c564b", "points": [1823, 1599, 831, 519, 391, 335, 351, 367, 375, 399, 423, 463]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [1839, 791, 663, 391, 335, 343, 375, 367, 391, 415, 423, 495]}
+    ]
+  },
+  {
+    "file": "graph_latency_p99_90-which_gets-pipeline_10-kind_median-scale_linear.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 10",
+    "xtitle": "Threads",
+    "ytitle": "P999 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [15231, 10367, 6239, 4703, 3839, 3231, 2783, 2415, 1975, 1655, 1391, 1215]},
+      {"cache": "garnet", "color": "#d62728", "points": [27647, 24703, 16895, 8255, 9151, 7551, 3151, 9919, 1295, 911, 799, 6815]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [3503, 3071, 2239, 1719, 1255, 1111, 951, 839, 663, 519, 447, 1055]},
+      {"cache": "pogocache", "color": "#e64098", "points": [3487, 2351, 1607, 1279, 967, 655, 511, 447, 367, 327, 359, 383]},
+      {"cache": "redis", "color": "#8c564b", "points": [7103, 4479, 4607, 4831, 4383, 4351, 4479, 4607, 4511, 4415, 4447, 5311]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [7711, 2463, 2879, 3711, 2527, 2975, 3167, 3295, 2863, 3023, 2687, 3055]}
+    ]
+  },
+  {
+    "file": "graph_latency_p99_90-which_gets-pipeline_10-kind_median-scale_logarithmic.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 10",
+    "xtitle": "Threads",
+    "ytitle": "P999 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [15231, 10367, 6239, 4703, 3839, 3231, 2783, 2415, 1975, 1655, 1391, 1215]},
+      {"cache": "garnet", "color": "#d62728", "points": [27647, 24703, 16895, 8255, 9151, 7551, 3151, 9919, 1295, 911, 799, 6815]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [3503, 3071, 2239, 1719, 1255, 1111, 951, 839, 663, 519, 447, 1055]},
+      {"cache": "pogocache", "color": "#e64098", "points": [3487, 2351, 1607, 1279, 967, 655, 511, 447, 367, 327, 359, 383]},
+      {"cache": "redis", "color": "#8c564b", "points": [7103, 4479, 4607, 4831, 4383, 4351, 4479, 4607, 4511, 4415, 4447, 5311]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [7711, 2463, 2879, 3711, 2527, 2975, 3167, 3295, 2863, 3023, 2687, 3055]}
+    ]
+  },
+  {
+    "file": "graph_latency_p99_90-which_gets-pipeline_25-kind_median-scale_linear.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 25",
+    "xtitle": "Threads",
+    "ytitle": "P999 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [130047, 40959, 17535, 10367, 8191, 6847, 5855, 5087, 4159, 3519, 3055, 2735]},
+      {"cache": "garnet", "color": "#d62728", "points": [835583, 524287, 252927, 157695, 210943, 119807, 137215, 81919, 92159, 96255, 62975, 24447]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [10047, 4927, 3359, 2623, 2095, 1815, 1703, 1519, 1383, 1239, 1151, 9855]},
+      {"cache": "pogocache", "color": "#e64098", "points": [7167, 4863, 3199, 2607, 2063, 1471, 1119, 983, 775, 679, 607, 647]},
+      {"cache": "redis", "color": "#8c564b", "points": [15103, 11647, 12415, 12351, 10815, 10815, 11135, 11007, 11007, 11135, 11007, 12479]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [15935, 6335, 6879, 9535, 6111, 9279, 11647, 11775, 7935, 6879, 5887, 7775]}
+    ]
+  },
+  {
+    "file": "graph_latency_p99_90-which_gets-pipeline_25-kind_median-scale_logarithmic.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 25",
+    "xtitle": "Threads",
+    "ytitle": "P999 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [130047, 40959, 17535, 10367, 8191, 6847, 5855, 5087, 4159, 3519, 3055, 2735]},
+      {"cache": "garnet", "color": "#d62728", "points": [835583, 524287, 252927, 157695, 210943, 119807, 137215, 81919, 92159, 96255, 62975, 24447]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [10047, 4927, 3359, 2623, 2095, 1815, 1703, 1519, 1383, 1239, 1151, 9855]},
+      {"cache": "pogocache", "color": "#e64098", "points": [7167, 4863, 3199, 2607, 2063, 1471, 1119, 983, 775, 679, 607, 647]},
+      {"cache": "redis", "color": "#8c564b", "points": [15103, 11647, 12415, 12351, 10815, 10815, 11135, 11007, 11007, 11135, 11007, 12479]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [15935, 6335, 6879, 9535, 6111, 9279, 11647, 11775, 7935, 6879, 5887, 7775]}
+    ]
+  },
+  {
+    "file": "graph_latency_p99_90-which_gets-pipeline_50-kind_median-scale_linear.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 50",
+    "xtitle": "Threads",
+    "ytitle": "P999 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [585727, 36095, 21375, 14399, 11775, 9983, 8639, 7551, 6239, 5279, 4639, 4159]},
+      {"cache": "garnet", "color": "#d62728", "points": [2007039, 1114111, 675839, 626687, 329727, 250879, 378879, 198655, 182271, 137215, 39679, 58111]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [17535, 8703, 5919, 4255, 3439, 2927, 2703, 2447, 2095, 1735, 1727, 12671]},
+      {"cache": "pogocache", "color": "#e64098", "points": [12159, 8703, 6079, 4831, 3807, 3023, 2479, 1791, 1535, 1247, 1143, 1463]},
+      {"cache": "redis", "color": "#8c564b", "points": [28415, 24447, 24703, 24703, 24959, 23423, 22527, 23679, 22271, 21631, 21759, 25343]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [29311, 14591, 15231, 15039, 13119, 15039, 14911, 23551, 24063, 24063, 22399, 25343]}
+    ]
+  },
+  {
+    "file": "graph_latency_p99_90-which_gets-pipeline_50-kind_median-scale_logarithmic.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 50",
+    "xtitle": "Threads",
+    "ytitle": "P999 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [585727, 36095, 21375, 14399, 11775, 9983, 8639, 7551, 6239, 5279, 4639, 4159]},
+      {"cache": "garnet", "color": "#d62728", "points": [2007039, 1114111, 675839, 626687, 329727, 250879, 378879, 198655, 182271, 137215, 39679, 58111]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [17535, 8703, 5919, 4255, 3439, 2927, 2703, 2447, 2095, 1735, 1727, 12671]},
+      {"cache": "pogocache", "color": "#e64098", "points": [12159, 8703, 6079, 4831, 3807, 3023, 2479, 1791, 1535, 1247, 1143, 1463]},
+      {"cache": "redis", "color": "#8c564b", "points": [28415, 24447, 24703, 24703, 24959, 23423, 22527, 23679, 22271, 21631, 21759, 25343]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [29311, 14591, 15231, 15039, 13119, 15039, 14911, 23551, 24063, 24063, 22399, 25343]}
+    ]
+  },
+  {
+    "file": "graph_latency_p99_90-which_sets-pipeline_1-kind_median-scale_linear.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 1",
+    "xtitle": "Threads",
+    "ytitle": "P999 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [1543, 1199, 759, 559, 447, 383, 319, 287, 231, 199, 167, 143]},
+      {"cache": "garnet", "color": "#d62728", "points": [20863, 759, 727, 671, 575, 359, 343, 247, 223, 223, 551, 12223]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [1207, 1143, 839, 687, 599, 511, 479, 423, 399, 407, 439, 855]},
+      {"cache": "pogocache", "color": "#e64098", "points": [791, 1295, 543, 687, 303, 231, 175, 135, 111, 127, 119, 127]},
+      {"cache": "redis", "color": "#8c564b", "points": [1999, 1847, 951, 623, 463, 343, 327, 359, 367, 399, 423, 463]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [2063, 911, 743, 463, 343, 359, 359, 367, 391, 431, 439, 495]}
+    ]
+  },
+  {
+    "file": "graph_latency_p99_90-which_sets-pipeline_1-kind_median-scale_logarithmic.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 1",
+    "xtitle": "Threads",
+    "ytitle": "P999 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [1543, 1199, 759, 559, 447, 383, 319, 287, 231, 199, 167, 143]},
+      {"cache": "garnet", "color": "#d62728", "points": [20863, 759, 727, 671, 575, 359, 343, 247, 223, 223, 551, 12223]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [1207, 1143, 839, 687, 599, 511, 479, 423, 399, 407, 439, 855]},
+      {"cache": "pogocache", "color": "#e64098", "points": [791, 1295, 543, 687, 303, 231, 175, 135, 111, 127, 119, 127]},
+      {"cache": "redis", "color": "#8c564b", "points": [1999, 1847, 951, 623, 463, 343, 327, 359, 367, 399, 423, 463]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [2063, 911, 743, 463, 343, 359, 359, 367, 391, 431, 439, 495]}
+    ]
+  },
+  {
+    "file": "graph_latency_p99_90-which_sets-pipeline_10-kind_median-scale_linear.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 10",
+    "xtitle": "Threads",
+    "ytitle": "P999 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [9791, 7871, 4191, 2991, 2399, 1983, 1703, 1471, 1231, 1015, 879, 759]},
+      {"cache": "garnet", "color": "#d62728", "points": [21631, 1631, 1591, 1487, 1071, 743, 719, 511, 383, 311, 695, 367]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [5055, 3631, 5023, 4415, 3711, 3791, 3775, 3695, 3887, 3743, 4015, 6495]},
+      {"cache": "pogocache", "color": "#e64098", "points": [4095, 2943, 2079, 1671, 1263, 1031, 679, 439, 391, 343, 279, 287]},
+      {"cache": "redis", "color": "#8c564b", "points": [8383, 3279, 3343, 3679, 4927, 2959, 3007, 3151, 4895, 4831, 5087, 5887]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [8831, 2751, 5247, 5535, 3679, 4671, 5759, 5535, 5503, 4671, 4959, 5503]}
+    ]
+  },
+  {
+    "file": "graph_latency_p99_90-which_sets-pipeline_10-kind_median-scale_logarithmic.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 10",
+    "xtitle": "Threads",
+    "ytitle": "P999 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [9791, 7871, 4191, 2991, 2399, 1983, 1703, 1471, 1231, 1015, 879, 759]},
+      {"cache": "garnet", "color": "#d62728", "points": [21631, 1631, 1591, 1487, 1071, 743, 719, 511, 383, 311, 695, 367]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [5055, 3631, 5023, 4415, 3711, 3791, 3775, 3695, 3887, 3743, 4015, 6495]},
+      {"cache": "pogocache", "color": "#e64098", "points": [4095, 2943, 2079, 1671, 1263, 1031, 679, 439, 391, 343, 279, 287]},
+      {"cache": "redis", "color": "#8c564b", "points": [8383, 3279, 3343, 3679, 4927, 2959, 3007, 3151, 4895, 4831, 5087, 5887]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [8831, 2751, 5247, 5535, 3679, 4671, 5759, 5535, 5503, 4671, 4959, 5503]}
+    ]
+  },
+  {
+    "file": "graph_latency_p99_90-which_sets-pipeline_25-kind_median-scale_linear.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 25",
+    "xtitle": "Threads",
+    "ytitle": "P999 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [2998271, 61695, 21247, 12031, 9407, 7519, 6463, 5631, 4575, 3855, 3311, 2831]},
+      {"cache": "garnet", "color": "#d62728", "points": [22655, 2703, 2767, 2655, 1431, 1391, 1351, 967, 967, 599, 1087, 16639]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [13311, 9535, 7359, 6079, 5695, 5631, 5311, 5503, 5471, 5535, 5375, 11647]},
+      {"cache": "pogocache", "color": "#e64098", "points": [12159, 6303, 4447, 3247, 2399, 1495, 1159, 935, 887, 703, 615, 559]},
+      {"cache": "redis", "color": "#8c564b", "points": [17791, 14271, 15039, 14975, 13375, 13311, 13759, 13311, 13439, 13311, 13055, 14335]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [18303, 11263, 7551, 7839, 7167, 7775, 10047, 13631, 10943, 9087, 12735, 13119]}
+    ]
+  },
+  {
+    "file": "graph_latency_p99_90-which_sets-pipeline_25-kind_median-scale_logarithmic.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 25",
+    "xtitle": "Threads",
+    "ytitle": "P999 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [2998271, 61695, 21247, 12031, 9407, 7519, 6463, 5631, 4575, 3855, 3311, 2831]},
+      {"cache": "garnet", "color": "#d62728", "points": [22655, 2703, 2767, 2655, 1431, 1391, 1351, 967, 967, 599, 1087, 16639]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [13311, 9535, 7359, 6079, 5695, 5631, 5311, 5503, 5471, 5535, 5375, 11647]},
+      {"cache": "pogocache", "color": "#e64098", "points": [12159, 6303, 4447, 3247, 2399, 1495, 1159, 935, 887, 703, 615, 559]},
+      {"cache": "redis", "color": "#8c564b", "points": [17791, 14271, 15039, 14975, 13375, 13311, 13759, 13311, 13439, 13311, 13055, 14335]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [18303, 11263, 7551, 7839, 7167, 7775, 10047, 13631, 10943, 9087, 12735, 13119]}
+    ]
+  },
+  {
+    "file": "graph_latency_p99_90-which_sets-pipeline_50-kind_median-scale_linear.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 50",
+    "xtitle": "Threads",
+    "ytitle": "P999 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [1327103, 109055, 40447, 24447, 18815, 15359, 12863, 11839, 9727, 8383, 7455, 6655]},
+      {"cache": "garnet", "color": "#d62728", "points": [28927, 14399, 11199, 5471, 5151, 3743, 3967, 3535, 3599, 2895, 8447, 14335]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [33279, 22783, 16895, 14015, 12351, 11967, 11519, 12095, 12543, 13311, 13695, 18815]},
+      {"cache": "pogocache", "color": "#e64098", "points": [19967, 6751, 6335, 4863, 4079, 3375, 2639, 1959, 1879, 1559, 1607, 1239]},
+      {"cache": "redis", "color": "#8c564b", "points": [25471, 34047, 34303, 34303, 34559, 32383, 30847, 30591, 29951, 30463, 29823, 33023]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [26751, 32383, 22143, 23423, 20735, 22783, 22655, 21759, 22271, 23039, 21119, 25727]}
+    ]
+  },
+  {
+    "file": "graph_latency_p99_90-which_sets-pipeline_50-kind_median-scale_logarithmic.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 50",
+    "xtitle": "Threads",
+    "ytitle": "P999 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [1327103, 109055, 40447, 24447, 18815, 15359, 12863, 11839, 9727, 8383, 7455, 6655]},
+      {"cache": "garnet", "color": "#d62728", "points": [28927, 14399, 11199, 5471, 5151, 3743, 3967, 3535, 3599, 2895, 8447, 14335]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [33279, 22783, 16895, 14015, 12351, 11967, 11519, 12095, 12543, 13311, 13695, 18815]},
+      {"cache": "pogocache", "color": "#e64098", "points": [19967, 6751, 6335, 4863, 4079, 3375, 2639, 1959, 1879, 1559, 1607, 1239]},
+      {"cache": "redis", "color": "#8c564b", "points": [25471, 34047, 34303, 34303, 34559, 32383, 30847, 30591, 29951, 30463, 29823, 33023]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [26751, 32383, 22143, 23423, 20735, 22783, 22655, 21759, 22271, 23039, 21119, 25727]}
+    ]
+  },
+  {
+    "file": "graph_latency_p99_99-which_gets-pipeline_1-kind_median-scale_linear.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 1",
+    "xtitle": "Threads",
+    "ytitle": "P9999 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [1655, 1191, 799, 711, 655, 623, 599, 567, 519, 471, 407, 327]},
+      {"cache": "garnet", "color": "#d62728", "points": [20863, 927, 983, 767, 727, 679, 639, 615, 575, 599, 16895, 31871]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [1695, 911, 703, 647, 559, 519, 447, 383, 311, 343, 343, 631]},
+      {"cache": "pogocache", "color": "#e64098", "points": [1191, 783, 655, 575, 503, 471, 383, 335, 255, 287, 287, 271]},
+      {"cache": "redis", "color": "#8c564b", "points": [1911, 1663, 847, 679, 599, 551, 551, 551, 559, 575, 575, 599]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [1951, 1159, 767, 663, 599, 591, 615, 583, 583, 583, 559, 583]}
+    ]
+  },
+  {
+    "file": "graph_latency_p99_99-which_gets-pipeline_1-kind_median-scale_logarithmic.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 1",
+    "xtitle": "Threads",
+    "ytitle": "P9999 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [1655, 1191, 799, 711, 655, 623, 599, 567, 519, 471, 407, 327]},
+      {"cache": "garnet", "color": "#d62728", "points": [20863, 927, 983, 767, 727, 679, 639, 615, 575, 599, 16895, 31871]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [1695, 911, 703, 647, 559, 519, 447, 383, 311, 343, 343, 631]},
+      {"cache": "pogocache", "color": "#e64098", "points": [1191, 783, 655, 575, 503, 471, 383, 335, 255, 287, 287, 271]},
+      {"cache": "redis", "color": "#8c564b", "points": [1911, 1663, 847, 679, 599, 551, 551, 551, 559, 575, 575, 599]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [1951, 1159, 767, 663, 599, 591, 615, 583, 583, 583, 559, 583]}
+    ]
+  },
+  {
+    "file": "graph_latency_p99_99-which_gets-pipeline_10-kind_median-scale_linear.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 10",
+    "xtitle": "Threads",
+    "ytitle": "P9999 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [15487, 11775, 6783, 5087, 4159, 3471, 2991, 2591, 2111, 1767, 1487, 1311]},
+      {"cache": "garnet", "color": "#d62728", "points": [28543, 27263, 20095, 9087, 33791, 12607, 4255, 25471, 3967, 3983, 17279, 11199]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [5599, 3423, 2319, 1767, 1279, 1143, 991, 927, 879, 823, 919, 4127]},
+      {"cache": "pogocache", "color": "#e64098", "points": [3839, 2399, 1639, 1319, 1111, 1055, 1023, 823, 791, 559, 559, 559]},
+      {"cache": "redis", "color": "#8c564b", "points": [7359, 4703, 4799, 4991, 4511, 4479, 4639, 4767, 4671, 4575, 4639, 5567]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [7935, 2559, 3247, 5023, 2863, 4895, 3983, 3887, 3663, 4351, 2911, 4927]}
+    ]
+  },
+  {
+    "file": "graph_latency_p99_99-which_gets-pipeline_10-kind_median-scale_logarithmic.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 10",
+    "xtitle": "Threads",
+    "ytitle": "P9999 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [15487, 11775, 6783, 5087, 4159, 3471, 2991, 2591, 2111, 1767, 1487, 1311]},
+      {"cache": "garnet", "color": "#d62728", "points": [28543, 27263, 20095, 9087, 33791, 12607, 4255, 25471, 3967, 3983, 17279, 11199]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [5599, 3423, 2319, 1767, 1279, 1143, 991, 927, 879, 823, 919, 4127]},
+      {"cache": "pogocache", "color": "#e64098", "points": [3839, 2399, 1639, 1319, 1111, 1055, 1023, 823, 791, 559, 559, 559]},
+      {"cache": "redis", "color": "#8c564b", "points": [7359, 4703, 4799, 4991, 4511, 4479, 4639, 4767, 4671, 4575, 4639, 5567]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [7935, 2559, 3247, 5023, 2863, 4895, 3983, 3887, 3663, 4351, 2911, 4927]}
+    ]
+  },
+  {
+    "file": "graph_latency_p99_99-which_gets-pipeline_25-kind_median-scale_linear.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 25",
+    "xtitle": "Threads",
+    "ytitle": "P9999 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [203775, 60415, 24191, 13567, 9791, 7871, 6623, 5631, 4575, 3855, 3359, 2991]},
+      {"cache": "garnet", "color": "#d62728", "points": [3751935, 1064959, 374783, 215039, 255999, 192511, 206847, 234495, 235519, 286719, 178175, 192511]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [11263, 5023, 4447, 2703, 2639, 2063, 1855, 1831, 1759, 1567, 1559, 19967]},
+      {"cache": "pogocache", "color": "#e64098", "points": [7551, 4959, 3263, 2655, 2143, 1759, 1607, 1487, 1239, 1487, 1575, 1183]},
+      {"cache": "redis", "color": "#8c564b", "points": [15551, 12095, 12735, 12735, 11199, 11135, 11391, 11327, 11391, 11455, 11327, 12927]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [16255, 8831, 9535, 10559, 6943, 10047, 12479, 12415, 9215, 11967, 10431, 8895]}
+    ]
+  },
+  {
+    "file": "graph_latency_p99_99-which_gets-pipeline_25-kind_median-scale_logarithmic.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 25",
+    "xtitle": "Threads",
+    "ytitle": "P9999 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [203775, 60415, 24191, 13567, 9791, 7871, 6623, 5631, 4575, 3855, 3359, 2991]},
+      {"cache": "garnet", "color": "#d62728", "points": [3751935, 1064959, 374783, 215039, 255999, 192511, 206847, 234495, 235519, 286719, 178175, 192511]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [11263, 5023, 4447, 2703, 2639, 2063, 1855, 1831, 1759, 1567, 1559, 19967]},
+      {"cache": "pogocache", "color": "#e64098", "points": [7551, 4959, 3263, 2655, 2143, 1759, 1607, 1487, 1239, 1487, 1575, 1183]},
+      {"cache": "redis", "color": "#8c564b", "points": [15551, 12095, 12735, 12735, 11199, 11135, 11391, 11327, 11391, 11455, 11327, 12927]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [16255, 8831, 9535, 10559, 6943, 10047, 12479, 12415, 9215, 11967, 10431, 8895]}
+    ]
+  },
+  {
+    "file": "graph_latency_p99_99-which_gets-pipeline_50-kind_median-scale_linear.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 50",
+    "xtitle": "Threads",
+    "ytitle": "P9999 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [897023, 52991, 25343, 15935, 12799, 10687, 9215, 7999, 6623, 5599, 4895, 4383]},
+      {"cache": "garnet", "color": "#d62728", "points": [6356991, 2023423, 1138687, 819199, 602111, 454655, 618495, 350207, 329727, 272383, 198655, 333823]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [17663, 8767, 11263, 4351, 4447, 3039, 2895, 2719, 2463, 2287, 5759, 21119]},
+      {"cache": "pogocache", "color": "#e64098", "points": [12671, 8767, 6207, 4959, 3951, 3183, 6335, 2191, 5855, 1647, 7103, 2111]},
+      {"cache": "redis", "color": "#8c564b", "points": [29055, 24959, 25215, 25599, 25727, 23935, 23039, 25727, 23039, 22015, 22015, 26111]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [29951, 14655, 19839, 15359, 13503, 25727, 26239, 24703, 25087, 25599, 22911, 26239]}
+    ]
+  },
+  {
+    "file": "graph_latency_p99_99-which_gets-pipeline_50-kind_median-scale_logarithmic.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 50",
+    "xtitle": "Threads",
+    "ytitle": "P9999 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [897023, 52991, 25343, 15935, 12799, 10687, 9215, 7999, 6623, 5599, 4895, 4383]},
+      {"cache": "garnet", "color": "#d62728", "points": [6356991, 2023423, 1138687, 819199, 602111, 454655, 618495, 350207, 329727, 272383, 198655, 333823]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [17663, 8767, 11263, 4351, 4447, 3039, 2895, 2719, 2463, 2287, 5759, 21119]},
+      {"cache": "pogocache", "color": "#e64098", "points": [12671, 8767, 6207, 4959, 3951, 3183, 6335, 2191, 5855, 1647, 7103, 2111]},
+      {"cache": "redis", "color": "#8c564b", "points": [29055, 24959, 25215, 25599, 25727, 23935, 23039, 25727, 23039, 22015, 22015, 26111]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [29951, 14655, 19839, 15359, 13503, 25727, 26239, 24703, 25087, 25599, 22911, 26239]}
+    ]
+  },
+  {
+    "file": "graph_latency_p99_99-which_sets-pipeline_1-kind_median-scale_linear.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 1",
+    "xtitle": "Threads",
+    "ytitle": "P9999 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [1711, 1255, 823, 711, 663, 631, 607, 559, 511, 463, 367, 335]},
+      {"cache": "garnet", "color": "#d62728", "points": [20863, 943, 943, 759, 751, 663, 655, 639, 543, 655, 3967, 19967]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [1687, 1207, 887, 735, 679, 639, 623, 591, 559, 583, 607, 4959]},
+      {"cache": "pogocache", "color": "#e64098", "points": [1223, 1511, 703, 831, 887, 663, 559, 319, 231, 327, 295, 263]},
+      {"cache": "redis", "color": "#8c564b", "points": [2143, 1887, 983, 727, 623, 559, 519, 535, 551, 535, 559, 575]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [2159, 1295, 799, 687, 607, 607, 567, 575, 567, 583, 567, 591]}
+    ]
+  },
+  {
+    "file": "graph_latency_p99_99-which_sets-pipeline_1-kind_median-scale_logarithmic.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 1",
+    "xtitle": "Threads",
+    "ytitle": "P9999 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [1711, 1255, 823, 711, 663, 631, 607, 559, 511, 463, 367, 335]},
+      {"cache": "garnet", "color": "#d62728", "points": [20863, 943, 943, 759, 751, 663, 655, 639, 543, 655, 3967, 19967]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [1687, 1207, 887, 735, 679, 639, 623, 591, 559, 583, 607, 4959]},
+      {"cache": "pogocache", "color": "#e64098", "points": [1223, 1511, 703, 831, 887, 663, 559, 319, 231, 327, 295, 263]},
+      {"cache": "redis", "color": "#8c564b", "points": [2143, 1887, 983, 727, 623, 559, 519, 535, 551, 535, 559, 575]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [2159, 1295, 799, 687, 607, 607, 567, 575, 567, 583, 567, 591]}
+    ]
+  },
+  {
+    "file": "graph_latency_p99_99-which_sets-pipeline_10-kind_median-scale_linear.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 10",
+    "xtitle": "Threads",
+    "ytitle": "P9999 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [10815, 8703, 4479, 3135, 2527, 2079, 1783, 1607, 1327, 1119, 991, 919]},
+      {"cache": "garnet", "color": "#d62728", "points": [21759, 3631, 2671, 2431, 3007, 2255, 1967, 1951, 2399, 2879, 17279, 5247]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [7743, 6591, 5183, 4479, 3823, 3903, 3887, 3791, 4031, 3919, 7551, 11583]},
+      {"cache": "pogocache", "color": "#e64098", "points": [4223, 3119, 2783, 1839, 1975, 1631, 919, 703, 743, 879, 687, 503]},
+      {"cache": "redis", "color": "#8c564b", "points": [8575, 5727, 5663, 5887, 5311, 5311, 5407, 5503, 5439, 5375, 5407, 6207]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [9087, 3775, 5599, 6015, 5087, 5375, 6015, 5855, 5695, 4895, 5183, 5759]}
+    ]
+  },
+  {
+    "file": "graph_latency_p99_99-which_sets-pipeline_10-kind_median-scale_logarithmic.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 10",
+    "xtitle": "Threads",
+    "ytitle": "P9999 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [10815, 8703, 4479, 3135, 2527, 2079, 1783, 1607, 1327, 1119, 991, 919]},
+      {"cache": "garnet", "color": "#d62728", "points": [21759, 3631, 2671, 2431, 3007, 2255, 1967, 1951, 2399, 2879, 17279, 5247]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [7743, 6591, 5183, 4479, 3823, 3903, 3887, 3791, 4031, 3919, 7551, 11583]},
+      {"cache": "pogocache", "color": "#e64098", "points": [4223, 3119, 2783, 1839, 1975, 1631, 919, 703, 743, 879, 687, 503]},
+      {"cache": "redis", "color": "#8c564b", "points": [8575, 5727, 5663, 5887, 5311, 5311, 5407, 5503, 5439, 5375, 5407, 6207]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [9087, 3775, 5599, 6015, 5087, 5375, 6015, 5855, 5695, 4895, 5183, 5759]}
+    ]
+  },
+  {
+    "file": "graph_latency_p99_99-which_sets-pipeline_25-kind_median-scale_linear.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 25",
+    "xtitle": "Threads",
+    "ytitle": "P9999 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [11010047, 83455, 28031, 15359, 12223, 9471, 8383, 7455, 6143, 5279, 4639, 3871]},
+      {"cache": "garnet", "color": "#d62728", "points": [25215, 20991, 5087, 5375, 3679, 3487, 3215, 3487, 3279, 3455, 21759, 18943]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [18815, 13503, 10559, 8831, 7839, 7487, 7327, 7871, 7615, 7679, 7487, 17151]},
+      {"cache": "pogocache", "color": "#e64098", "points": [14399, 7711, 5215, 3823, 2975, 1831, 1383, 1351, 5247, 1911, 1455, 1263]},
+      {"cache": "redis", "color": "#8c564b", "points": [18303, 15167, 15551, 15487, 13695, 13695, 14079, 13631, 13759, 13631, 13439, 14911]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [18687, 11711, 9151, 9791, 7519, 13631, 11007, 14015, 11327, 11199, 12927, 13503]}
+    ]
+  },
+  {
+    "file": "graph_latency_p99_99-which_sets-pipeline_25-kind_median-scale_logarithmic.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 25",
+    "xtitle": "Threads",
+    "ytitle": "P9999 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [11010047, 83455, 28031, 15359, 12223, 9471, 8383, 7455, 6143, 5279, 4639, 3871]},
+      {"cache": "garnet", "color": "#d62728", "points": [25215, 20991, 5087, 5375, 3679, 3487, 3215, 3487, 3279, 3455, 21759, 18943]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [18815, 13503, 10559, 8831, 7839, 7487, 7327, 7871, 7615, 7679, 7487, 17151]},
+      {"cache": "pogocache", "color": "#e64098", "points": [14399, 7711, 5215, 3823, 2975, 1831, 1383, 1351, 5247, 1911, 1455, 1263]},
+      {"cache": "redis", "color": "#8c564b", "points": [18303, 15167, 15551, 15487, 13695, 13695, 14079, 13631, 13759, 13631, 13439, 14911]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [18687, 11711, 9151, 9791, 7519, 13631, 11007, 14015, 11327, 11199, 12927, 13503]}
+    ]
+  },
+  {
+    "file": "graph_latency_p99_99-which_sets-pipeline_50-kind_median-scale_linear.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 50",
+    "xtitle": "Threads",
+    "ytitle": "P9999 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [2244607, 155647, 57343, 40959, 33023, 27647, 24575, 20351, 16255, 13055, 10239, 9791]},
+      {"cache": "garnet", "color": "#d62728", "points": [39423, 21759, 12351, 8191, 8383, 8255, 5279, 4287, 4863, 13119, 19967, 14719]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [34559, 25599, 19583, 16767, 13887, 13439, 12927, 14143, 13311, 14463, 15231, 22399]},
+      {"cache": "pogocache", "color": "#e64098", "points": [24319, 9343, 6687, 5215, 4351, 3599, 2927, 2527, 9535, 5983, 5023, 2495]},
+      {"cache": "redis", "color": "#8c564b", "points": [33535, 35583, 35583, 35583, 35839, 33535, 31871, 33791, 30847, 31103, 30591, 34047]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [33535, 40191, 33535, 35071, 31871, 33791, 34047, 33535, 33791, 34303, 31615, 35071]}
+    ]
+  },
+  {
+    "file": "graph_latency_p99_99-which_sets-pipeline_50-kind_median-scale_logarithmic.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 50",
+    "xtitle": "Threads",
+    "ytitle": "P9999 Latency (microseconds)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [2244607, 155647, 57343, 40959, 33023, 27647, 24575, 20351, 16255, 13055, 10239, 9791]},
+      {"cache": "garnet", "color": "#d62728", "points": [39423, 21759, 12351, 8191, 8383, 8255, 5279, 4287, 4863, 13119, 19967, 14719]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [34559, 25599, 19583, 16767, 13887, 13439, 12927, 14143, 13311, 14463, 15231, 22399]},
+      {"cache": "pogocache", "color": "#e64098", "points": [24319, 9343, 6687, 5215, 4351, 3599, 2927, 2527, 9535, 5983, 5023, 2495]},
+      {"cache": "redis", "color": "#8c564b", "points": [33535, 35583, 35583, 35583, 35839, 33535, 31871, 33791, 30847, 31103, 30591, 34047]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [33535, 40191, 33535, 35071, 31871, 33791, 34047, 33535, 33791, 34303, 31615, 35071]}
+    ]
+  },
+  {
+    "file": "graph_opsec-which_gets-pipeline_1-kind_median-scale_linear.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 1",
+    "xtitle": "Threads",
+    "ytitle": "Throughput (Kops/sec)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [217, 363, 548, 718, 889, 1072, 1260, 1407, 1790, 2132, 2509, 2935]},
+      {"cache": "garnet", "color": "#d62728", "points": [204, 403, 577, 759, 935, 1145, 1321, 1548, 1987, 2451, 3029, 2366]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [316, 616, 878, 1139, 1414, 1725, 2131, 2601, 3160, 3083, 3070, 3106]},
+      {"cache": "pogocache", "color": "#e64098", "points": [405, 746, 1044, 1489, 1878, 2282, 2690, 3080, 3624, 3497, 3435, 3414]},
+      {"cache": "redis", "color": "#8c564b", "points": [301, 334, 597, 899, 1222, 1573, 1571, 1513, 1528, 1465, 1412, 1322]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [290, 359, 586, 941, 1315, 1333, 1275, 1331, 1395, 1390, 1473, 1378]}
+    ]
+  },
+  {
+    "file": "graph_opsec-which_gets-pipeline_1-kind_median-scale_logarithmic.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 1",
+    "xtitle": "Threads",
+    "ytitle": "Throughput (Kops/sec)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [217, 363, 548, 718, 889, 1072, 1260, 1407, 1790, 2132, 2509, 2935]},
+      {"cache": "garnet", "color": "#d62728", "points": [204, 403, 577, 759, 935, 1145, 1321, 1548, 1987, 2451, 3029, 2366]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [316, 616, 878, 1139, 1414, 1725, 2131, 2601, 3160, 3083, 3070, 3106]},
+      {"cache": "pogocache", "color": "#e64098", "points": [405, 746, 1044, 1489, 1878, 2282, 2690, 3080, 3624, 3497, 3435, 3414]},
+      {"cache": "redis", "color": "#8c564b", "points": [301, 334, 597, 899, 1222, 1573, 1571, 1513, 1528, 1465, 1412, 1322]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [290, 359, 586, 941, 1315, 1333, 1275, 1331, 1395, 1390, 1473, 1378]}
+    ]
+  },
+  {
+    "file": "graph_opsec-which_gets-pipeline_10-kind_median-scale_linear.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 10",
+    "xtitle": "Threads",
+    "ytitle": "Throughput (Kops/sec)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [323, 639, 911, 1172, 1425, 1667, 1983, 2160, 2691, 3214, 3667, 4198]},
+      {"cache": "garnet", "color": "#d62728", "points": [1519, 3601, 5153, 7319, 7584, 7343, 8858, 9659, 12941, 13834, 12286, 12551]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [846, 1588, 2360, 3204, 4167, 4727, 5572, 6269, 7900, 10010, 11035, 10766]},
+      {"cache": "pogocache", "color": "#e64098", "points": [905, 2194, 3234, 4110, 5460, 6719, 7978, 9385, 11707, 13482, 13788, 13492]},
+      {"cache": "redis", "color": "#8c564b", "points": [746, 1135, 1143, 1090, 1196, 1203, 1174, 1144, 1163, 1178, 1164, 998]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [700, 1194, 1011, 972, 1136, 1013, 1002, 1016, 1029, 977, 1161, 1025]}
+    ]
+  },
+  {
+    "file": "graph_opsec-which_gets-pipeline_10-kind_median-scale_logarithmic.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 10",
+    "xtitle": "Threads",
+    "ytitle": "Throughput (Kops/sec)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [323, 639, 911, 1172, 1425, 1667, 1983, 2160, 2691, 3214, 3667, 4198]},
+      {"cache": "garnet", "color": "#d62728", "points": [1519, 3601, 5153, 7319, 7584, 7343, 8858, 9659, 12941, 13834, 12286, 12551]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [846, 1588, 2360, 3204, 4167, 4727, 5572, 6269, 7900, 10010, 11035, 10766]},
+      {"cache": "pogocache", "color": "#e64098", "points": [905, 2194, 3234, 4110, 5460, 6719, 7978, 9385, 11707, 13482, 13788, 13492]},
+      {"cache": "redis", "color": "#8c564b", "points": [746, 1135, 1143, 1090, 1196, 1203, 1174, 1144, 1163, 1178, 1164, 998]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [700, 1194, 1011, 972, 1136, 1013, 1002, 1016, 1029, 977, 1161, 1025]}
+    ]
+  },
+  {
+    "file": "graph_opsec-which_gets-pipeline_25-kind_median-scale_linear.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 25",
+    "xtitle": "Threads",
+    "ytitle": "Throughput (Kops/sec)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [284, 656, 942, 1256, 1521, 1805, 2089, 2235, 2881, 3151, 3628, 4076]},
+      {"cache": "garnet", "color": "#d62728", "points": [3034, 8149, 9861, 11678, 12807, 17209, 21091, 29799, 44434, 30408, 37044, 31463]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [758, 1456, 2179, 2962, 3853, 4573, 5279, 5924, 7207, 9219, 10671, 11217]},
+      {"cache": "pogocache", "color": "#e64098", "points": [1201, 2676, 4040, 4955, 6296, 7840, 9377, 10962, 13786, 15949, 16685, 15729]},
+      {"cache": "redis", "color": "#8c564b", "points": [872, 1104, 1081, 1058, 1209, 1211, 1179, 1193, 1195, 1182, 1197, 1049]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [834, 1134, 1038, 1006, 1154, 1041, 1026, 1043, 1057, 1028, 1183, 1129]}
+    ]
+  },
+  {
+    "file": "graph_opsec-which_gets-pipeline_25-kind_median-scale_logarithmic.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 25",
+    "xtitle": "Threads",
+    "ytitle": "Throughput (Kops/sec)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [284, 656, 942, 1256, 1521, 1805, 2089, 2235, 2881, 3151, 3628, 4076]},
+      {"cache": "garnet", "color": "#d62728", "points": [3034, 8149, 9861, 11678, 12807, 17209, 21091, 29799, 44434, 30408, 37044, 31463]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [758, 1456, 2179, 2962, 3853, 4573, 5279, 5924, 7207, 9219, 10671, 11217]},
+      {"cache": "pogocache", "color": "#e64098", "points": [1201, 2676, 4040, 4955, 6296, 7840, 9377, 10962, 13786, 15949, 16685, 15729]},
+      {"cache": "redis", "color": "#8c564b", "points": [872, 1104, 1081, 1058, 1209, 1211, 1179, 1193, 1195, 1182, 1197, 1049]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [834, 1134, 1038, 1006, 1154, 1041, 1026, 1043, 1057, 1028, 1183, 1129]}
+    ]
+  },
+  {
+    "file": "graph_opsec-which_gets-pipeline_50-kind_median-scale_linear.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 50",
+    "xtitle": "Threads",
+    "ytitle": "Throughput (Kops/sec)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [290, 649, 946, 1282, 1570, 1903, 2247, 2380, 3056, 3434, 3942, 4400]},
+      {"cache": "garnet", "color": "#d62728", "points": [2996, 8032, 11108, 12187, 15041, 18570, 24086, 29515, 52198, 39827, 37657, 34140]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [839, 1601, 2397, 3272, 4246, 4915, 5554, 6169, 7648, 9792, 11520, 12128]},
+      {"cache": "pogocache", "color": "#e64098", "points": [1269, 3005, 4289, 5418, 6835, 8272, 9766, 11388, 14456, 17328, 16524, 15803]},
+      {"cache": "redis", "color": "#8c564b", "points": [928, 1062, 1057, 1075, 1038, 1145, 1186, 1205, 1178, 1212, 1191, 1025]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [901, 1003, 1000, 969, 1115, 986, 981, 1019, 1019, 977, 1132, 956]}
+    ]
+  },
+  {
+    "file": "graph_opsec-which_gets-pipeline_50-kind_median-scale_logarithmic.png",
+    "title": "GET - 256 Clients - 25600000 Ops - Pipeline 50",
+    "xtitle": "Threads",
+    "ytitle": "Throughput (Kops/sec)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [290, 649, 946, 1282, 1570, 1903, 2247, 2380, 3056, 3434, 3942, 4400]},
+      {"cache": "garnet", "color": "#d62728", "points": [2996, 8032, 11108, 12187, 15041, 18570, 24086, 29515, 52198, 39827, 37657, 34140]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [839, 1601, 2397, 3272, 4246, 4915, 5554, 6169, 7648, 9792, 11520, 12128]},
+      {"cache": "pogocache", "color": "#e64098", "points": [1269, 3005, 4289, 5418, 6835, 8272, 9766, 11388, 14456, 17328, 16524, 15803]},
+      {"cache": "redis", "color": "#8c564b", "points": [928, 1062, 1057, 1075, 1038, 1145, 1186, 1205, 1178, 1212, 1191, 1025]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [901, 1003, 1000, 969, 1115, 986, 981, 1019, 1019, 977, 1132, 956]}
+    ]
+  },
+  {
+    "file": "graph_opsec-which_sets-pipeline_1-kind_median-scale_linear.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 1",
+    "xtitle": "Threads",
+    "ytitle": "Throughput (Kops/sec)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [198, 348, 534, 708, 891, 1065, 1246, 1432, 1828, 2175, 2564, 3071]},
+      {"cache": "garnet", "color": "#d62728", "points": [192, 386, 559, 736, 916, 1116, 1291, 1519, 1953, 2408, 3005, 2321]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [240, 444, 615, 780, 911, 1053, 1190, 1271, 1392, 1426, 1412, 1355]},
+      {"cache": "pogocache", "color": "#e64098", "points": [389, 664, 963, 1356, 1707, 2046, 2513, 2948, 3687, 3421, 3391, 3383]},
+      {"cache": "redis", "color": "#8c564b", "points": [274, 288, 524, 794, 1097, 1437, 1786, 1669, 1696, 1615, 1549, 1464]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [266, 317, 541, 856, 1203, 1231, 1385, 1423, 1424, 1408, 1440, 1395]}
+    ]
+  },
+  {
+    "file": "graph_opsec-which_sets-pipeline_1-kind_median-scale_logarithmic.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 1",
+    "xtitle": "Threads",
+    "ytitle": "Throughput (Kops/sec)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [198, 348, 534, 708, 891, 1065, 1246, 1432, 1828, 2175, 2564, 3071]},
+      {"cache": "garnet", "color": "#d62728", "points": [192, 386, 559, 736, 916, 1116, 1291, 1519, 1953, 2408, 3005, 2321]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [240, 444, 615, 780, 911, 1053, 1190, 1271, 1392, 1426, 1412, 1355]},
+      {"cache": "pogocache", "color": "#e64098", "points": [389, 664, 963, 1356, 1707, 2046, 2513, 2948, 3687, 3421, 3391, 3383]},
+      {"cache": "redis", "color": "#8c564b", "points": [274, 288, 524, 794, 1097, 1437, 1786, 1669, 1696, 1615, 1549, 1464]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [266, 317, 541, 856, 1203, 1231, 1385, 1423, 1424, 1408, 1440, 1395]}
+    ]
+  },
+  {
+    "file": "graph_opsec-which_sets-pipeline_10-kind_median-scale_linear.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 10",
+    "xtitle": "Threads",
+    "ytitle": "Throughput (Kops/sec)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [324, 639, 933, 1225, 1504, 1755, 2023, 2324, 2808, 3354, 3936, 4579]},
+      {"cache": "garnet", "color": "#d62728", "points": [899, 1758, 2637, 3499, 4324, 5188, 6037, 6960, 8763, 10706, 12921, 13491]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [607, 769, 1010, 1233, 1420, 1493, 1571, 1553, 1559, 1570, 1493, 1504]},
+      {"cache": "pogocache", "color": "#e64098", "points": [797, 1909, 2793, 3589, 4487, 5601, 6772, 8646, 10086, 12458, 14761, 16585]},
+      {"cache": "redis", "color": "#8c564b", "points": [639, 915, 930, 895, 973, 978, 966, 946, 964, 971, 961, 865]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [613, 1049, 886, 857, 972, 892, 888, 902, 911, 881, 982, 915]}
+    ]
+  },
+  {
+    "file": "graph_opsec-which_sets-pipeline_10-kind_median-scale_logarithmic.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 10",
+    "xtitle": "Threads",
+    "ytitle": "Throughput (Kops/sec)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [324, 639, 933, 1225, 1504, 1755, 2023, 2324, 2808, 3354, 3936, 4579]},
+      {"cache": "garnet", "color": "#d62728", "points": [899, 1758, 2637, 3499, 4324, 5188, 6037, 6960, 8763, 10706, 12921, 13491]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [607, 769, 1010, 1233, 1420, 1493, 1571, 1553, 1559, 1570, 1493, 1504]},
+      {"cache": "pogocache", "color": "#e64098", "points": [797, 1909, 2793, 3589, 4487, 5601, 6772, 8646, 10086, 12458, 14761, 16585]},
+      {"cache": "redis", "color": "#8c564b", "points": [639, 915, 930, 895, 973, 978, 966, 946, 964, 971, 961, 865]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [613, 1049, 886, 857, 972, 892, 888, 902, 911, 881, 982, 915]}
+    ]
+  },
+  {
+    "file": "graph_opsec-which_sets-pipeline_25-kind_median-scale_linear.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 25",
+    "xtitle": "Threads",
+    "ytitle": "Throughput (Kops/sec)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [358, 713, 1048, 1429, 1772, 2024, 2327, 2626, 3141, 3726, 4246, 4810]},
+      {"cache": "garnet", "color": "#d62728", "points": [1595, 3012, 4517, 6274, 8065, 10280, 12572, 15240, 22727, 30537, 17473, 18789]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [571, 761, 995, 1240, 1393, 1477, 1520, 1448, 1464, 1492, 1508, 1375]},
+      {"cache": "pogocache", "color": "#e64098", "points": [1059, 2191, 3389, 4185, 5366, 6915, 8316, 10460, 12136, 14750, 17312, 20331]},
+      {"cache": "redis", "color": "#8c564b", "points": [752, 881, 872, 863, 980, 985, 961, 984, 985, 984, 997, 897]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [739, 998, 917, 883, 962, 904, 889, 898, 898, 886, 966, 932]}
+    ]
+  },
+  {
+    "file": "graph_opsec-which_sets-pipeline_25-kind_median-scale_logarithmic.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 25",
+    "xtitle": "Threads",
+    "ytitle": "Throughput (Kops/sec)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [358, 713, 1048, 1429, 1772, 2024, 2327, 2626, 3141, 3726, 4246, 4810]},
+      {"cache": "garnet", "color": "#d62728", "points": [1595, 3012, 4517, 6274, 8065, 10280, 12572, 15240, 22727, 30537, 17473, 18789]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [571, 761, 995, 1240, 1393, 1477, 1520, 1448, 1464, 1492, 1508, 1375]},
+      {"cache": "pogocache", "color": "#e64098", "points": [1059, 2191, 3389, 4185, 5366, 6915, 8316, 10460, 12136, 14750, 17312, 20331]},
+      {"cache": "redis", "color": "#8c564b", "points": [752, 881, 872, 863, 980, 985, 961, 984, 985, 984, 997, 897]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [739, 998, 917, 883, 962, 904, 889, 898, 898, 886, 966, 932]}
+    ]
+  },
+  {
+    "file": "graph_opsec-which_sets-pipeline_50-kind_median-scale_linear.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 50",
+    "xtitle": "Threads",
+    "ytitle": "Throughput (Kops/sec)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [338, 732, 1085, 1472, 1835, 2125, 2434, 2754, 3336, 3944, 4532, 5165]},
+      {"cache": "garnet", "color": "#d62728", "points": [2190, 4910, 6258, 8758, 10405, 14061, 16280, 20385, 20730, 26683, 20784, 21384]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [570, 761, 994, 1243, 1404, 1450, 1507, 1493, 1486, 1451, 1426, 1398]},
+      {"cache": "pogocache", "color": "#e64098", "points": [939, 2479, 3490, 4554, 5420, 6527, 8152, 10322, 12142, 14454, 16986, 19342]},
+      {"cache": "redis", "color": "#8c564b", "points": [809, 818, 824, 830, 822, 897, 913, 935, 936, 945, 954, 848]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [767, 930, 910, 882, 962, 890, 893, 910, 903, 881, 960, 864]}
+    ]
+  },
+  {
+    "file": "graph_opsec-which_sets-pipeline_50-kind_median-scale_logarithmic.png",
+    "title": "SET - 256 Clients - 25600000 Ops - Pipeline 50",
+    "xtitle": "Threads",
+    "ytitle": "Throughput (Kops/sec)",
+    "xseries": [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16],
+    "series": [
+      {"cache": "dragonfly", "color": "#ff7f0e", "points": [338, 732, 1085, 1472, 1835, 2125, 2434, 2754, 3336, 3944, 4532, 5165]},
+      {"cache": "garnet", "color": "#d62728", "points": [2190, 4910, 6258, 8758, 10405, 14061, 16280, 20385, 20730, 26683, 20784, 21384]},
+      {"cache": "memcache", "color": "#1f77b4", "points": [570, 761, 994, 1243, 1404, 1450, 1507, 1493, 1486, 1451, 1426, 1398]},
+      {"cache": "pogocache", "color": "#e64098", "points": [939, 2479, 3490, 4554, 5420, 6527, 8152, 10322, 12142, 14454, 16986, 19342]},
+      {"cache": "redis", "color": "#8c564b", "points": [809, 818, 824, 830, 822, 897, 913, 935, 936, 945, 954, 848]},
+      {"cache": "valkey", "color": "#2ca02c", "points": [767, 930, 910, 882, 962, 890, 893, 910, 903, 881, 960, 864]}
+    ]
+  }
+]

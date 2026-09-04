@@ -62,7 +62,7 @@ cache-bench verify  --against /path/to/cache-benchmarks/results
 
 `sweep` takes days. It is restartable, it skips runs whose result file already exists, and it prints an ETA once it has enough completed runs to derive one.
 
-`verify` is the claim this port makes about itself. With no arguments it checks the golden files committed here and runs anywhere in under a second. Pointed at a checkout of the original it reads all 20160 of its committed run files, reproduces all 2304 of its chosen files and its whole published `output.json` byte for byte, and then prints how far the corrected statistics sit from the original's.
+`verify` is the claim this port makes about itself. With no arguments it checks the golden files committed here and runs anywhere in under a second. Pointed at a checkout of the original it reads all 20160 of its committed run files, reproduces all 2304 of its chosen files and its whole published `output.json` byte for byte, rebuilds all 154 of its charts down to the last bar, and then prints how far the corrected statistics sit from the original's.
 
 ## Hardware profiles
 

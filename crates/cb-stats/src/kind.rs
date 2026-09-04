@@ -37,7 +37,9 @@ impl Kind {
 
 impl fmt::Display for Kind {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.write_str(self.name())
+        // Through `pad` rather than `write_str`, so that a width in the format string does what it says.
+        // `verify` prints these in a column and asks for eight characters, and `write_str` throws the width away without complaining.
+        f.pad(self.name())
     }
 }
 

@@ -59,6 +59,11 @@ version = "0.2.0"
 [[package]]
 name = "cb-chart"
 version = "0.2.0"
+dependencies = [
+ "cb-core",
+ "serde",
+ "serde_json",
+]
 
 [[package]]
 name = "cb-cli"
