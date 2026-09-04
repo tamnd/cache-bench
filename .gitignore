@@ -1,18 +1,15 @@
 /target
 Cargo.lock.orig
 
-# The ssh targets for the benchmark hosts. Names and addresses of those
-# machines do not go in a public repository, and CI checks that this file is
-# not tracked. hosts.example.toml is the template.
+# The ssh targets for the benchmark hosts.
+# Names and addresses of those machines do not go in a public repository, and CI checks that this file is not tracked.
+# hosts.example.toml is the template.
 hosts.toml
 
-# Raw measurement data does not go in git. A sweep produces about ten thousand
-# small JSON files, one per run, and they are evidence rather than a result:
-# nobody reads one, everybody reads what they were aggregated into. Seventeen
-# thousand files in the history is a tax on every clone forever, so they ship
-# as a tarball attached to the release instead.
+# Raw measurement data does not go in git.
+# A sweep produces about ten thousand small JSON files, one per run, and they are evidence rather than a result: nobody reads one, everybody reads what they were aggregated into.
+# Seventeen thousand files in the history is a tax on every clone forever, so they ship as a tarball attached to the release instead.
 #
-# What is committed from a results directory is the finished article and
-# nothing else: output.json, host.json, the charts and the generated markdown.
+# What is committed from a results directory is the finished article and nothing else: output.json, host.json, the charts and the generated markdown.
 results/*/runs/
 results/*/logs/

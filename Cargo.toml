@@ -15,8 +15,7 @@ members = [
 [workspace.package]
 version = "0.0.1"
 edition = "2024"
-# Held behind stable, and it matches the floor in tamnd/yo so the two trees
-# agree on what a supported compiler is.
+# Held behind stable, and it matches the floor in tamnd/yo so the two trees agree on what a supported compiler is.
 rust-version = "1.94"
 license = "Apache-2.0"
 repository = "https://github.com/tamnd/cache-bench"
@@ -37,10 +36,8 @@ cb-stats = { path = "crates/cb-stats", version = "0.0.1" }
 [workspace.lints.rust]
 missing_docs = "warn"
 unreachable_pub = "warn"
-# Deny rather than forbid, because cb-cache needs one block of it for the
-# pre_exec closure that sets CPU affinity before the server starts. That block
-# allows the lint at the site, with a safety comment, and it is the only unsafe
-# in the tree.
+# Deny rather than forbid, because cb-cache needs one block of it for the pre_exec closure that sets CPU affinity before the server starts.
+# That block allows the lint at the site, with a safety comment, and it is the only unsafe in the tree.
 unsafe_code = "deny"
 
 [workspace.lints.clippy]
@@ -51,15 +48,14 @@ panic = "deny"
 unwrap_used = "deny"
 expect_used = "warn"
 float_cmp = "deny"
-# Not decoration. The chart layer turns f64 measurements into integers in three
-# places and each one has a rounding mode that has to match the original. A
-# silent truncation would produce charts that are wrong by one, which is the
-# kind of wrong nobody ever notices.
+# Not decoration.
+# The chart layer turns f64 measurements into integers in three places and each one has a rounding mode that has to match the original.
+# A silent truncation would produce charts that are wrong by one, which is the kind of wrong nobody ever notices.
 cast_possible_truncation = "deny"
 cast_precision_loss = "warn"
 
-# The harness spends its life waiting on two child processes in sequence, so
-# none of this is about its own speed. It is about start time and binary size.
+# The harness spends its life waiting on two child processes in sequence, so none of this is about its own speed.
+# It is about start time and binary size.
 [profile.release]
 lto = "fat"
 codegen-units = 1

@@ -1,9 +1,7 @@
 {
-    // Paths to the binaries. Same shape and same keys as the original, so a
-    // config that works there works here.
+    // Paths to the binaries. Same shape and same keys as the original, so a config that works there works here.
     //
-    // ${arch} is replaced with x86_64 or aarch64, which is only needed for the
-    // Dragonfly release binary.
+    // ${arch} is replaced with x86_64 or aarch64, which is only needed for the Dragonfly release binary.
     "paths": {
         "memtier": "memtier_benchmark",
         "memcache": "../memcached/memcached",

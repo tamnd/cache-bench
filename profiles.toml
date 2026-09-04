@@ -1,13 +1,10 @@
 # Hardware profiles.
 #
-# The original hardcodes a 32 core box: the cache pinned to cores 0 to 15, the
-# load generator pinned to 16 to 31, 32 GB of cache memory, and a thread sweep
-# that runs to 16. None of that is written down anywhere as data, so running it
-# on a different machine means editing the driver script and the Go source.
+# The original hardcodes a 32 core box: the cache pinned to cores 0 to 15, the load generator pinned to 16 to 31, 32 GB of cache memory, and a thread sweep that runs to 16.
+# None of that is written down anywhere as data, so running it on a different machine means editing the driver script and the Go source.
 #
-# Here it is data, every result file records which profile produced it, and
-# every chart is stamped with the host it came from. Mixing two profiles into
-# one chart set without saying so is the mistake this file exists to prevent.
+# Here it is data, every result file records which profile produced it, and every chart is stamped with the host it came from.
+# Mixing two profiles into one chart set without saying so is the mistake this file exists to prevent.
 
 [profiles.reference]
 description = "The original's box. AWS c8g.8xlarge, 32 core ARM64, non NUMA."
@@ -19,11 +16,9 @@ bench_threads = 16
 connections_per_thread = 16
 operations = 100000
 size_range = "1-1024"
-# The original leaves this at memtier's default of ten million and never says
-# so. At an average value of 512 bytes that is about six gigabytes live, which
-# is why maxmemory is 32 GB: it is chosen so that nothing is ever evicted.
-# Shrink one without the other and the benchmark quietly becomes an eviction
-# benchmark, which is the easiest way to get confidently wrong numbers here.
+# The original leaves this at memtier's default of ten million and never says so.
+# At an average value of 512 bytes that is about six gigabytes live, which is why maxmemory is 32 GB: it is chosen so that nothing is ever evicted.
+# Shrink one without the other and the benchmark quietly becomes an eviction benchmark, which is the easiest way to get confidently wrong numbers here.
 key_maximum = 10000000
 maxmemory = "32gb"
 pipelines = [1, 10, 25, 50]
@@ -44,10 +39,8 @@ key_maximum = 10000000
 maxmemory = "32gb"
 pipelines = [1, 10, 25, 50]
 runs = 31
-# Hyper-V does not give the guest a virtual PMU, so there is no cycles counter
-# to read and the eight CPU cycles charts cannot come from this host. Running
-# the perf half of the matrix here would produce ten thousand result files
-# whose only effect is to be filtered back out by the chart layer.
+# Hyper-V does not give the guest a virtual PMU, so there is no cycles counter to read and the eight CPU cycles charts cannot come from this host.
+# Running the perf half of the matrix here would produce ten thousand result files whose only effect is to be filtered back out by the chart layer.
 perf = ["no"]
 
 [profiles.epyc8]
