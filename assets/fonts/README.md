@@ -17,4 +17,4 @@ Jost is metric compatible enough with Futura that the chart geometry did not
 have to change. The licence text for each font ships next to the font file, and
 both are permissive enough to embed in a binary that is itself MIT or Apache-2.0.
 
-The font files land with M6.
+The font files land with M3.

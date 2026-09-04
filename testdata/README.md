@@ -18,4 +18,4 @@ what the manifest exists to make visible. The fix is to look at the visual diff
 first and update the manifest in its own commit, never to regenerate it as part
 of some other change.
 
-Both land with M6.
+The golden data lands with M2 and the manifest with M3.
