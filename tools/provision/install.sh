@@ -222,7 +222,8 @@ if wanted pogocache; then
     dir="$WORK/pogocache"
     fetch https://github.com/tidwall/pogocache.git "$POGOCACHE_REF" "$dir"
     if stale "$dir/pogocache" "$dir"; then
-        (cd "$dir" && make -j"$jobs")
+        # Pogocache builds with -Werror, and a compiler newer than the one it was released against finds things in it that stop the build. GCC 15 on Ubuntu 26.04 does exactly that. This demotes those back to warnings and changes nothing else: it goes in through the environment rather than on the command line, because the Makefile appends the environment's CFLAGS to its own and a command line assignment would replace them, which would quietly take -O3 off a server we are about to measure.
+        (cd "$dir" && CFLAGS="-Wno-error" make -j"$jobs")
         built "$dir/pogocache" "$dir"
     fi
 fi
