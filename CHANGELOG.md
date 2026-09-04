@@ -4,6 +4,16 @@ What each release costs you, in the order the releases happened. New entries go 
 
 ## Unreleased
 
+Nothing yet.
+
+## 0.1.0 - 2026-09-04
+
+M1 is done, which means the data model is finished and the port is proved faithful in both directions. Still nothing measures anything.
+
+The milestone exits on two things and both have now been run. The original's published `output.json` parses and comes back byte for byte, all 2304 entries of it, and the original's `graph` reads a file our emitter wrote and draws throughput, latency and cycles from it in both scales. That cross check is the cheapest proof available that this is a port rather than a rewrite that resembles one, and it stops being available the moment a field gets renamed for being nicer.
+
+What is left of the milestone is data rather than code: the config, the profiles and the hosts file, which are what turn a harness that assumes one 32 core AWS instance into one that runs on a machine you actually have.
+
 ### Added
 
 - `config.jsonc`, the same file the original reads, with the same keys and the same `${arch}` placeholder, so a config that works there works here and the other way round. Comments and trailing commas are allowed and nothing else is, because the original hands everything past those to a strict JSON parser and a file that only works on one side defeats the point of sharing it.
@@ -11,6 +21,7 @@ What each release costs you, in the order the releases happened. New entries go 
 - Profile validation, which refuses the three mistakes that produce numbers rather than errors: a thread sweep wider than the cores it is pinned to, a load generator sharing cores with the server under test, and a key space too large for the memory limit. All three make a chart that looks fine and measures something else.
 - `hosts.toml`, absent by default, absent meaning run here. Only `hosts.example.toml` is committed, with ssh config names rather than addresses, and a test that fails if anything in it starts to look like a real machine.
 - `cache-bench doctor`, which reads all three files and says what it found, or says what is wrong with them and exits non-zero. This is the file half. The machine half, which probes cores, memory and the PMU, lands with the runner.
+- `CB_PARITY_EMIT`, which writes out what our emitter produced so the original's `graph` can be pointed at it. The commands are in `testdata/golden/README.md`, so the claim that the original's chart tool reads our file is something you can repeat rather than something we assert.
 
 ### Changed
 

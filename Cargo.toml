@@ -13,7 +13,7 @@ members = [
 ]
 
 [workspace.package]
-version = "0.0.2"
+version = "0.1.0"
 edition = "2024"
 # Held behind stable, and it matches the floor in tamnd/yo so the two trees agree on what a supported compiler is.
 rust-version = "1.94"
@@ -25,13 +25,13 @@ keywords = ["benchmark", "cache", "redis", "valkey", "memcached"]
 categories = ["caching", "development-tools::profiling"]
 
 [workspace.dependencies]
-cb-cache = { path = "crates/cb-cache", version = "0.0.2" }
-cb-chart = { path = "crates/cb-chart", version = "0.0.2" }
-cb-core = { path = "crates/cb-core", version = "0.0.2" }
-cb-docs = { path = "crates/cb-docs", version = "0.0.2" }
-cb-memtier = { path = "crates/cb-memtier", version = "0.0.2" }
-cb-perf = { path = "crates/cb-perf", version = "0.0.2" }
-cb-stats = { path = "crates/cb-stats", version = "0.0.2" }
+cb-cache = { path = "crates/cb-cache", version = "0.1.0" }
+cb-chart = { path = "crates/cb-chart", version = "0.1.0" }
+cb-core = { path = "crates/cb-core", version = "0.1.0" }
+cb-docs = { path = "crates/cb-docs", version = "0.1.0" }
+cb-memtier = { path = "crates/cb-memtier", version = "0.1.0" }
+cb-perf = { path = "crates/cb-perf", version = "0.1.0" }
+cb-stats = { path = "crates/cb-stats", version = "0.1.0" }
 
 [workspace.lints.rust]
 missing_docs = "warn"
