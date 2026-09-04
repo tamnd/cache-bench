@@ -172,7 +172,7 @@ fn mean_perf(perfs: &[Perf], n: f64) -> Perf {
     out
 }
 
-/// The mean of one counter, where anything unparseable is a zero.
+/// The mean of one counter, where anything that is not a number is a zero.
 ///
 /// A `<not supported>` counter reads as zero and averages in as zero, so an engine on a machine with no branch counter is reported as having taken no branches. That is D11 and it is reproduced here.
 fn mean_counter<const PLACES: usize>(
