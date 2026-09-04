@@ -22,7 +22,7 @@ pub struct Divergence {
 }
 
 /// Every divergence, in the order `divergences.md` has them.
-pub const DIVERGENCES: [Divergence; 16] = [
+pub const DIVERGENCES: [Divergence; 17] = [
     Divergence {
         id: "D1 to D4",
         title: "the statistics",
@@ -117,6 +117,12 @@ pub const DIVERGENCES: [Divergence; 16] = [
         id: "D19",
         title: "the numbers carry their own caveat",
         effect: "What these numbers may and may not be used for is emitted next to the charts rather than kept in a document nobody following a chart link will open.",
+        moves: false,
+    },
+    Divergence {
+        id: "D20",
+        title: "pinned before exec, and stopped as a group",
+        effect: "The CPU pin is applied in the server itself rather than by wrapping it in taskset, and every run confirms its process group is gone before the next one starts.",
         moves: false,
     },
 ];

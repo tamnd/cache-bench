@@ -5,3 +5,9 @@
 //!
 //! This crate needs Linux.
 //! On other platforms it compiles to a stub that reports the platform is unsupported, which keeps the chart and statistics crates testable on a laptop.
+
+pub mod ready;
+pub mod supervise;
+
+pub use ready::{NotReady, wait};
+pub use supervise::{BadProcess, Running, Stopped, Supervisor};

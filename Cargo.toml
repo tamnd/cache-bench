@@ -40,8 +40,9 @@ cb-stats = { path = "crates/cb-stats" }
 [workspace.lints.rust]
 missing_docs = "warn"
 unreachable_pub = "warn"
-# Deny rather than forbid, because cb-cache needs one block of it for the pre_exec closure that sets CPU affinity before the server starts.
-# That block allows the lint at the site, with a safety comment, and it is the only unsafe in the tree.
+# Deny rather than forbid, because process control has no safe equivalent in the standard library.
+# cb-cache needs it to put a child in its own process group and pin it between fork and exec, to signal a whole group, and to ask whether a group is still there.
+# Every one of those sites allows the lint on its own with a safety comment saying why it is sound, and there is no unsafe anywhere else.
 unsafe_code = "deny"
 
 [workspace.lints.clippy]

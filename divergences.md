@@ -153,3 +153,11 @@ Here the whole document is generated. The methodology bullets carry the profile'
 The original states its methodology and leaves it at that. What its numbers may be used to claim is not written down anywhere, and the charts are what get linked.
 
 Every generated results README ends with what these numbers may and may not be used for, in full, next to the charts rather than in a document that a reader following a link to a chart will never open. The sentence that matters is that they may not be used to say one engine is faster than another, full stop, because this is a hot path measurement of two commands with no expiry, no eviction, no mixed command set, no large values, no network, no replication and no persistence in it. It is emitted rather than referenced so that it travels with the thing it is about.
+
+## D20, pinned before exec, and stopped as a group
+
+The original pins with `taskset -c 0-15` in front of the server command, and stops the server by killing the pid it started.
+
+Both of those are a problem here for the same reason: the pid the harness holds is not the pid it thinks it is holding. With a wrapper, the pid that comes back belongs to taskset, so that is the pid perf would be attached to and the pid a stray check would look for. And a server that forks workers leaves those workers behind when the pid alone is signalled, still holding the socket and still on the cores.
+
+Here the affinity is set with `sched_setaffinity` inside the child between fork and exec, so the pid is the server's own. The child also puts itself in a new process group, and stopping means signalling the group, escalating to a kill if the grace period runs out, and then confirming the group is gone before the run counts as finished. A group that is still there is a failed run rather than a warning, because a server that outlives its run competes with the next one for the same cores and the number that comes out of that is low and entirely plausible.
