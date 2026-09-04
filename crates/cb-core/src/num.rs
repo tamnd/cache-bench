@@ -72,15 +72,24 @@ impl<'de> Deserialize<'de> for Fixed0 {
 /// A chosen file holds the same counters as JSON numbers, because the selection step reparses them as floats on the way through.
 ///
 /// Both shapes have to round trip byte for byte, so this keeps whichever one it was given and converts only on request.
+///
+/// `PLACES` is how many decimal places the number form is written with, and it is a property of which counter this is rather than of its value.
+/// The original writes `cpu_utilized` with three and every event count with none, so it is [`CpuCounter`] and [`EventCounter`] rather than one type that guesses from the value.
 #[derive(Debug, Clone, PartialEq)]
-pub enum Counter {
+pub enum Counter<const PLACES: usize> {
     /// The run file form, which is whatever `perf stat` printed, verbatim.
     Text(String),
     /// The chosen file form, which is a number.
     Number(f64),
 }
 
-impl Counter {
+/// `cpu_utilized`, which is a ratio and is written with three decimal places.
+pub type CpuCounter = Counter<3>;
+
+/// An event count, which is written with none.
+pub type EventCounter = Counter<0>;
+
+impl<const PLACES: usize> Counter<PLACES> {
     /// The counter as a float.
     ///
     /// Text that is not a number reads as zero.
@@ -107,44 +116,44 @@ impl Counter {
     }
 }
 
-impl Serialize for Counter {
+impl<const PLACES: usize> Serialize for Counter<PLACES> {
     fn serialize<S: Serializer>(&self, s: S) -> Result<S::Ok, S::Error> {
         match self {
             Self::Text(t) => s.serialize_str(t),
-            Self::Number(n) => emit(format!("{n}"), s),
+            Self::Number(n) => emit(format!("{n:.PLACES$}"), s),
         }
     }
 }
 
-impl<'de> Deserialize<'de> for Counter {
+impl<'de, const PLACES: usize> Deserialize<'de> for Counter<PLACES> {
     fn deserialize<D: Deserializer<'de>>(d: D) -> Result<Self, D::Error> {
-        struct V;
+        struct V<const PLACES: usize>;
 
-        impl Visitor<'_> for V {
-            type Value = Counter;
+        impl<const PLACES: usize> Visitor<'_> for V<PLACES> {
+            type Value = Counter<PLACES>;
 
             fn expecting(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
                 f.write_str("a perf counter, as a string or a number")
             }
 
-            fn visit_str<E: de::Error>(self, v: &str) -> Result<Counter, E> {
+            fn visit_str<E: de::Error>(self, v: &str) -> Result<Self::Value, E> {
                 Ok(Counter::Text(v.to_owned()))
             }
 
-            fn visit_f64<E: de::Error>(self, v: f64) -> Result<Counter, E> {
+            fn visit_f64<E: de::Error>(self, v: f64) -> Result<Self::Value, E> {
                 Ok(Counter::Number(v))
             }
 
-            fn visit_u64<E: de::Error>(self, v: u64) -> Result<Counter, E> {
+            fn visit_u64<E: de::Error>(self, v: u64) -> Result<Self::Value, E> {
                 Ok(Counter::Number(widen_u64(v)))
             }
 
-            fn visit_i64<E: de::Error>(self, v: i64) -> Result<Counter, E> {
+            fn visit_i64<E: de::Error>(self, v: i64) -> Result<Self::Value, E> {
                 Ok(Counter::Number(widen_i64(v)))
             }
         }
 
-        d.deserialize_any(V)
+        d.deserialize_any(V::<PLACES>)
     }
 }
 
@@ -163,7 +172,7 @@ fn widen_i64(v: i64) -> f64 {
 #[cfg(test)]
 #[allow(clippy::unwrap_used)]
 mod tests {
-    use super::{Counter, Fixed0, Fixed3};
+    use super::{CpuCounter, EventCounter, Fixed0, Fixed3};
 
     #[test]
     fn three_places_always() {
@@ -196,18 +205,29 @@ mod tests {
 
     #[test]
     fn a_counter_keeps_the_shape_it_arrived_in() {
-        let text: Counter = serde_json::from_str(r#""642245372237""#).unwrap();
+        let text: EventCounter = serde_json::from_str(r#""642245372237""#).unwrap();
         assert_eq!(serde_json::to_string(&text).unwrap(), r#""642245372237""#);
 
-        let number: Counter = serde_json::from_str("642245372237").unwrap();
+        let number: EventCounter = serde_json::from_str("642245372237").unwrap();
         assert_eq!(serde_json::to_string(&number).unwrap(), "642245372237");
+    }
+
+    // How many places a numeric counter is written with is a property of which counter it is, not of its value.
+    // The original writes cpu_utilized with three and everything else with none, so a ratio that happens to land on 0.99 still goes out as 0.990 and an event count never grows a decimal point.
+    #[test]
+    fn places_come_from_the_counter_not_from_the_value() {
+        let cpu: CpuCounter = serde_json::from_str("0.99").unwrap();
+        assert_eq!(serde_json::to_string(&cpu).unwrap(), "0.990");
+
+        let events: EventCounter = serde_json::from_str("49427").unwrap();
+        assert_eq!(serde_json::to_string(&events).unwrap(), "49427");
     }
 
     #[test]
     fn unsupported_counters_read_as_zero_and_know_it() {
-        let c = Counter::Text("<not supported>".to_owned());
+        let c = EventCounter::Text("<not supported>".to_owned());
         assert!((c.as_f64() - 0.0).abs() < f64::EPSILON);
         assert!(!c.is_measured());
-        assert!(Counter::Text("21181".to_owned()).is_measured());
+        assert!(EventCounter::Text("21181".to_owned()).is_measured());
     }
 }

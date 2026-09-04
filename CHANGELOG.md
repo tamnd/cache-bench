@@ -4,7 +4,13 @@ What each release costs you, in the order the releases happened. New entries go 
 
 ## Unreleased
 
-Nothing yet.
+### Added
+
+- `output.json`, the combined file the chart layer reads, matching the original's layout field for field and number for number. Verified against the original's whole published file, all 2304 entries, byte for byte in both directions.
+
+### Fixed
+
+- Numeric perf counters are written with the decimal places the original writes them with. How many places a counter gets is a property of which counter it is rather than of its value, so `cpu_utilized` goes out with three and every event count with none. Before this, a CPU figure that happened to land on 0.99 was written as `0.99` where the original writes `0.990`.
 
 ## 0.0.1 - 2026-09-04
 

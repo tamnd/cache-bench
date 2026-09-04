@@ -21,7 +21,7 @@
 
 use serde::{Deserialize, Serialize};
 
-use crate::num::{Counter, Fixed3};
+use crate::num::{CpuCounter, EventCounter, Fixed3};
 
 /// One measurement, or one aggregate over 31 of them.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -166,31 +166,35 @@ pub struct Latency {
 /// Field order is the order the original discovers them in `perf stat` output, which is the order they end up in the file.
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct Perf {
-    /// CPUs utilised, a ratio rather than a count.
+    /// CPUs utilised, a ratio rather than a count, and the one counter the original writes with decimal places.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub cpu_utilized: Option<Counter>,
+    pub cpu_utilized: Option<CpuCounter>,
     /// CPU cycles.
     /// The presence of this key is what marks a cell as having usable perf data.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub cycles: Option<Counter>,
+    pub cycles: Option<EventCounter>,
     /// Seconds of user time.
+    ///
+    /// Three places, like `cpu_utilized`, because that is the shape `perf stat` prints seconds in.
+    /// The original never writes this one as a number at all, since its selection step converts six named counters and this is not one of them, so the choice is ours and it only shows up in a file the original would not have written.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub secsuser: Option<Counter>,
+    pub secsuser: Option<CpuCounter>,
     /// Seconds of system time.
+    /// Three places, for the same reason as `secsuser`.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub secssys: Option<Counter>,
+    pub secssys: Option<CpuCounter>,
     /// Instructions retired.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub instructions: Option<Counter>,
+    pub instructions: Option<EventCounter>,
     /// Branches.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub branches: Option<Counter>,
+    pub branches: Option<EventCounter>,
     /// Mispredicted branches.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub branch_misses: Option<Counter>,
+    pub branch_misses: Option<EventCounter>,
     /// Page faults.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub page_faults: Option<Counter>,
+    pub page_faults: Option<EventCounter>,
 }
 
 impl Perf {
