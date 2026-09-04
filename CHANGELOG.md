@@ -4,6 +4,18 @@ What each release costs you, in the order the releases happened. New entries go 
 
 ## Unreleased
 
+## 0.5.0 - 2026-09-04
+
+The runner.
+
+This is the release where the project starts measuring. Everything before it was arithmetic over numbers somebody else took. `cache-bench run` starts a server, waits for it to answer, drives memtier against it, counts cycles over the server while it does, stops the server, checks nothing survived, and writes one file. Run it once per cell and the sweep is the loop around it, which is M6.
+
+The sequence is the original's and it does not vary by engine. What is not the original's is what happens when the sequence goes wrong. Six things are refused here that the original would have measured through: a server left over from an earlier cell answering on the socket, two sweeps sharing a results directory, a perf cell on a machine whose counters do not answer, more I/O threads than the profile pinned cores, a profile written for a bigger machine than the one running it, and a memtier pass that did not complete the operations it was asked for. Every one of those produces a plausible number rather than an error, which is why they are checks rather than notes in a document.
+
+A run that fails anywhere writes nothing, and a cell already on disk is skipped rather than measured again. That is the whole of how a sweep that takes days survives a reboot.
+
+The exit condition on this milestone is a gate and it has not been run. Seven servers each starting, answering, completing a run and stopping cleanly, with and without perf, needs a Linux host with all seven built on it. Everything up to that point is verified: unit tests on every piece, one whole run end to end against fakes, and thirteen checks on three operating systems. The gate itself is hardware work and it stays open until it runs on hardware.
+
 ### Added
 
 - `cache-bench run`, which measures one cell once and writes one run file. Version, start, wait for an answer, warmup, attach perf, the two measured passes, detach, stop, confirm the group is gone, write. A run that fails anywhere in that writes nothing, because a partial file cannot be told from a complete one by the stage that reads it next, and a cell that is already on disk is skipped rather than measured again, which is the whole of how a sweep that takes days is restartable.
