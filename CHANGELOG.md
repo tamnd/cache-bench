@@ -4,11 +4,20 @@ What each release costs you, in the order the releases happened. New entries go 
 
 ## Unreleased
 
+Nothing yet.
+
+## 0.1.1 - 2026-09-04
+
+Both halves of the statistics, and the one that matters is the half that reproduces the original's mistakes.
+
+All 2304 of the original's published chosen files come back byte for byte from its own run files, across all 576 cells, with nothing skipped. That is not a formality. Until it held, every claim about what the four defects cost was a reading of the Go source, and now each one is a subtraction anybody can repeat. The corrected numbers are worth reading because the numbers they disagree with can be regenerated on demand.
+
+Nothing here measures anything yet, and the milestone is not finished. `combine` and `verify` are what is left.
+
 ### Added
 
 - Upstream mode, which reproduces all four statistics defects exactly. Given the original's own run files it regenerates the original's own chosen files, and all 2304 of them come back byte for byte across all 576 cells. That is the first half of the M2 gate and it is what makes the corrected numbers worth reading, because the disagreement between the two modes is now measured rather than asserted.
 - Go's `sort.Slice` ported, which upstream mode needs and nothing else does. The original sorts its SET results with a comparator that reads a different slice, so the order that comes out is a property of the algorithm rather than of the data, and reproducing its published SET numbers means reproducing Go's `pdqsort` rather than merely sorting the same values. Checked against 142 cases produced by Go itself, including the aliased comparator at the four lengths the original's mutated run count produces.
-
 - The corrected reduction. Thirty one runs of one cell go in, and a median, a best, a worst and an average come out. Each series is sorted by its own key, ten percent comes off each end, and the median is the middle of what is left. All four aggregates see all 31 runs.
 - The `spread` object in a chosen file. Interquartile range, standard deviation and coefficient of variation for both throughput series and for cycles, over every run including the ones the trim drops. Nothing plots it. It is the only way to tell a cell that was measured on a quiet machine from one that was not, once both have been reduced to a single number.
 - Two golden cells in `testdata/golden/cells`, which are the original's own committed runs for dragonfly at one thread and pipeline depth 1, one cell with perf attached and one without, together with the four files the original reduced each of them to. Every statistics test here is checked against what the original actually produced rather than against a distribution somebody made up.
