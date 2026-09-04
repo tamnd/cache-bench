@@ -18,11 +18,14 @@ workspace = true
 [dependencies]
 cb-core.workspace = true
 serde = { version = "1.0.229", default-features = false, features = ["derive", "std"] }
+# float_roundtrip because the golden fixtures are full of numbers that have to come back as the exact bits Python wrote.
+# Without it serde_json parses with a fast path that is allowed to be a unit in the last place out, and a gridline one bit out is a test that fails for a reason nobody would ever guess.
+serde_json = { version = "1.0.151", features = ["float_roundtrip"] }
 # The font parser, used here to prove the three embedded faces are what they claim to be.
 # ab_glyph is the obvious choice because plotters draws text with it, and it is not the choice made here: it sits on ttf-parser, which its author has marked unmaintained, and cargo-deny fails the build on that.
 # skrifa is what the advisory points at and it is a hard dependency of nothing else, so the renderer can be settled on its own terms rather than by what a font crate dragged in.
 skrifa = "0.46.2"
+thiserror = "2.0.20"
 
 [dev-dependencies]
-serde_json = "1.0.151"
 sha2 = "0.11.0"

@@ -74,6 +74,16 @@ Getting it needed a trick, because the original's `graph` tool pastes its number
 
 Two levels of test read it. Everything that does not need measurements, which is the filenames, the titles, the axes, the legend order and the colours, is checked in `cargo test` against a synthetic results file with the original's shape and none of its numbers. The bar heights need the original's 1.7 MB `output.json`, so they go through `cache-bench verify --against`, and there the numbers come out of our own reduction of the original's run files rather than out of its combined file, which makes a matching chart one where every bar survived the whole pipeline.
 
+## axes.json
+
+The other half of a chart. `series.json` is what goes on one and this is where it goes: the bottom and top of the y axis, every labelled tick with its text, every gridline between them, the numbers in the left margin on a logarithmic chart, the thread counts under the x axis, the legend order, and the block of constants that is the same on all 154.
+
+It exists because the layout is arithmetic and arithmetic can be wrong quietly. The original works out a log axis with `ceil` of one logarithm for the top and `floor` of a different one for the bottom, steps the minor lines by an eighth of a decade, and formats every label through Python's comma grouping and its round half to even. A reimplementation of that from reading it would look right on most charts and be a decade out on a few. So the fixture is the original's own answer: `tools/axis-vectors` cuts its two chart scripts out of `cmd/graph/main.go`, runs them on these same 154 charts with matplotlib replaced by a recorder, and writes down what matplotlib was told.
+
+All 154 are checked in `cargo test`, bit for bit, on every bound, tick, gridline and label. Like `series.json` it needs no measurements, because an axis is a function of the bars and the bars are already here. `cache-bench verify` makes the same check from the command line and prints how much of it passed.
+
+The numbers in here are compared exactly, so `serde_json` is built with `float_roundtrip` wherever this file is read. Without it the parser takes a fast path that is allowed to land a unit in the last place away from what Python wrote, which shows up as one gridline out of six thousand being wrong in the last digit.
+
 ## gosort.json
 
 142 cases produced by Go's `sort.Slice`, which is the one fixture here that is generated rather than copied. Upstream mode has to reproduce the original's SET numbers, and those come out of a sort whose comparator reads a slice it is not sorting, so the result depends on the exact sequence of comparisons and swaps rather than on the values. Matching it means matching Go's `pdqsort`, and the only way to know we do is to ask Go.

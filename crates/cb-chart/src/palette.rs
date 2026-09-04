@@ -20,6 +20,49 @@ pub fn color(at: usize) -> Result<&'static str, TooManyCaches> {
     COLORS.get(at).copied().ok_or(TooManyCaches { at })
 }
 
+/// A colour, as three channels from zero to one.
+///
+/// The same range matplotlib works in, because the outline colour is worked out by multiplying and the multiplication has to happen on the same numbers.
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct Rgb(pub [f64; 3]);
+
+impl Rgb {
+    /// Read a six digit hex colour.
+    ///
+    /// # Errors
+    ///
+    /// If it is not a hash followed by six hex digits, which is the only form anything in this project uses.
+    pub fn parse(hex: &str) -> Result<Self, BadColor> {
+        let digits = hex.strip_prefix('#').filter(|d| d.len() == 6);
+        let channel = |at: usize| {
+            digits
+                .and_then(|d| d.get(at..at + 2))
+                .and_then(|p| u8::from_str_radix(p, 16).ok())
+                .map(|v| f64::from(v) / 255.0)
+        };
+        match (channel(0), channel(2), channel(4)) {
+            (Some(r), Some(g), Some(b)) => Ok(Self([r, g, b])),
+            _ => Err(BadColor(hex.to_owned())),
+        }
+    }
+
+    /// The colour a bar is outlined in, which is the bar's own colour darkened.
+    ///
+    /// The original writes it as each channel times 0.4 clamped into range, and the clamp never does anything because darkening cannot take a channel out of range. It is kept because it is what the original computes.
+    #[must_use]
+    pub fn edge(self) -> Self {
+        Self(
+            self.0
+                .map(|c| (c * crate::axis::EDGE_SCALE).clamp(0.0, 1.0)),
+        )
+    }
+}
+
+/// Text that is not a six digit hex colour.
+#[derive(Debug, Clone, PartialEq, Eq, thiserror::Error)]
+#[error("{0:?} is not a colour, expected a hash and six hex digits")]
+pub struct BadColor(pub String);
+
 /// More cache servers in a results file than there are colours to draw them with.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct TooManyCaches {
@@ -43,7 +86,7 @@ impl std::error::Error for TooManyCaches {}
 #[cfg(test)]
 #[allow(clippy::unwrap_used)]
 mod tests {
-    use super::{COLORS, color};
+    use super::{COLORS, Rgb, color};
 
     // The six the original uses, in its order, because a chart drawn here and a chart drawn there should be the same chart.
     #[test]
@@ -62,6 +105,26 @@ mod tests {
         seen.sort_unstable();
         seen.dedup();
         assert_eq!(seen.len(), COLORS.len());
+    }
+
+    // The number the original's chart records show for the orange, worked out the way it works it out.
+    #[test]
+    fn an_outline_is_the_bar_darkened() {
+        let edge = Rgb::parse("#ff7f0e").unwrap().edge();
+        assert_eq!(
+            edge,
+            Rgb([0.4, 0.199_215_686_274_509_8, 0.021_960_784_313_725_49])
+        );
+    }
+
+    #[test]
+    fn every_colour_in_the_table_reads_back() {
+        for hex in COLORS {
+            assert!(Rgb::parse(hex).is_ok(), "{hex} does not parse");
+        }
+        assert!(Rgb::parse("ff7f0e").is_err());
+        assert!(Rgb::parse("#ff7f0").is_err());
+        assert!(Rgb::parse("#ff7f0g").is_err());
     }
 
     #[test]

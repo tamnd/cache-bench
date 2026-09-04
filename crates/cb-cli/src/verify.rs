@@ -5,9 +5,10 @@
 //!
 //! It also prints what the corrections cost, because both modes read the same directory and differ in nothing but the statistics, so the difference between them is the size of the four defects rather than an opinion about them.
 
+use std::collections::BTreeMap;
 use std::path::{Path, PathBuf};
 
-use cb_chart::{Chart, Corpus, Spec};
+use cb_chart::{Chart, Corpus, Golden, Spec};
 use cb_core::{Compat, Entry, Output, Run};
 use cb_stats::{Kind, correct, upstream};
 
@@ -48,6 +49,8 @@ const CELL_PLAIN: &str =
     include_str!("../../../testdata/golden/cells/dragonfly-threads_1-pipeline_1-perf_no.json");
 /// All 154 charts as the original drew them, taken out of its own generated drawing scripts.
 const SERIES: &str = include_str!("../../../testdata/golden/series.json");
+/// Where the original put all of that, taken by standing in for matplotlib while the same scripts ran.
+const AXES: &str = include_str!("../../../testdata/golden/axes.json");
 
 /// A cell as the golden files hold it, which is the runs and the answers side by side.
 #[derive(serde::Deserialize)]
@@ -71,6 +74,7 @@ pub(crate) fn run(args: &Args) -> Result<(), String> {
     failed += format_round_trips();
     failed += golden_cells()?;
     failed += chart_names()?;
+    failed += axes()?;
     if let Some(dir) = &args.against {
         failed += corpus(dir, !args.no_compare)?;
     } else {
@@ -174,6 +178,32 @@ fn chart_names() -> Result<usize, String> {
 /// The 154 charts the original drew, as the fixture holds them.
 fn golden_charts() -> Result<Vec<Chart>, String> {
     serde_json::from_str(SERIES).map_err(|e| format!("the golden series will not parse: {e}"))
+}
+
+/// Where the original put every bar, tick and gridline, checked without needing any measurements either.
+///
+/// The series fixture holds the numbers and this holds the geometry those numbers produced, so the two together are a chart minus the drawing. Anything that differs is printed, because one wrong gridline out of eleven thousand is worth the line it takes to name.
+fn axes() -> Result<usize, String> {
+    let golden = Golden::parse(AXES).map_err(|e| format!("the golden axes will not parse: {e}"))?;
+    let charts: BTreeMap<String, Chart> = golden_charts()?
+        .into_iter()
+        .map(|c| (c.file.clone(), c))
+        .collect();
+
+    let mut failed = golden.constants();
+    let (tally, wrong) = golden.check(&charts);
+    failed.extend(wrong);
+    if failed.is_empty() {
+        println!(
+            "axes      {} axes laid out, {} ticks, {} gridlines, all on the original's numbers",
+            tally.charts, tally.ticks, tally.lines
+        );
+        return Ok(0);
+    }
+    for m in &failed {
+        println!("axes      {} {}", m.file, m.what);
+    }
+    Ok(failed.len())
 }
 
 /// The chart half of the corpus check, bar by bar.

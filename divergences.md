@@ -99,3 +99,11 @@ Every server in the original is given 32 GB except Dragonfly, which is given 31.
 A gigabyte in 32 is not going to move a throughput number when the working set is about six gigabytes and nothing is ever evicted. It is here because Dragonfly is the one engine in the set running under a limit nobody chose, and a reader comparing engines deserves to know that one of them was configured by an arithmetic accident.
 
 Here the profile's `maxmemory` goes to all seven servers unchanged. In `--compat=upstream` the formula is reproduced, arithmetic and all, rather than the 31 it happens to produce.
+
+## D13, the x tick offset
+
+Under each group of bars the original writes the thread count, and it places that label at `width * 2.5` from the left edge of the group. Six bars of width `width` make a group `6 * width` wide, whose middle is at `width * 3`, so the label is half a bar to the left of centre. It looks centred because the bar the label is under is drawn from its own left edge, and the middle of the last bar in a group of six is exactly `width * 2.5`. The number is right for six bars by construction and for no other count.
+
+We draw seven. Keeping the constant would push every thread count on every chart half a bar off the group it names, which is a visible fault on a chart nobody would think to check, so here the offset is the middle of however many bars there are. At six the two expressions produce the same number, so nothing the original published moves.
+
+`Bars::upstream_xtick` keeps the original's expression and a test asserts the two agree at six and disagree at seven, which is what makes this a divergence that only shows up once a seventh engine is on the chart.
