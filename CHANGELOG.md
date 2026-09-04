@@ -6,6 +6,7 @@ What each release costs you, in the order the releases happened. New entries go 
 
 ### Added
 
+- Upstream mode, which reproduces all four statistics defects exactly. Given the original's own run files it regenerates the original's own chosen files, and all 2304 of them come back byte for byte across all 576 cells. That is the first half of the M2 gate and it is what makes the corrected numbers worth reading, because the disagreement between the two modes is now measured rather than asserted.
 - Go's `sort.Slice` ported, which upstream mode needs and nothing else does. The original sorts its SET results with a comparator that reads a different slice, so the order that comes out is a property of the algorithm rather than of the data, and reproducing its published SET numbers means reproducing Go's `pdqsort` rather than merely sorting the same values. Checked against 142 cases produced by Go itself, including the aliased comparator at the four lengths the original's mutated run count produces.
 
 - The corrected reduction. Thirty one runs of one cell go in, and a median, a best, a worst and an average come out. Each series is sorted by its own key, ten percent comes off each end, and the median is the middle of what is left. All four aggregates see all 31 runs.
