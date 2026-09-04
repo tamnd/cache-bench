@@ -65,6 +65,9 @@ jobs:
                   print(f"{p}: {e}")
           sys.exit(1 if bad else 0)
           PY
+      # The provisioner is the one piece of this project that runs as root on a machine somebody is about to give up for a week, and it is the one piece that is not Rust, so nothing else in this file would catch an unquoted variable in it.
+      - name: the provisioning script holds up
+        run: shellcheck tools/provision/install.sh
       # The data files that drive every run, checked here by the same command that checks them on the host.
       # A typo in one of them is otherwise found by whoever starts a sweep, and a sweep starts on a machine that is not this one and runs for days.
       # This used to be a Python approximation of the same checks, which could only look at shape. doctor reads the files with the parser the harness uses and applies the checks that matter, including whether a profile's working set fits inside its own memory limit.
