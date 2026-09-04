@@ -4,7 +4,16 @@ What each release costs you, in the order the releases happened. New entries go 
 
 ## Unreleased
 
-Nothing yet.
+### Added
+
+- `cache-bench choose`, which reduces every cell in a results directory to its median, best, worst and average. `--compat=upstream` reproduces the original's four defects, `--out` writes somewhere else so that two modes can be compared without either overwriting the other, and `--cell` does one cell for when you are looking at a single number rather than a sweep.
+- `cache-bench combine`, which gathers the chosen files into the `output.json` the charts read. No computation in it. Every number was decided by `choose` and this collects them in the order a directory listing gives them, which is the original's order because the original builds the file straight out of one.
+- The results directory layer the two of them share. A gap in a cell's run numbering stops that cell at the gap and says how many files sit above it, rather than reducing 30 runs and calling them 31.
+
+### Notes
+
+- The M2 gate is met end to end. From the original's 20160 committed run files, `choose --compat=upstream` writes all 2304 of its chosen files byte for byte and `combine` writes its published `output.json` byte for byte, all 1.7 MB of it.
+- That makes the size of the four defects a measurement. The same directory reduced in corrected mode moves the typical median by a tenth of a percent on GET and a quarter of a percent on SET, and the worst median SET by 61 percent, which is Garnet at 8 threads and pipeline 50 published at 19.86 million operations per second where the median of its 31 runs is 12.30 million. The published median GET is higher than the true median in 576 of 576 cells, which is what a one sided index error looks like once you can see all of them at once.
 
 ## 0.1.1 - 2026-09-04
 

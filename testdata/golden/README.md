@@ -48,6 +48,16 @@ CB_PARITY_RUNS=/path/to/cache-benchmarks/results/runs cargo test -p cb-stats -- 
 
 That reduces all 576 cells four ways each and compares against what the original wrote. The two committed cells are one engine at one thread and one pipeline depth, so they catch a mistake but they cannot show the absence of one.
 
+The same thing through the command line, which also covers `combine` and ends at the original's published `output.json` rather than at its chosen files:
+
+```
+cache-bench choose --dir /path/to/cache-benchmarks/results --compat upstream --out /tmp/gate
+cache-bench combine --dir /tmp/gate
+cmp /tmp/gate/output.json /path/to/cache-benchmarks/results/output.json
+```
+
+`--out` is what keeps the original's directory untouched, since `choose` would otherwise write its four files next to the runs it read. Dropping `--compat upstream` from the first line writes the corrected numbers to the same place, so diffing two runs of it is a like for like comparison of the statistics and of nothing else.
+
 ## gosort.json
 
 142 cases produced by Go's `sort.Slice`, which is the one fixture here that is generated rather than copied. Upstream mode has to reproduce the original's SET numbers, and those come out of a sort whose comparator reads a slice it is not sorting, so the result depends on the exact sequence of comparisons and swaps rather than on the values. Matching it means matching Go's `pdqsort`, and the only way to know we do is to ask Go.
