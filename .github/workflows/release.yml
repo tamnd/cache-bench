@@ -128,7 +128,13 @@ jobs:
           cp README.md LICENSE-APACHE profiles.toml config.jsonc "dist/$name/"
           tar -C dist -czf "dist/$name.tar.gz" "$name"
           # Written next to the archive rather than only in the release notes, so a copy that was fetched once and passed around can still be checked.
-          (cd dist && shasum -a 256 "$name.tar.gz" > "$name.tar.gz.sha256")
+          # The three runners do not agree on which tool exists. Linux and the Git Bash that Windows runs this step under have sha256sum, macOS has shasum and not sha256sum.
+          cd dist
+          if command -v sha256sum >/dev/null 2>&1; then
+            sha256sum "$name.tar.gz" > "$name.tar.gz.sha256"
+          else
+            shasum -a 256 "$name.tar.gz" > "$name.tar.gz.sha256"
+          fi
       - uses: actions/upload-artifact@v7.0.1
         with:
           name: ${{ matrix.target }}
