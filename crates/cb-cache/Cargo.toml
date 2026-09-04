@@ -14,3 +14,11 @@ publish.workspace = true
 
 [lints]
 workspace = true
+
+[dependencies]
+cb-core.workspace = true
+thiserror = "2.0.20"
+
+# Process groups and affinity masks, neither of which the standard library has.
+[target.'cfg(unix)'.dependencies]
+libc = "0.2.189"

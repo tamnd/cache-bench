@@ -96,6 +96,11 @@ dependencies = [
 [[package]]
 name = "cb-cache"
 version = "0.4.0"
+dependencies = [
+ "cb-core",
+ "libc",
+ "thiserror",
+]
 
 [[package]]
 name = "cb-chart"
