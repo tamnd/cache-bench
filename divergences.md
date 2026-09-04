@@ -78,7 +78,9 @@ The original hardcodes a 32 core box throughout: core pinning, thread sweep, mem
 
 ## D9, no Python
 
-The original charts with matplotlib through a generated script. Here the chart engine is a Rust crate built on plotters, so the chart layer has tests, golden series and a PNG hash manifest, and a fresh checkout draws a byte identical chart on Linux, macOS and Windows.
+The original charts with matplotlib through a generated script. Here the chart engine is a Rust crate that lays out the axes and draws the pixels itself, so the chart layer has tests, golden series and a PNG hash manifest, and a fresh checkout draws a byte identical chart on Linux, macOS and Windows.
+
+Drawing the pixels ourselves is not enthusiasm for writing a rasterizer. The two chart libraries in Rust that could have done it both take their text from somewhere we cannot control. plotters with its `ttf` feature resolves system fonts through font-kit, which means a chart drawn on this laptop and a chart drawn on a CI runner are two different pictures, and that is exactly the non determinism this project exists to remove. Its `ab_glyph` feature avoids that but sits on ttf-parser, which cargo-deny already fails the build on under RUSTSEC-2026-0192. What is left is small: the shapes on these charts are axis aligned rectangles, which have an exact coverage per pixel with no sampling involved, and glyph outlines, which skrifa reads out of the two font files committed here and zeno fills in scalar f32 with no SIMD path to diverge on. Every arithmetic step is fixed order f64 or f32, so byte identical output across platforms is a property of the code rather than a hope about somebody else's crate.
 
 ## D10, an added subject
 
@@ -107,3 +109,15 @@ Under each group of bars the original writes the thread count, and it places tha
 We draw seven. Keeping the constant would push every thread count on every chart half a bar off the group it names, which is a visible fault on a chart nobody would think to check, so here the offset is the middle of however many bars there are. At six the two expressions produce the same number, so nothing the original published moves.
 
 `Bars::upstream_xtick` keeps the original's expression and a test asserts the two agree at six and disagree at seven, which is what makes this a divergence that only shows up once a seventh engine is on the chart.
+
+## D14, one canvas size
+
+The original asks matplotlib for a figure of a fixed size and then saves it with `bbox_inches='tight'`, which crops the image to whatever the drawing turned out to need. What it needed depends on how wide the widest y axis number is, so the 154 published PNGs come in three sizes. 112 of them are 1715 pixels wide, 21 are 1716 and 21 are 1714, all 1038 tall. Nobody chose that and nothing reads it, but it means two charts cannot be flipped between without everything on them shifting a pixel or two sideways.
+
+Here every chart is 1880 by 1130, which is the figure size the original asks for at the resolution it asks for, plus the white border it adds afterwards on all four sides. The plot area sits at the same place on all 154, so two charts in a browser tab are comparable by switching between them, and a diff of two PNGs is a diff of the bars rather than of the crop. The cost is that the y axis label column is as wide as the widest number needs on any chart rather than on this one, which on a chart with short numbers leaves a little more white to the left of the axis than the original had.
+
+## D15, the provenance stamp
+
+The original's charts say what was measured and not where. A throughput number is meaningless without the machine it came off, and two of these charts from two machines are not comparable with nothing in the picture to say so, which is the most likely way for a chart drawn here to mislead somebody.
+
+Every chart drawn from real measurements carries a line along the bottom naming the profile, what the machine is and its core count. Charts drawn from the golden series carry nothing, because that is what CI hashes and a hostname in the picture would make the hash depend on which machine drew it.

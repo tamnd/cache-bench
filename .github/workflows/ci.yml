@@ -117,6 +117,26 @@ jobs:
       # They are most of the documentation for the statistics crate, so they get their own step rather than being quietly dropped.
       - run: cargo test --workspace --locked --doc
 
+  # The claim that a chart is a function of its data and nothing else.
+  # Three operating systems draw the same 154 charts from the same committed series and every PNG has to hash to what is in the manifest.
+  # A chart that comes out different on Windows is a chart whose numbers cannot be compared across machines, which would quietly undo the thing this repository exists to do.
+  # The charts drawn here carry no provenance stamp, because a hostname in the picture would make the hash depend on which runner drew it.
+  determinism:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2.9.2
+        with:
+          save-if: ${{ github.ref == 'refs/heads/main' }}
+      - name: every chart hashes to what is committed
+        run: cargo run --locked --release --package cb-cli -- chart --golden --check testdata/golden/charts.sha256
+
   # The floor stays green too.
   # It is the same floor as tamnd/yo, so the two trees agree on what a supported compiler is.
   msrv:

@@ -4,6 +4,17 @@ What each release costs you, in the order the releases happened. New entries go 
 
 ## Unreleased
 
+### Added
+
+- The renderer, which is the other half of the chart engine. All 154 charts now come out as PNGs. The shapes on a chart are axis aligned rectangles and glyphs, so the rectangles are filled by exact coverage per pixel with no sampling anywhere, and the glyphs are outlines read out of the embedded fonts and filled in scalar arithmetic. Nothing in the path touches a system font, a SIMD path or a floating point operation whose order is not fixed, which is what makes the output the same on every platform rather than nearly the same.
+- `cache-bench chart`, which draws them. Point it at a results directory, or pass `--golden` to draw the 154 committed here without measuring anything. `--manifest` writes a SHA-256 per chart and `--check` reads one back, so two machines are compared by diffing two text files rather than 154 pictures.
+- `testdata/golden/charts.sha256`, the hash of every chart drawn from the committed series, and a `determinism` job that redraws them on Linux, macOS and Windows and checks all 154 against it on every push. A quicker version of the same check runs in `cargo test` over four charts chosen to cover both scales and the widest axis.
+- A provenance line along the bottom of every chart drawn from real measurements, naming the profile, what the machine is and its core count. The original's charts say what was measured and not where, which is the most likely way for a chart drawn here to mislead somebody. Charts drawn from the golden series carry nothing, because that is what CI hashes.
+
+### Changed
+
+- Every chart is 1880 by 1130. The original saves with `bbox_inches='tight'`, so its own 154 come out in three different widths depending on how many digits the y axis numbers happen to need, and two of them cannot be flipped between without everything shifting sideways. Recorded as D14.
+
 ## 0.2.1 - 2026-09-04
 
 Everything a chart is, except the picture.

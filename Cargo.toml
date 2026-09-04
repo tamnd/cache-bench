@@ -57,6 +57,9 @@ float_cmp = "deny"
 # A silent truncation would produce charts that are wrong by one, which is the kind of wrong nobody ever notices.
 cast_possible_truncation = "deny"
 cast_precision_loss = "warn"
+# Duplicate versions are checked by cargo-deny instead, which reports them with the path that pulled each one in.
+# This lint fires on a duplicate nothing here can fix: png depends on miniz_oxide directly and on flate2, which depends on a different minor version of the same crate, so the only ways to satisfy the lint are to stop encoding PNGs or to stop treating warnings as errors.
+multiple_crate_versions = "allow"
 
 # The harness spends its life waiting on two child processes in sequence, so none of this is about its own speed.
 # It is about start time and binary size.

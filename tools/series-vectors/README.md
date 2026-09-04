@@ -12,6 +12,6 @@ It needs Go, a `python3` for the assembling step, and a checkout of the original
 
 The loop is `bench-all.sh`'s loop, in its order, plus the two charts the original adds by hand afterwards. If the capture comes back with anything other than 154 scripts it stops rather than writing a short fixture.
 
-What gets kept is the header block at the top of each script, which is the title, both axis labels, the thread counts, the colour per cache server and one number per bar. Everything below it is matplotlib and is none of our business, since this project draws with plotters instead.
+What gets kept is the header block at the top of each script, which is the title, both axis labels, the thread counts, the colour per cache server and one number per bar. Everything below it is matplotlib and is none of our business, since this project draws the picture itself.
 
 `--force` is the one flag the original's own script does not pass. Without it `graph` skips any chart whose PNG is already sitting in `results/graphs`, which in a checkout of the original is all of them.
