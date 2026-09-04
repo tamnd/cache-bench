@@ -78,6 +78,8 @@ The charts use Jost and DejaVu Sans, which are open fonts embedded in the binary
 
 A chart here is a function of its data and nothing else. The same numbers produce the same PNG, byte for byte, on Linux, macOS and Windows, and CI checks that on every push by drawing all 154 charts from a committed series on three operating systems and hashing every one of them. Every chart drawn from real measurements also carries a line along the bottom naming the profile and the machine, because two throughput charts from two machines are not comparable and the original's charts do not say which machine they came off.
 
+The chart indexes are generated rather than maintained. The original writes `LINEAR.md` and `LOGARITHMIC.md` by hand, down to the anchor suffixes GitHub appends to repeated headings, and between them they link 120 of the 154 charts it publishes. Here both come out of the same table the charts are drawn from, so every chart that exists is linked, a chart that was not drawn is named rather than quietly dropped, and every image says what is on it.
+
 ## Licence
 
 Apache-2.0.
