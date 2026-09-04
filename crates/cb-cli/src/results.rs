@@ -126,13 +126,29 @@ pub(crate) fn read(path: &Path) -> Result<Run, String> {
     Run::parse(&text).map_err(|e| format!("{} is not a run file: {e}", path.display()))
 }
 
-/// Write a file, making the directory above it first.
+/// Write a file, making the directory above it first, and get it onto the disk before saying so.
+///
+/// The flush matters here in a way it does not in most programs. A sweep runs for days and is restartable by which run files exist, so a machine that loses power holds a directory whose contents are the harness's whole memory of what it has done. A file that was written but not flushed comes back as a file of the right name holding nothing, and the run it stands for is never measured again.
 pub(crate) fn write(path: &Path, text: &str) -> Result<(), String> {
+    use std::io::Write as _;
+
     if let Some(parent) = path.parent() {
         std::fs::create_dir_all(parent)
             .map_err(|e| format!("{} cannot be created: {e}", parent.display()))?;
     }
-    std::fs::write(path, text).map_err(|e| format!("{} cannot be written: {e}", path.display()))
+    let mut file = std::fs::File::create(path)
+        .map_err(|e| format!("{} cannot be written: {e}", path.display()))?;
+    file.write_all(text.as_bytes())
+        .and_then(|()| file.sync_all())
+        .map_err(|e| format!("{} cannot be written: {e}", path.display()))?;
+    // The name is a separate thing from the contents, and the contents being on the disk does not put the name there. Windows has no directory handle to flush and does not need one.
+    #[cfg(unix)]
+    if let Some(parent) = path.parent()
+        && let Ok(dir) = std::fs::File::open(parent)
+    {
+        let _ = dir.sync_all();
+    }
+    Ok(())
 }
 
 #[cfg(test)]

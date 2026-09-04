@@ -4,6 +4,7 @@
 //! It builds and tests on every platform, which matters because the parts of this project that are hard to get right are the JSON bytes, the statistics and the chart arithmetic, and none of those should need a benchmark host to work on.
 
 pub mod cache;
+pub mod clock;
 pub mod compat;
 pub mod config;
 pub mod cpuset;
@@ -18,6 +19,7 @@ pub mod size;
 pub mod spread;
 
 pub use cache::{CacheKind, Endpoint, Launch, Protocol, UnknownCache};
+pub use clock::{now, stamp};
 pub use compat::{BadCompat, Compat};
 pub use config::{Arch, BadConfig, Config};
 pub use cpuset::{BadCpuSet, CpuSet};

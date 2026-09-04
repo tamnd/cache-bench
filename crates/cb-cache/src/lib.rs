@@ -11,7 +11,7 @@ pub mod server;
 pub mod supervise;
 pub mod version;
 
-pub use ready::{NotReady, wait};
+pub use ready::{NotReady, anybody_there, wait};
 pub use server::{NotRunning, Server};
-pub use supervise::{BadProcess, Running, Stopped, Supervisor};
+pub use supervise::{BadProcess, Running, Stopped, Supervisor, as_root};
 pub use version::{NoVersion, version};

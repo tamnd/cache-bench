@@ -64,6 +64,16 @@ pub fn wait(
     }
 }
 
+/// Whether anything is already listening where a server is about to be started.
+///
+/// Asked before a run rather than after one. The original's answer to a leftover server is to `pkill` every process whose name it recognises, including ones it did not start, and then to bind over whatever is left. The failure that hides is a server from the previous cell answering the whole of this one, which produces a full set of entirely plausible numbers for the wrong engine.
+///
+/// Connecting is enough here. A round trip would say more, but a socket that accepts and then says nothing is a wedged process rather than an empty path, and either one has to stop the run.
+#[must_use]
+pub fn anybody_there(endpoint: Endpoint<'_>) -> bool {
+    open(endpoint).is_ok()
+}
+
 /// One attempt: connect, send the smallest command there is, and check the answer.
 fn knock(endpoint: Endpoint<'_>, protocol: Protocol) -> Result<(), String> {
     let mut stream = open(endpoint)?;
