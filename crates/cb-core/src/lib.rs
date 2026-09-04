@@ -4,13 +4,17 @@
 //! It builds and tests on every platform, which matters because the parts of this project that are hard to get right are the JSON bytes, the statistics and the chart arithmetic, and none of those should need a benchmark host to work on.
 
 pub mod cache;
+pub mod compat;
 pub mod name;
 pub mod num;
 pub mod output;
 pub mod run;
+pub mod size;
 
-pub use cache::{CacheKind, UnknownCache};
+pub use cache::{CacheKind, Endpoint, Launch, Protocol, UnknownCache};
+pub use compat::{BadCompat, Compat};
 pub use name::{BadName, Chosen, RunName, Slot};
 pub use num::{Counter, CpuCounter, EventCounter, Fixed0, Fixed3};
 pub use output::{Entry, Output};
 pub use run::{Info, Latency, Op, Perf, Run};
+pub use size::{BadSize, Bytes};
