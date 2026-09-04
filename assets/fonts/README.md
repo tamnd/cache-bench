@@ -15,6 +15,6 @@ resolve on macOS, so this port substitutes:
 
 Jost is metric compatible enough with Futura that the chart geometry did not
 have to change. The licence text for each font ships next to the font file, and
-both are permissive enough to embed in a binary that is itself MIT or Apache-2.0.
+both are permissive enough to embed in a binary that is itself Apache-2.0.
 
 The font files land with M3.
