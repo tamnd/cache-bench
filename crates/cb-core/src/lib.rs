@@ -6,9 +6,11 @@
 pub mod cache;
 pub mod name;
 pub mod num;
+pub mod output;
 pub mod run;
 
 pub use cache::{CacheKind, UnknownCache};
 pub use name::{BadName, Chosen, RunName, Slot};
-pub use num::{Counter, Fixed0, Fixed3};
+pub use num::{Counter, CpuCounter, EventCounter, Fixed0, Fixed3};
+pub use output::{Entry, Output};
 pub use run::{Info, Latency, Op, Perf, Run};
