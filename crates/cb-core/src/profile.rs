@@ -145,6 +145,15 @@ impl Profile {
         self.bench_threads * self.connections_per_thread
     }
 
+    /// How many operations one pass performs in total.
+    ///
+    /// memtier's `-n` is per connection, and the number that goes in the result file, and that a completed run is checked against, is the total. Keeping the two apart in one place means nothing else has to remember which of them it is holding.
+    #[must_use]
+    pub fn total_operations(&self) -> u64 {
+        self.operations
+            .saturating_mul(u64::from(self.connections()))
+    }
+
     /// How much data the sweep will have live at once.
     ///
     /// The key space times the mean value size, with nothing added for per key overhead or allocator slack, so it is a floor rather than an estimate.
