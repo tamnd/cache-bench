@@ -13,7 +13,7 @@ members = [
 ]
 
 [workspace.package]
-version = "0.3.0"
+version = "0.4.0"
 edition = "2024"
 # Held behind stable, and it matches the floor in tamnd/yo so the two trees agree on what a supported compiler is.
 rust-version = "1.94"
