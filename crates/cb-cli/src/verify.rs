@@ -7,7 +7,8 @@
 
 use std::path::{Path, PathBuf};
 
-use cb_core::{Entry, Output, Run};
+use cb_chart::{Chart, Corpus, Spec};
+use cb_core::{Compat, Entry, Output, Run};
 use cb_stats::{Kind, correct, upstream};
 
 use crate::results;
@@ -45,6 +46,8 @@ const CELL_PERF: &str =
 /// The same cell measured without counters, which escapes one of the four defects by accident.
 const CELL_PLAIN: &str =
     include_str!("../../../testdata/golden/cells/dragonfly-threads_1-pipeline_1-perf_no.json");
+/// All 154 charts as the original drew them, taken out of its own generated drawing scripts.
+const SERIES: &str = include_str!("../../../testdata/golden/series.json");
 
 /// A cell as the golden files hold it, which is the runs and the answers side by side.
 #[derive(serde::Deserialize)]
@@ -67,6 +70,7 @@ pub(crate) fn run(args: &Args) -> Result<(), String> {
     let mut failed = 0_usize;
     failed += format_round_trips();
     failed += golden_cells()?;
+    failed += chart_names()?;
     if let Some(dir) = &args.against {
         failed += corpus(dir, !args.no_compare)?;
     } else {
@@ -146,6 +150,70 @@ fn golden_cells() -> Result<usize, String> {
     Ok(failed)
 }
 
+/// The chart set, checked without needing any measurements.
+///
+/// The 154 charts are a table here rather than whatever a results directory happens to yield, so the thing that can go wrong is the table, and the golden file names every chart the original published.
+fn chart_names() -> Result<usize, String> {
+    let want = golden_charts()?;
+    let mut theirs: Vec<&str> = want.iter().map(|c| c.file.as_str()).collect();
+    let mut ours: Vec<String> = Spec::all().into_iter().map(Spec::file).collect();
+    ours.sort();
+    theirs.sort_unstable();
+    if ours == theirs {
+        println!("charts    {} chart names match the original's", ours.len());
+        return Ok(0);
+    }
+    println!(
+        "charts    we draw {} charts where the original draws {}",
+        ours.len(),
+        theirs.len()
+    );
+    Ok(1)
+}
+
+/// The 154 charts the original drew, as the fixture holds them.
+fn golden_charts() -> Result<Vec<Chart>, String> {
+    serde_json::from_str(SERIES).map_err(|e| format!("the golden series will not parse: {e}"))
+}
+
+/// The chart half of the corpus check, bar by bar.
+///
+/// The numbers come out of our own reduction of the original's run files rather than out of its `output.json`, so a chart that matches here is one where every bar survived the whole pipeline: the run files, the selection, the combining and the extraction.
+fn series(output: &Output) -> Result<usize, String> {
+    let mut theirs = golden_charts()?;
+    let corpus =
+        Corpus::new(output, Compat::Upstream).map_err(|e| format!("nothing to chart: {e}"))?;
+    let mut ours = corpus.charts();
+    ours.sort_by(|a, b| a.file.cmp(&b.file));
+    theirs.sort_by(|a, b| a.file.cmp(&b.file));
+    if ours.len() != theirs.len() {
+        println!(
+            "series    we draw {} charts where the original draws {}",
+            ours.len(),
+            theirs.len()
+        );
+        return Ok(1);
+    }
+
+    let mut failed = 0;
+    let mut bars = 0;
+    for (ours, theirs) in ours.iter().zip(&theirs) {
+        if ours == theirs {
+            bars += ours.series.iter().map(|s| s.points.len()).sum::<usize>();
+        } else {
+            println!("series    {} came back different", theirs.file);
+            failed += 1;
+        }
+    }
+    if failed == 0 {
+        println!(
+            "series    {} charts reproduced, {bars} bars, every one the original's",
+            theirs.len()
+        );
+    }
+    Ok(failed)
+}
+
 /// The whole thing, against a real results directory.
 ///
 /// Reads every run file, reduces every cell in upstream mode, compares each chosen file against the one already on disk, and then compares the combined file it would write against the one already there.
@@ -195,7 +263,8 @@ fn corpus(dir: &Path, compare: bool) -> Result<usize, String> {
 
     entries.sort_by(|a, b| a.file.cmp(&b.file));
     let count = entries.len();
-    let ours = Output { entries }.emit();
+    let combined = Output { entries };
+    let ours = combined.emit();
     let path = dir.join("output.json");
     match std::fs::read_to_string(&path) {
         Ok(text) if text == ours => println!(
@@ -211,6 +280,8 @@ fn corpus(dir: &Path, compare: bool) -> Result<usize, String> {
             failed += 1;
         }
     }
+
+    failed += series(&combined)?;
 
     if compare {
         moved.report();

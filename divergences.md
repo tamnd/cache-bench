@@ -80,9 +80,13 @@ The original charts with matplotlib through a generated script. Here the chart e
 
 `yo` is a seventh cache server that the original does not have. Pogocache, which is the original author's own engine, stays in. Dropping it would mean this is no longer a reproduction of the benchmark but a modified one that happens to omit the engine the original was written to showcase, and the fairness rules in the spec exist precisely so that adding our own engine does not become an excuse to tilt anything.
 
+The seventh subject needs a seventh bar colour. The original has six, assigned by position in the sorted list of names rather than by which engine it is, and that rule is kept because a chart drawn here and a chart drawn there have to be comparable. It works out because `yo` sorts last, so the added colour goes on the end and the original's six land exactly where they were. It is purple, from the same matplotlib cycle five of the other six come from.
+
 ## D11, unsupported perf counters
 
 A counter the machine cannot measure comes out of `perf stat` as the text `<not supported>`, and the original pulls it through a JSON accessor that returns zero for anything it cannot parse as a number. The zero then reaches a chart, where it is a bar of height nothing, claiming the engine took no branches. Our model keeps the distinction and the chart layer leaves such a cell out rather than drawing it as a zero. In `--compat=upstream` the zero is written as the original writes it, because the parity proof needs those bytes.
+
+A cell that was never measured takes the same route to the same place. The chart layer asks the results file for one cache server at one thread count, the accessor finds nothing and hands back zero, and a sweep that was interrupted draws an engine that scored nothing rather than an engine that was not tested. Here that bar is not drawn. It matters more on the logarithmic charts than on the linear ones, because the y axis there is scaled from the smallest bar on the chart and one zero takes the whole axis with it.
 
 ## D12, Dragonfly's memory limit
 

@@ -66,6 +66,14 @@ cache-bench verify --against /path/to/cache-benchmarks/results
 
 It checks the files in this directory first, which needs no checkout and is what CI runs, and then does the whole corpus and prints how far the corrected statistics sit from the original's. The numbers quoted in `divergences.md` under D1 to D4 are that output.
 
+## series.json
+
+All 154 charts the original published, as it worked them out: the title, both axis labels, the thread counts, the colour per cache server and one number per bar. This is what the chart layer is tested against, and it is the answer rather than a description of the answer.
+
+Getting it needed a trick, because the original's `graph` tool pastes its numbers into a Python script, draws the PNG and deletes the script. `tools/series-vectors` puts a fake `python3` on `PATH` that keeps the script and draws nothing, so the fixture is the original's own output. Regenerating needs Go, a real Python for the assembling step, and a checkout of the original.
+
+Two levels of test read it. Everything that does not need measurements, which is the filenames, the titles, the axes, the legend order and the colours, is checked in `cargo test` against a synthetic results file with the original's shape and none of its numbers. The bar heights need the original's 1.7 MB `output.json`, so they go through `cache-bench verify --against`, and there the numbers come out of our own reduction of the original's run files rather than out of its combined file, which makes a matching chart one where every bar survived the whole pipeline.
+
 ## gosort.json
 
 142 cases produced by Go's `sort.Slice`, which is the one fixture here that is generated rather than copied. Upstream mode has to reproduce the original's SET numbers, and those come out of a sort whose comparator reads a slice it is not sorting, so the result depends on the exact sequence of comparisons and swaps rather than on the values. Matching it means matching Go's `pdqsort`, and the only way to know we do is to ask Go.
