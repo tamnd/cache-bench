@@ -43,6 +43,7 @@ crates/cb-stats     run selection and aggregation
 crates/cb-chart     the chart engine, axes and layout and its own rasterizer
 crates/cb-docs      generated LINEAR.md, LOGARITHMIC.md and README.md
 crates/cache-bench  the binary
+tools/provision     one script that turns a fresh Ubuntu box into one that can be swept
 ```
 
 `crates/cb-core/golden` holds the original's own files, which is what every test in the workspace and `cache-bench verify` are checked against, and `crates/cb-chart/assets/fonts` holds the three faces the charts are drawn with. Both are in the crates that read them rather than beside them, because a published crate can only carry what is inside it.
@@ -57,7 +58,7 @@ cargo install cache-bench
 
 That builds the binary from source and needs nothing else. A release also carries a tarball per platform on its [releases page](https://github.com/tamnd/cache-bench/releases), with a SHA-256 next to each one, which is what to fetch on a box that has no Rust toolchain on it and no reason to grow one.
 
-The seven cache servers and `memtier_benchmark` are not installed by any of this. They are named in `config.jsonc` by path, and `cache-bench doctor` says which ones it found.
+The seven cache servers and `memtier_benchmark` are not installed by any of this. They are named in `config.jsonc` by path, and `cache-bench doctor` says which ones it found. On Ubuntu, `tools/provision/install.sh` builds all eight of them at the versions pinned in `tools/provision/versions.env` and puts them where `config.jsonc` already looks, which is the half hour between a fresh box and a box that can be swept.
 
 ## Usage
 
