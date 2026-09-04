@@ -37,3 +37,11 @@ updates:
     groups:
       actions:
         patterns: ["*"]
+    # dtolnay/rust-toolchain tags itself with the Rust version it installs, so
+    # the msrv job pins it to the compiler floor rather than to a version of the
+    # action. Dependabot cannot know that and bumps it to the highest tag, which
+    # produced a job asking rustup for Rust 1.120.0 and a 404. The floor moves
+    # when we decide it moves, and it moves in rust-toolchain.toml and in
+    # Cargo.toml at the same time.
+    ignore:
+      - dependency-name: dtolnay/rust-toolchain
