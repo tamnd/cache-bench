@@ -350,11 +350,10 @@ perf = ["no"]
             told.contains("1 measured here, 3 already on disk"),
             "{told}"
         );
-        assert_eq!(
-            std::fs::read_to_string(&cut).expect("reads it back"),
-            whole,
-            "the truncated file was not measured again"
-        );
+        // Whole again. Not byte for byte the same as before, because the run it now holds started a second later than the one it used to hold.
+        let back = std::fs::read_to_string(&cut).expect("reads it back");
+        assert_eq!(back.len(), whole.len(), "{back}");
+        assert!(back.ends_with("\"perf\": {}\n}\n"), "{back}");
 
         let _ = std::fs::remove_dir_all(&dir);
     }
