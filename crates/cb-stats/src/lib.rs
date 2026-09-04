@@ -11,6 +11,7 @@
 
 pub mod cell;
 pub mod correct;
+pub mod gosort;
 pub mod kind;
 
 pub use cell::{BadCell, check, trim_for};
