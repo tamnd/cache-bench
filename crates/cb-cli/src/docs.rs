@@ -1,23 +1,24 @@
 //! `cache-bench docs`, which writes the documents that go with a results directory.
 //!
-//! So far that is the two chart indexes. The rest of the milestone adds the results README, the methodology and the divergences table, and they all come out of this one command so that a results directory is either regenerated whole or not at all.
+//! Three of them. The two chart indexes, and the README that carries the methodology, the hardware, the versions and the caveat. They come out of one command so that a results directory is either regenerated whole or not at all, and `--check` is what CI runs to fail a build where one of them was edited by hand.
 //!
-//! What goes in a document is decided by what is on disk. The generator is handed the list of charts actually sitting in `graphs`, so a sweep that ran on a machine with no hardware counters produces an index that says the cycles charts are missing instead of one with eight broken images in it.
+//! What goes in a document is decided by what is on disk. The generator is handed the list of charts actually sitting in `graphs`, so a sweep that ran on a machine with no hardware counters produces documents that say the cycles charts are missing instead of ones with eight broken images in them.
 
-use std::collections::BTreeSet;
+use std::collections::{BTreeMap, BTreeSet};
 use std::fs;
 use std::path::{Path, PathBuf};
 
 use cb_chart::{Scale, Spec};
-use cb_docs::Index;
+use cb_core::{Compat, Machine, Output, Profile, Profiles};
+use cb_docs::{Index, Readme};
 
 /// What to generate and where to put it.
 #[derive(Debug, clap::Args)]
 pub(crate) struct Args {
-    /// A results directory, the one holding `graphs`.
+    /// A results directory, the one holding `graphs`, `output.json` and `host.json`.
     #[arg(long, value_name = "PATH", conflicts_with = "golden")]
     dir: Option<PathBuf>,
-    /// Generate as if every chart the spec names had been drawn, which needs no measurements.
+    /// Generate the chart indexes as if every chart the spec names had been drawn, which needs no measurements. There is no README in this mode, because there is no host to describe.
     #[arg(long)]
     golden: bool,
     /// Where the documents go. Defaults to the results directory.
@@ -26,53 +27,131 @@ pub(crate) struct Args {
     /// Write nothing and fail if what is on disk is not what would be written.
     #[arg(long)]
     check: bool,
-    /// A sentence explaining why a chart might be missing on this host, shown under any section that is short of one.
+    /// Where to read the profiles from.
+    #[arg(long, value_name = "PATH", default_value = "profiles.toml")]
+    profiles: PathBuf,
+    /// A sentence explaining why a chart might be missing on this host, shown under any index section that is short of one.
     #[arg(long, value_name = "TEXT", default_value = "")]
     absent: String,
+    /// Which statistics produced the numbers, which the README says out loud.
+    #[arg(long, default_value_t = Compat::Corrected, value_name = "MODE")]
+    compat: Compat,
 }
 
 /// Generate them.
 ///
 /// # Errors
 ///
-/// If the graphs directory will not list, if the documents will not write, or if `--check` was asked for and a document on disk is not the one that would be written.
+/// If the results directory will not read, if the documents will not write, or if `--check` was asked for and a document on disk is not the one that would be written.
 pub(crate) fn run(args: &Args) -> Result<(), String> {
     let have = present(args)?;
     let out = destination(args)?;
 
-    let mut stale = Vec::new();
+    let mut wanted: Vec<(PathBuf, String)> = Vec::new();
     for scale in Scale::ALL {
         let index = Index {
             scale,
             have: &have,
             absent: &args.absent,
         };
-        let path = out.join(index.file());
-        let text = index.render();
-        if args.check {
-            if fs::read_to_string(&path).ok().as_deref() != Some(text.as_str()) {
-                stale.push(path);
+        wanted.push((out.join(index.file()), index.render()));
+    }
+    if let Some(dir) = &args.dir {
+        let (machine, profile, versions) = about(dir, &args.profiles)?;
+        let readme = Readme {
+            machine: &machine,
+            profile: &profile,
+            versions: &versions,
+            have: &have,
+            compat: args.compat,
+        };
+        wanted.push((out.join(readme.file()), readme.render()));
+    }
+
+    if args.check {
+        return compare(&out, &wanted);
+    }
+    fs::create_dir_all(&out).map_err(|e| format!("{}: {e}", out.display()))?;
+    for (path, text) in &wanted {
+        fs::write(path, text).map_err(|e| format!("{}: {e}", path.display()))?;
+        println!("docs      {} written", path.display());
+    }
+    Ok(())
+}
+
+/// Fail on any document that is not what would be generated.
+fn compare(out: &Path, wanted: &[(PathBuf, String)]) -> Result<(), String> {
+    let mut stale = Vec::new();
+    for (path, text) in wanted {
+        if fs::read_to_string(path).ok().as_deref() != Some(text.as_str()) {
+            println!("stale     {}", path.display());
+            stale.push(path);
+        }
+    }
+    if !stale.is_empty() {
+        return Err(format!(
+            "{} of {} documents are not what would be generated, rerun cache-bench docs",
+            stale.len(),
+            wanted.len()
+        ));
+    }
+    println!(
+        "docs      {} documents up to date in {}",
+        wanted.len(),
+        out.display()
+    );
+    Ok(())
+}
+
+/// What the results directory says about itself: the host, the profile it ran, and the version of every engine in it.
+fn about(
+    dir: &Path,
+    profiles: &Path,
+) -> Result<(Machine, Profile, BTreeMap<String, String>), String> {
+    let path = dir.join("host.json");
+    let text = fs::read_to_string(&path).map_err(|e| {
+        format!(
+            "{}: {e}, which is what doctor writes before a sweep",
+            path.display()
+        )
+    })?;
+    let machine = Machine::parse(&text).map_err(|e| format!("{}: {e}", path.display()))?;
+
+    let text = fs::read_to_string(profiles).map_err(|e| format!("{}: {e}", profiles.display()))?;
+    let profile = Profiles::parse(&text)
+        .map_err(|e| format!("{}: {e}", profiles.display()))?
+        .get(&machine.profile)
+        .map_err(|e| format!("{}: {e}", profiles.display()))?
+        .clone();
+
+    Ok((machine, profile, versions(dir)?))
+}
+
+/// One version line per engine, read out of the results rather than out of a list somebody keeps.
+///
+/// An engine that reports two different versions inside one results directory means the sweep was rerun against a rebuilt server, which makes the two halves of a chart incomparable, so it is refused rather than reported as whichever one was read last.
+fn versions(dir: &Path) -> Result<BTreeMap<String, String>, String> {
+    let path = dir.join("output.json");
+    let text = fs::read_to_string(&path).map_err(|e| format!("{}: {e}", path.display()))?;
+    let output = Output::parse(&text).map_err(|e| format!("{}: {e}", path.display()))?;
+
+    let mut out: BTreeMap<String, String> = BTreeMap::new();
+    for entry in &output.entries {
+        let info = &entry.data.info;
+        if let Some(seen) = out.get(&info.cache) {
+            if seen != &info.version {
+                return Err(format!(
+                    "{} has {} at two versions, {seen:?} and {:?}",
+                    path.display(),
+                    info.cache,
+                    info.version
+                ));
             }
             continue;
         }
-        fs::create_dir_all(&out).map_err(|e| format!("{}: {e}", out.display()))?;
-        fs::write(&path, &text).map_err(|e| format!("{}: {e}", path.display()))?;
-        println!("docs      {} written", path.display());
+        out.insert(info.cache.clone(), info.version.clone());
     }
-
-    if !stale.is_empty() {
-        for path in &stale {
-            println!("stale     {}", path.display());
-        }
-        return Err(format!(
-            "{} documents are not what would be generated, rerun cache-bench docs",
-            stale.len()
-        ));
-    }
-    if args.check {
-        println!("docs      up to date in {}", out.display());
-    }
-    Ok(())
+    Ok(out)
 }
 
 /// The charts that are there to be linked.
