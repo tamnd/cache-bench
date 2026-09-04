@@ -2,6 +2,13 @@
 
 What each release costs you, in the order the releases happened. New entries go on top.
 
+## Unreleased
+
+### Added
+
+- The memtier driver's argv, built in one place as data. The original spreads the same flags across a shell script and a Go program whose defaults disagree with it, so reading either one tells you what might have been measured rather than what was. A test compares the generated argv against the exact command line the original's published numbers came out of.
+- A strict parser for memtier's output. Three checks before a result is accepted: the stats object exists, the completed operation count is within a thousandth of the one requested, and all five requested percentiles came back. The original reads the same JSON with a path query that yields zero for a missing field, so a memtier that renamed something, or a run where connections died halfway through, produces a result file full of zeros that then charts as real bars sitting on the axis. Each of the three is a failed run here instead.
+
 ## 0.4.0 - 2026-09-04
 
 The documents.
