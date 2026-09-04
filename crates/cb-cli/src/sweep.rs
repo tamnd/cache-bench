@@ -7,13 +7,26 @@
 //! The restart rule is file existence and nothing else, and a file that will not parse does not count as existence. A sweep that ran for six days and lost power holds a directory of result files plus, possibly, one file that was created and never finished. Trusting that file because its name is right is how a truncated run ends up in a median.
 
 use std::path::PathBuf;
-use std::time::Instant;
+use std::time::{Duration, Instant};
 
-use cb_core::{Arch, CacheKind, Compat, Config, PerfMode, Profile, Profiles};
+use cb_core::{
+    Arch, CacheKind, Compat, Config, Failures, Outcome, PerfMode, Profile, Profiles, Step,
+};
 
 use crate::lock::Lock;
 use crate::results;
 use crate::run::{Cell, Setup};
+
+/// How many recent runs the estimate averages over.
+///
+/// The cells are not the same size as each other, so the last twenty are a better guide to the next one than the last thousand are.
+const WINDOW: usize = 20;
+
+/// How many runs there have to be before an estimate is printed at all.
+const ENOUGH: usize = 3;
+
+/// How many of one engine's cells may fail in a row before the rest of them are left.
+const GIVE_UP: u32 = 3;
 
 /// Which matrix to sweep, and where to put it.
 #[derive(Debug, clap::Args)]
@@ -51,7 +64,7 @@ pub(crate) struct Args {
 ///
 /// # Errors
 ///
-/// If the config or the profile will not do, if the results directory is held by something else, or if any cell fails. A cell that fails stops the sweep rather than being skipped, because the run files already written are the whole record of what happened and there is nowhere yet for the reason to go.
+/// If the config or the profile will not do, if the results directory is held by something else, or if anything was missing at the end. A cell that fails does not stop the sweep, because the other ten thousand are still worth measuring, but a sweep that did not measure everything says so on the way out rather than reporting success.
 pub(crate) fn run(args: &Args) -> Result<(), String> {
     let config = read(&args.config)?;
     let config = Config::parse(&config, Arch::host()).map_err(|e| why(&args.config, &e))?;
@@ -98,30 +111,234 @@ pub(crate) fn run(args: &Args) -> Result<(), String> {
         perf_binary: &args.perf_binary,
     };
 
-    let started = Instant::now();
+    let journal = args.dir.join("logs").join("sweep.jsonl");
+    let record = args.dir.join("failures.json");
+    let mut failures = failures(&record)?;
+    // Every engine gets another chance at the start of a session, because the usual reason one was given up on is something on the machine that somebody has since fixed.
+    failures.reconsider();
+
+    // The whole matrix is checked against the disk before anything is measured, so the count in the progress line is the work left rather than the work there was, and so a directory full of half written files says so at the start instead of eight days in.
     let total = cells.len();
-    let mut measured = 0_usize;
-    let mut skipped = 0_usize;
-    for (at, cell) in cells.iter().enumerate() {
-        let name = cell.name();
-        let path = results::runs_dir(&args.dir).join(name.to_string());
-        if done(&path) {
-            skipped += 1;
+    let mut todo = Vec::new();
+    for cell in cells {
+        let name = cell.name().to_string();
+        if done(&results::runs_dir(&args.dir).join(&name)) {
+            failures.measured(&name);
             continue;
         }
-        println!("[{}/{total}] {name}", at + 1);
-        crate::run::once(&setup, *cell).map_err(|e| {
-            format!(
-                "{name} failed after {measured} runs measured in this session, which are on disk and will not be repeated when this is started again: {e}"
-            )
-        })?;
-        measured += 1;
+        todo.push(cell);
+    }
+    let skipped = total - todo.len();
+    keep(&record, &failures);
+
+    let started = Instant::now();
+    let tally = measure_all(&setup, &todo, &journal, &record, &mut failures);
+
+    let mut said = vec![
+        format!("{} measured here", tally.measured),
+        format!("{skipped} already on disk"),
+    ];
+    if tally.failed > 0 {
+        said.push(format!("{} failed", tally.failed));
+    }
+    if tally.left > 0 {
+        said.push(format!(
+            "{} left alone because their engine was given up on",
+            tally.left
+        ));
     }
     println!(
-        "swept {total} cells in {:?}: {measured} measured here, {skipped} already on disk",
-        started.elapsed()
+        "swept {total} cells in {}: {}",
+        spell(started.elapsed()),
+        said.join(", ")
     );
-    Ok(())
+
+    if failures.is_empty() {
+        return Ok(());
+    }
+    Err(format!(
+        "{} cells have no file and are named with a reason in {}",
+        failures.failures.len(),
+        record.display()
+    ))
+}
+
+/// How a session went.
+struct Tally {
+    /// Cells measured here.
+    measured: usize,
+    /// Cells attempted here that produced no file.
+    failed: usize,
+    /// Cells not attempted, because their engine had been given up on.
+    left: usize,
+}
+
+/// The loop, over the cells that are not already on disk.
+///
+/// Every attempt goes in the journal, whether it worked or not, and the failure file is rewritten after each one, because the thing this is built for is being killed partway through.
+fn measure_all(
+    setup: &Setup<'_>,
+    todo: &[Cell],
+    journal: &std::path::Path,
+    record: &std::path::Path,
+    failures: &mut Failures,
+) -> Tally {
+    let mut seconds: Vec<f64> = Vec::new();
+    let mut tally = Tally {
+        measured: 0,
+        failed: 0,
+        left: 0,
+    };
+    let mut given_up: Vec<CacheKind> = Vec::new();
+    let mut in_a_row = 0_u32;
+    let mut last: Option<CacheKind> = None;
+
+    for (at, cell) in todo.iter().enumerate() {
+        if given_up.contains(&cell.cache) {
+            tally.left += 1;
+            continue;
+        }
+        let name = cell.name().to_string();
+        let when = cb_core::now();
+        // Before the run rather than after it, because the question this answers is whether the machine was already busy, and a run is itself load.
+        let load = crate::host::load_average();
+        match eta(todo.len() - at, &seconds) {
+            Some(rest) => println!("[{}/{}] {name}, about {rest} left", at + 1, todo.len()),
+            None => println!("[{}/{}] {name}", at + 1, todo.len()),
+        }
+
+        let began = Instant::now();
+        let outcome = crate::run::once(setup, *cell);
+        let took = began.elapsed().as_secs_f64();
+
+        let why = match outcome {
+            Ok(()) => {
+                tally.measured += 1;
+                seconds.push(took);
+                failures.measured(&name);
+                in_a_row = 0;
+                None
+            }
+            Err(e) => {
+                tally.failed += 1;
+                failures.failed(&name, &when, &e);
+                eprintln!("{name} failed: {e}");
+                in_a_row = if last == Some(cell.cache) {
+                    in_a_row.saturating_add(1)
+                } else {
+                    1
+                };
+                last = Some(cell.cache);
+                // An engine whose every cell fails is a thousand cells that each take their own time to fail, and this is day three of eight. The rest of the matrix is still worth measuring, so this one is put down and named in the failure file.
+                if in_a_row >= GIVE_UP {
+                    given_up.push(cell.cache);
+                    failures.abandon(cell.cache.name(), &when, in_a_row, &e);
+                    eprintln!(
+                        "{} has failed {in_a_row} times in a row, so the rest of its cells are being left rather than failing one at a time for the next day",
+                        cell.cache
+                    );
+                }
+                Some(e)
+            }
+        };
+        note(
+            journal,
+            &Step {
+                cell: name,
+                started: when,
+                seconds: took,
+                load,
+                outcome: if why.is_none() {
+                    Outcome::Measured
+                } else {
+                    Outcome::Failed
+                },
+                why,
+            },
+        );
+        keep(record, failures);
+    }
+    tally
+}
+
+/// Read the failure file, or start a new one.
+///
+/// A file that will not parse stops the sweep here rather than being written over, because it is the only record of what an earlier sweep of this directory could not measure.
+fn failures(path: &std::path::Path) -> Result<Failures, String> {
+    match std::fs::read_to_string(path) {
+        Ok(text) => Failures::parse(&text).map_err(|e| why(path, &e)),
+        Err(e) if e.kind() == std::io::ErrorKind::NotFound => Ok(Failures::default()),
+        Err(e) => Err(format!("cannot read {}: {e}", path.display())),
+    }
+}
+
+/// Write the failure file, saying so and carrying on if it cannot be written.
+///
+/// A sweep that has been running for six days does not stop because a note about it could not be saved. Whatever is wrong with the disk will stop the next run file too, and that one does stop it.
+fn keep(path: &std::path::Path, failures: &Failures) {
+    if let Err(e) = results::write(path, &failures.emit()) {
+        eprintln!("the failure file could not be written: {e}");
+    }
+}
+
+/// Append one line to the journal, saying so and carrying on if it cannot be appended.
+fn note(path: &std::path::Path, step: &Step) {
+    if let Err(e) = append(path, &step.emit()) {
+        eprintln!("the sweep log could not be written: {e}");
+    }
+}
+
+/// Append to a file, making the directory above it first.
+fn append(path: &std::path::Path, line: &str) -> Result<(), String> {
+    use std::io::Write as _;
+
+    if let Some(parent) = path.parent() {
+        std::fs::create_dir_all(parent)
+            .map_err(|e| format!("{} cannot be created: {e}", parent.display()))?;
+    }
+    let mut file = std::fs::OpenOptions::new()
+        .create(true)
+        .append(true)
+        .open(path)
+        .map_err(|e| format!("{} cannot be opened: {e}", path.display()))?;
+    file.write_all(line.as_bytes())
+        .map_err(|e| format!("{} cannot be written: {e}", path.display()))
+}
+
+/// How long the rest of the sweep will take, once there is enough measured here to say.
+///
+/// The average of the last few runs rather than of all of them, because a sweep walks from one thread up to sixteen and from pipeline one up to fifty, and the cells are not the same size as each other. The recent ones are the better guide to the next one, and nothing here pretends to more than that.
+///
+/// Nothing is printed until there are a few, because an estimate from one run is a number with no information in it and people believe printed numbers.
+fn eta(remaining: usize, seconds: &[f64]) -> Option<String> {
+    if seconds.len() < ENOUGH {
+        return None;
+    }
+    let recent = &seconds[seconds.len().saturating_sub(WINDOW)..];
+    let mean = recent.iter().sum::<f64>() / f64::from(u32::try_from(recent.len()).ok()?);
+    let rest = mean * f64::from(u32::try_from(remaining).ok()?);
+    // A sweep long enough to overflow this is not a sweep.
+    Some(spell(Duration::from_secs_f64(rest.max(0.0))))
+}
+
+/// A duration, said the way a person would say it.
+fn spell(took: Duration) -> String {
+    let seconds = took.as_secs();
+    let (days, hours, minutes) = (
+        seconds / 86400,
+        (seconds % 86400) / 3600,
+        (seconds % 3600) / 60,
+    );
+    if days > 0 {
+        return format!("{days}d {hours}h");
+    }
+    if hours > 0 {
+        return format!("{hours}h {minutes}m");
+    }
+    if minutes > 0 {
+        return format!("{minutes}m {}s", seconds % 60);
+    }
+    format!("{seconds}s")
 }
 
 /// Every cell to measure, in the order the original measures them.
@@ -193,7 +410,7 @@ mod tests {
 
     use cb_core::{CacheKind, Profiles};
 
-    use super::{caches, done, plan};
+    use super::{caches, done, eta, plan, spell};
 
     /// The profile the reference numbers were measured with.
     fn profile() -> cb_core::Profile {
@@ -255,6 +472,32 @@ mod tests {
             vec![CacheKind::Memcache, CacheKind::Yo]
         );
         assert_eq!(caches(&[]), CacheKind::ALL.to_vec());
+    }
+
+    // An estimate from one run is a number with no information in it, and people believe printed numbers.
+    #[test]
+    fn nothing_is_estimated_until_there_is_something_to_estimate_from() {
+        assert_eq!(eta(100, &[]), None);
+        assert_eq!(eta(100, &[60.0, 60.0]), None);
+        assert_eq!(eta(100, &[60.0, 60.0, 60.0]).unwrap(), "1h 40m");
+    }
+
+    // The recent runs, because a sweep walks from one thread to sixteen and from pipeline one to fifty, and the cells are not the same size as each other.
+    #[test]
+    fn the_estimate_follows_the_runs_it_just_did() {
+        let mut seconds = vec![600.0; 30];
+        seconds.extend([60.0; 20]);
+        assert_eq!(eta(60, &seconds).unwrap(), "1h 0m");
+    }
+
+    #[test]
+    fn a_duration_is_said_the_way_a_person_says_it() {
+        use std::time::Duration;
+
+        assert_eq!(spell(Duration::from_secs(9)), "9s");
+        assert_eq!(spell(Duration::from_secs(90)), "1m 30s");
+        assert_eq!(spell(Duration::from_secs(3700)), "1h 1m");
+        assert_eq!(spell(Duration::from_secs(200_000)), "2d 7h");
     }
 
     // The failure this rule prevents is a file that was created and never finished being counted as a measurement.

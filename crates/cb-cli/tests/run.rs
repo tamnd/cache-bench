@@ -132,12 +132,14 @@ perf = ["no"]
         let server = fake(&dir, "fake-server", SERVER);
         let memtier = fake(&dir, "fake-memtier", MEMTIER);
         let config = dir.join("config.jsonc");
+        // Valkey is named and its binary is not there, which is what a broken engine looks like from here. Nothing that sweeps only redis touches it.
         std::fs::write(
             &config,
             format!(
-                "{{ \"paths\": {{ \"memtier\": {:?}, \"redis\": {:?} }} }}",
+                "{{ \"paths\": {{ \"memtier\": {:?}, \"redis\": {:?}, \"valkey\": {:?} }} }}",
                 memtier.display().to_string(),
-                server.display().to_string()
+                server.display().to_string(),
+                dir.join("no-such-valkey").display().to_string()
             ),
         )
         .expect("writes the config");
@@ -168,10 +170,10 @@ perf = ["no"]
             .expect("runs cache-bench")
     }
 
-    /// `cache-bench sweep` over the four cell profile, against the same fakes.
+    /// `cache-bench sweep` over the four cell profile, against the same fakes. Which engines it sweeps is up to the caller.
     fn sweep(dir: &Path, config: &Path, results: &Path, extra: &[&str]) -> std::process::Output {
         Command::new(env!("CARGO_BIN_EXE_cache-bench"))
-            .args(["sweep", "--profile", "sweepy", "--cache", "redis"])
+            .args(["sweep", "--profile", "sweepy"])
             .arg("--config")
             .arg(config)
             .arg("--dir")
@@ -305,7 +307,7 @@ perf = ["no"]
             return;
         }
         let (dir, config, results) = scaffold("sweep");
-        let out = sweep(&dir, &config, &results, &[]);
+        let out = sweep(&dir, &config, &results, &["--cache", "redis"]);
         let said = String::from_utf8_lossy(&out.stdout).into_owned()
             + &String::from_utf8_lossy(&out.stderr);
         assert!(out.status.success(), "{said}");
@@ -329,8 +331,17 @@ perf = ["no"]
         assert!(at(names[2]) < at(names[3]), "{said}");
         assert!(!results.join(".lock").exists(), "the lock was not released");
 
+        // One line per attempt, and nothing missing, which is what an empty failure file says.
+        let log = std::fs::read_to_string(results.join("logs").join("sweep.jsonl"))
+            .expect("wrote the journal");
+        assert_eq!(log.lines().count(), 4, "{log}");
+        assert!(log.contains("\"outcome\":\"measured\""), "{log}");
+        let failures =
+            std::fs::read_to_string(results.join("failures.json")).expect("wrote the failure file");
+        assert!(failures.contains("\"failures\": []"), "{failures}");
+
         // Started again, it measures nothing, because everything it was going to measure is on disk.
-        let again = sweep(&dir, &config, &results, &[]);
+        let again = sweep(&dir, &config, &results, &["--cache", "redis"]);
         assert!(again.status.success());
         assert!(
             String::from_utf8_lossy(&again.stdout).contains("0 measured here, 4 already on disk"),
@@ -342,7 +353,7 @@ perf = ["no"]
         let cut = results.join("runs").join(names[2]);
         let whole = std::fs::read_to_string(&cut).expect("reads the run file");
         std::fs::write(&cut, &whole[..whole.len() / 2]).expect("truncates it");
-        let third = sweep(&dir, &config, &results, &[]);
+        let third = sweep(&dir, &config, &results, &["--cache", "redis"]);
         let told = String::from_utf8_lossy(&third.stdout).into_owned();
         assert!(third.status.success(), "{told}");
         assert!(told.contains("being measured again"), "{told}");
@@ -358,11 +369,56 @@ perf = ["no"]
         let _ = std::fs::remove_dir_all(&dir);
     }
 
+    // What a sweep leaves behind besides the runs: a line per attempt, and a file naming what is missing.
+    #[test]
+    fn a_sweep_writes_down_what_it_did_and_what_it_could_not_do() {
+        if !have_python() {
+            eprintln!("skipped: this machine has no python3 to run the fake server with");
+            return;
+        }
+        let (dir, config, results) = scaffold("record");
+        // Valkey is named in the config and its binary is not there, so all four of its cells fail. Valkey is swept before redis, so this also checks that a broken engine does not stop the ones behind it.
+        let out = sweep(&dir, &config, &results, &["--cache", "valkey"]);
+        let said = String::from_utf8_lossy(&out.stdout).into_owned()
+            + &String::from_utf8_lossy(&out.stderr);
+        assert!(
+            !out.status.success(),
+            "a sweep that measured nothing said it was fine: {said}"
+        );
+
+        // Three failures, and then the rest of that engine left alone rather than failing one cell at a time for a day.
+        let failures =
+            std::fs::read_to_string(results.join("failures.json")).expect("wrote the failure file");
+        assert_eq!(failures.matches("\"cell\"").count(), 3, "{failures}");
+        assert!(failures.contains("\"attempts\": 1"), "{failures}");
+        assert!(failures.contains("\"cache\": \"valkey\""), "{failures}");
+        assert!(said.contains("failed 3 times in a row"), "{said}");
+        assert!(said.contains("1 left alone"), "{said}");
+
+        // One line per attempt, and every one of them says what happened.
+        let log = std::fs::read_to_string(results.join("logs").join("sweep.jsonl"))
+            .expect("wrote the journal");
+        let lines: Vec<&str> = log.lines().collect();
+        assert_eq!(lines.len(), 3, "{log}");
+        for line in &lines {
+            assert!(line.contains("\"outcome\":\"failed\""), "{line}");
+            assert!(line.contains("\"why\":"), "{line}");
+            assert!(line.contains("\"seconds\":"), "{line}");
+        }
+        // An engine the config never named stops the sweep before it starts, rather than failing a thousand cells one at a time on day three.
+        let unnamed = sweep(&dir, &config, &results, &["--cache", "yo"]);
+        let why = String::from_utf8_lossy(&unnamed.stderr).into_owned();
+        assert!(!unnamed.status.success(), "{why}");
+        assert!(why.contains("yo"), "{why}");
+
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
     // A dry run says what it would do and touches nothing, which is how somebody checks the shape of a sweep before giving up a machine for a week.
     #[test]
     fn a_dry_run_names_the_cells_and_measures_none_of_them() {
         let (dir, config, results) = scaffold("dry");
-        let out = sweep(&dir, &config, &results, &["--dry-run"]);
+        let out = sweep(&dir, &config, &results, &["--cache", "redis", "--dry-run"]);
         let said = String::from_utf8_lossy(&out.stdout).into_owned();
         assert!(out.status.success(), "{said}");
         assert!(said.contains("4 cells over redis"), "{said}");

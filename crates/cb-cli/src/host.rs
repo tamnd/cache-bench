@@ -51,7 +51,7 @@ pub(crate) fn probe() -> Host {
             .map(|text| text.trim().to_owned())
             .filter(|text| !text.is_empty()),
         mitigations: mitigations(),
-        load: file("/proc/loadavg").as_deref().and_then(load),
+        load: load_average(),
     }
 }
 
@@ -126,6 +126,13 @@ fn meminfo(text: &str, key: &str) -> Option<u64> {
         .then(|| number.parse::<u64>().ok())
         .flatten()?
         .checked_mul(1024)
+}
+
+/// What the machine's one minute load average is right now.
+///
+/// Asked again per run by the sweep rather than once by the probe, because the whole point of recording it is that it changes: a cell measured in an hour where somebody else was on the machine is a cell that can be found afterwards rather than guessed at.
+pub(crate) fn load_average() -> Option<f64> {
+    file("/proc/loadavg").as_deref().and_then(load)
 }
 
 /// The one minute load average, which is the first of the three.
