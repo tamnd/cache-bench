@@ -23,6 +23,7 @@ cb-docs.workspace = true
 cb-memtier.workspace = true
 cb-perf.workspace = true
 cb-stats.workspace = true
+clap = { version = "4.6.6", features = ["derive"] }
 
 [lints]
 workspace = true
