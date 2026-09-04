@@ -107,7 +107,8 @@ mkdir -p "$WORK" "$PREFIX/bin"
 
 if wanted deps; then
     say "build dependencies"
-    sudo apt-get update
+    # A machine that has been used for anything else has third party apt sources on it, and one of those being unreachable or unsigned fails the whole update even though every package below comes from the distribution. What matters is whether the install works, so the update is allowed to complain and the install is the thing that has to succeed.
+    sudo apt-get update || echo "some apt sources did not refresh, carrying on with what is cached"
     sudo apt-get install -y --no-install-recommends \
         autoconf automake build-essential ca-certificates cmake curl git libevent-dev \
         libpcre3-dev libssl-dev libtool linux-tools-common pkg-config python3 zlib1g-dev
