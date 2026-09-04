@@ -19,4 +19,17 @@ CB_PARITY_OUTPUT=/path/to/cache-benchmarks/results/output.json cargo test -p cb-
 
 That one covers all 2304 entries and is the test that catches formatting bugs the three cell fixture is too small to reach.
 
+Set `CB_PARITY_EMIT` as well and it writes what our emitter produced, which is the file to point the original's `graph` at:
+
+```
+mkdir -p /tmp/parity/results/graphs
+CB_PARITY_OUTPUT=/path/to/cache-benchmarks/results/output.json \
+CB_PARITY_EMIT=/tmp/parity/results/output.json \
+  cargo test -p cb-core -- --ignored
+cd /path/to/cache-benchmarks/cmd && go build -o /tmp/parity/graph ./graph
+cd /tmp/parity && ./graph -dir results -bench throughput -which get -pipeline 10 -scale linear -force
+```
+
+`graph` needs `python3` with matplotlib, and it warns that it cannot find Futura on anything that is not a Mac with Futura installed. Neither of those is about the data. That is the second half of the M1 exit condition: the original's chart tool reads a file we wrote and draws from it, throughput, latency and cycles alike.
+
 `.gitattributes` marks this directory as binary so that a checkout on Windows does not rewrite the line endings and break every assertion in here.

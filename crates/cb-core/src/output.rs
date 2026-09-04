@@ -148,7 +148,12 @@ mod tests {
         let text = std::fs::read_to_string(&path).unwrap();
         let out = Output::parse(&text).unwrap();
         assert_eq!(out.entries.len(), 2304);
-        assert_eq!(out.emit(), text);
+        let ours = out.emit();
+        assert_eq!(ours, text);
+        // The other half of the gate is that the original's graph reads a file we wrote, so set this to a path and point graph at the directory it lands in.
+        if let Ok(path) = std::env::var("CB_PARITY_EMIT") {
+            std::fs::write(path, &ours).unwrap();
+        }
     }
 
     // Every entry has to survive the trip through the wider indent and come back as the same run, since the run file and the entry are the two places the same measurement is written down.
