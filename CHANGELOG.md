@@ -4,6 +4,18 @@ What each release costs you, in the order the releases happened. New entries go 
 
 ## Unreleased
 
+## 0.2.1 - 2026-09-04
+
+Everything a chart is, except the picture.
+
+The chart engine is being built in two halves and this is the first one finished. What goes on each of the 154 charts and where it goes are both settled, both taken from the original rather than from reading the original, and both checked bit for bit in CI on a checkout with nothing measured in it. 154 titles, 11088 bars, 1872 ticks and 6098 gridlines, all of them the original's.
+
+That was worth doing before the renderer rather than after. The original's chart layer leaves nothing behind but a PNG, so every decision it makes about what a chart says and where the axis starts is invisible once it has run. Both fixtures were taken by standing in for the thing it hands its work to, Python in one case and matplotlib in the other, which means neither is a transcription that could quietly drift from what the original does. Once the renderer exists, a wrong pixel will be a rendering bug and nothing else, because everything upstream of the pixel is already pinned.
+
+The fonts are in the binary too, so nothing depends on what happens to be installed. Three faces, three licences, three digests checked against the embedded bytes.
+
+M3 is not finished. The renderer, the hash manifest, the provenance stamp and the determinism job are what is left, and the exit gate needs two machines to agree on the bytes.
+
 ### Added
 
 - The series layer, which is the half of the chart engine with no pixels in it. A results file goes in and what comes out is a title, both axis labels, a thread count for each group of bars, and one number per bar, for each of the 154 charts. Everything a reader could disagree with is decided here, so it is a pure function and it is tested before anything is drawn.
