@@ -80,6 +80,8 @@ A chart here is a function of its data and nothing else. The same numbers produc
 
 The chart indexes are generated rather than maintained. The original writes `LINEAR.md` and `LOGARITHMIC.md` by hand, down to the anchor suffixes GitHub appends to repeated headings, and between them they link 120 of the 154 charts it publishes. Here both come out of the same table the charts are drawn from, so every chart that exists is linked, a chart that was not drawn is named rather than quietly dropped, and every image says what is on it.
 
+The README in a results directory is generated too, and none of the facts in it are typed. The methodology bullets carry the profile's own numbers, the hardware table comes out of the `host.json` written before the sweep, and the version table is one row per engine read out of the results themselves. Two things go in it that the original has nowhere: the table of everything this port does differently, and what these numbers may and may not be used for in full, because a caveat that lives in a document nobody opens is a caveat that does not exist. CI regenerates every published document and fails if one of them was edited by hand.
+
 ## Licence
 
 Apache-2.0.

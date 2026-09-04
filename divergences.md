@@ -133,3 +133,23 @@ The two charts drawn with Garnet's single thread bar left off are linked from th
 A chart that was specified but not drawn is named rather than left out. A sweep on a machine with no hardware counters produces no cycles charts, and a section that quietly disappears reads as a chart set that was never meant to have one, which is exactly the sort of gap a reader should be told about.
 
 Every image has a real alt text saying what is on it. The original writes `Alt text` on all 120 of its images, which is the placeholder out of the markdown documentation and tells a screen reader nothing.
+
+## D17, an added host record
+
+The original's results directory is the runs, the chosen files, the combined file and the charts. Nothing in it says what any of it was measured on, and the hardware appears once, as a line in a hand written README, where it cannot be checked against the data underneath it.
+
+Each results directory here carries a `host.json` written before the sweep starts: the kernel, the distribution, the CPU, the core count, the memory, whether there is a hardware PMU, the frequency governor, the CPU mitigations, the load generator's version, every engine's version, the `cache-bench` version and commit, and when the sweep started and finished. That is what a reader needs in order to decide whether two numbers are comparable, and it is what makes the generated README a description of the run rather than a description somebody typed once.
+
+Nothing in it names the machine. No hostname, no address, no user. A results directory is published and a machine name is not, so a host is described by what it is rather than by what it is called, and there is a check that fails if a name gets into the file.
+
+## D18, a generated results README
+
+The original's README is written by hand, which is how its version table came to be a list somebody maintains rather than a reading of the data. A version table that disagrees with the results it sits above is worse than no version table, because it is the thing a reader quotes.
+
+Here the whole document is generated. The methodology bullets carry the profile's real numbers, the version table is one row per engine read out of `info.version` in the results themselves, and the hardware line comes out of `host.json`. Regenerating is checked in CI, so a results README somebody edited by hand fails the build rather than silently becoming the truth.
+
+## D19, the numbers carry their own caveat
+
+The original states its methodology and leaves it at that. What its numbers may be used to claim is not written down anywhere, and the charts are what get linked.
+
+Every generated results README ends with what these numbers may and may not be used for, in full, next to the charts rather than in a document that a reader following a link to a chart will never open. The sentence that matters is that they may not be used to say one engine is faster than another, full stop, because this is a hot path measurement of two commands with no expiry, no eviction, no mixed command set, no large values, no network, no replication and no persistence in it. It is emitted rather than referenced so that it travels with the thing it is about.

@@ -66,6 +66,36 @@ impl CacheKind {
         }
     }
 
+    /// How the project is written when it is named in prose.
+    ///
+    /// The short name is what a filename and a legend use, and it is not always what the project calls itself. memcached is the one that differs.
+    #[must_use]
+    pub const fn label(self) -> &'static str {
+        match self {
+            Self::Memcache => "Memcached",
+            Self::Dragonfly => "Dragonfly",
+            Self::Valkey => "Valkey",
+            Self::Redis => "Redis",
+            Self::Garnet => "Garnet",
+            Self::Pogocache => "Pogocache",
+            Self::Yo => "yo",
+        }
+    }
+
+    /// Where the project lives, for the generated documents.
+    #[must_use]
+    pub const fn homepage(self) -> &'static str {
+        match self {
+            Self::Memcache => "https://github.com/memcached/memcached",
+            Self::Dragonfly => "https://github.com/dragonflydb/dragonfly",
+            Self::Valkey => "https://github.com/valkey-io/valkey",
+            Self::Redis => "https://github.com/redis/redis",
+            Self::Garnet => "https://github.com/microsoft/garnet",
+            Self::Pogocache => "https://github.com/tidwall/pogocache",
+            Self::Yo => "https://github.com/tamnd/yo",
+        }
+    }
+
     /// Which protocol memtier should speak to this server.
     #[must_use]
     pub const fn protocol(self) -> Protocol {

@@ -137,6 +137,39 @@ jobs:
       - name: every chart hashes to what is committed
         run: cargo run --locked --release --package cb-cli -- chart --golden --check testdata/golden/charts.sha256
 
+  # Every generated document is the one the generator would write.
+  # The two chart indexes and the results README are output, not source, and the failure this catches is somebody fixing a typo in a published README and having the next sweep silently throw the fix away.
+  # A generated file that is edited by hand is a file that is now lying about the data next to it, so it fails the build instead.
+  generated:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2.9.2
+        with:
+          save-if: ${{ github.ref == 'refs/heads/main' }}
+      # Generating twice into two directories and diffing them is what proves the generator is a function of its inputs.
+      # A document that comes out different on a second run cannot be checked at all, so this has to pass before the check below means anything.
+      - name: generating twice produces the same bytes
+        run: |
+          cargo run --locked --release --package cb-cli -- docs --golden --out "$RUNNER_TEMP/once"
+          cargo run --locked --release --package cb-cli -- docs --golden --out "$RUNNER_TEMP/twice"
+          diff -r "$RUNNER_TEMP/once" "$RUNNER_TEMP/twice"
+      # Nothing is published yet, so this loop is empty until the first results directory lands, and then it guards every one of them.
+      - name: no published document was edited by hand
+        run: |
+          shopt -s nullglob
+          found=0
+          for dir in results/*/; do
+            found=1
+            echo "checking $dir"
+            cargo run --locked --release --package cb-cli -- docs --dir "$dir" --check
+          done
+          if [ "$found" = 0 ]; then
+            echo "no results directories yet, nothing to check"
+          fi
+
   # The floor stays green too.
   # It is the same floor as tamnd/yo, so the two trees agree on what a supported compiler is.
   msrv:
