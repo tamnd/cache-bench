@@ -51,3 +51,11 @@ The original charts with matplotlib through a generated script. Here the chart e
 ## D11, unsupported perf counters
 
 A counter the machine cannot measure comes out of `perf stat` as the text `<not supported>`, and the original pulls it through a JSON accessor that returns zero for anything it cannot parse as a number. The zero then reaches a chart, where it is a bar of height nothing, claiming the engine took no branches. Our model keeps the distinction and the chart layer leaves such a cell out rather than drawing it as a zero. In `--compat=upstream` the zero is written as the original writes it, because the parity proof needs those bytes.
+
+## D12, Dragonfly's memory limit
+
+Every server in the original is given 32 GB except Dragonfly, which is given 31. The limit is computed rather than written down: the thread count times 256 megabytes, floored at 32384, then divided by 1024 to get gigabytes. That last division is integer arithmetic, and 32384 over 1024 is 31 and a bit, so the answer is 31 for every thread count the sweep uses. The floor is what the formula was for, and the unit conversion is what defeated it.
+
+A gigabyte in 32 is not going to move a throughput number when the working set is about six gigabytes and nothing is ever evicted. It is here because Dragonfly is the one engine in the set running under a limit nobody chose, and a reader comparing engines deserves to know that one of them was configured by an arithmetic accident.
+
+Here the profile's `maxmemory` goes to all seven servers unchanged. In `--compat=upstream` the formula is reproduced, arithmetic and all, rather than the 31 it happens to produce.
