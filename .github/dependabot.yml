@@ -15,15 +15,15 @@ updates:
       minor:
         update-types: [minor]
     # The chart stack is deliberately not grouped and not batched.
-    # A patch bump to plotters or image changes anti aliasing, every PNG hash in the manifest moves, and the determinism job goes red.
+    # A patch bump to skrifa or zeno moves a glyph by a fraction of a pixel, a patch bump to png changes what the encoder emits, and either way every hash in the manifest moves and the determinism job goes red.
     # That is the job working.
     # The fix is to look at the visual diff and update the manifest in its own commit, never to wave the bump through with the rest of the week's noise.
     ignore:
-      - dependency-name: plotters
+      - dependency-name: skrifa
         update-types: [version-update:semver-patch]
-      - dependency-name: plotters-bitmap
+      - dependency-name: zeno
         update-types: [version-update:semver-patch]
-      - dependency-name: image
+      - dependency-name: png
         update-types: [version-update:semver-patch]
 
   - package-ecosystem: github-actions

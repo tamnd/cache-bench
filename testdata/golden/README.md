@@ -84,6 +84,14 @@ All 154 are checked in `cargo test`, bit for bit, on every bound, tick, gridline
 
 The numbers in here are compared exactly, so `serde_json` is built with `float_roundtrip` wherever this file is read. Without it the parser takes a fast path that is allowed to land a unit in the last place away from what Python wrote, which shows up as one gridline out of six thousand being wrong in the last digit.
 
+## charts.sha256
+
+The SHA-256 of every one of the 154 charts, drawn from `series.json` with no provenance stamp on them, which is the only form of a chart here that does not depend on which machine drew it. Written by `cache-bench chart --golden --manifest` and checked by `cache-bench chart --golden --check`, which the `determinism` job in CI runs on Linux, macOS and Windows on every push.
+
+This is the fixture with the shortest explanation and the widest reach. The other three say what a chart should contain and this one says what it looks like, so a glyph that moved half a pixel, an encoder that changed its filter or a rounding mode that behaves differently on one platform all land here as a line that does not match, on a chart named in the output.
+
+Unlike the others it is ours rather than the original's, because the original's own PNGs are drawn with fonts we cannot ship and cropped to three different widths. It moves when the renderer changes on purpose, and the rule for updating it is to look at the visual diff first and to update it in a commit that does nothing else.
+
 ## gosort.json
 
 142 cases produced by Go's `sort.Slice`, which is the one fixture here that is generated rather than copied. Upstream mode has to reproduce the original's SET numbers, and those come out of a sort whose comparator reads a slice it is not sorting, so the result depends on the exact sequence of comparisons and swaps rather than on the values. Matching it means matching Go's `pdqsort`, and the only way to know we do is to ask Go.

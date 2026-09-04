@@ -3,6 +3,7 @@
 //! One subcommand per stage, because a sweep takes days and the stages after it have to be rerunnable without repeating it.
 //! Most of them are not written yet. The milestones say which: <https://github.com/tamnd/cache-bench/milestones>
 
+mod chart;
 mod choose;
 mod combine;
 mod doctor;
@@ -31,6 +32,8 @@ enum Command {
     Choose(choose::Args),
     /// Gather every chosen file into the one file the charts read.
     Combine(combine::Args),
+    /// Draw the charts.
+    Chart(chart::Args),
     /// Check this port against the original's own files.
     Verify(verify::Args),
 }
@@ -41,6 +44,7 @@ fn main() -> ExitCode {
         Command::Doctor(args) => doctor::run(args),
         Command::Choose(args) => choose::run(args),
         Command::Combine(args) => combine::run(args),
+        Command::Chart(args) => chart::run(args),
         Command::Verify(args) => verify::run(args),
     };
     match result {
