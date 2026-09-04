@@ -3,7 +3,10 @@
 //! One subcommand per stage, because a sweep takes days and the stages after it have to be rerunnable without repeating it.
 //! Most of them are not written yet. The milestones say which: <https://github.com/tamnd/cache-bench/milestones>
 
+mod choose;
+mod combine;
 mod doctor;
+mod results;
 
 use std::process::ExitCode;
 
@@ -23,12 +26,18 @@ struct Cli {
 enum Command {
     /// Check everything a sweep needs before starting one.
     Doctor(doctor::Args),
+    /// Reduce each cell's runs to a median, a best, a worst and an average.
+    Choose(choose::Args),
+    /// Gather every chosen file into the one file the charts read.
+    Combine(combine::Args),
 }
 
 fn main() -> ExitCode {
     let cli = Cli::parse();
     let result = match &cli.command {
         Command::Doctor(args) => doctor::run(args),
+        Command::Choose(args) => choose::run(args),
+        Command::Combine(args) => combine::run(args),
     };
     match result {
         Ok(()) => ExitCode::SUCCESS,

@@ -72,6 +72,8 @@ dependencies = [
  "cb-perf",
  "cb-stats",
  "clap",
+ "serde",
+ "serde_json",
 ]
 
 [[package]]
