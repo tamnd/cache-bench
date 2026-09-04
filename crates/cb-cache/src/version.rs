@@ -20,7 +20,7 @@ const GRACE: Duration = Duration::from_secs(5);
 ///
 /// # Errors
 ///
-/// If the binary will not start, if it does not answer within [`GRACE`], or if it exits without printing anything.
+/// If the binary will not start, if it does not answer within a few seconds, or if it exits without printing anything.
 pub fn version(binary: &Path, capture: &Path) -> Result<String, NoVersion> {
     let mut asking = Supervisor::new(binary)
         .args(["--version"])
