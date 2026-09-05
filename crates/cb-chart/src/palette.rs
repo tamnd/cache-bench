@@ -1,23 +1,51 @@
 //! The bar colours.
 //!
-//! Five of the six are matplotlib's default cycle, which is where the original got them, and the pink is hand picked. They are assigned by position in the list of cache servers a results file turns out to hold, not by which server it is, so a results file with a server missing shifts every colour after it.
+//! Five of the six are matplotlib's default cycle, which is where the original got them, and the pink is hand picked.
 //!
-//! That is the original's rule and it is kept, because a chart drawn here has to be comparable with a chart drawn there. It works out because the list is the sorted set of names, `yo` sorts last, and appending a seventh colour therefore leaves the original's six assignments exactly where they were.
+//! # Why this is not the original's rule
+//!
+//! The original assigns a colour by position in the list of cache servers a results file turns out to hold, and that list is the sorted set of names. So a results file with a server missing shifts every colour after it, and so does a server added.
+//!
+//! That rule survived `yo` by luck: `yo` sorts after all six of the original's names, so a seventh colour on the end left the first six where they were. `rugo` sorts between `redis` and `valkey`, and under the original's rule adding it would have silently recoloured Valkey, Pogocache and yo in every chart this project has ever drawn.
+//!
+//! So the colour is a property of the server here, from the table below, and not of where it landed. The original's six keep the original's six colours permanently, which is the thing the positional rule was for and the thing it could not actually promise. This is D22 in `divergences.md`.
+
+use cb_core::CacheKind;
 
 /// A colour for each cache server, by position.
 ///
-/// The first six are the original's. The purple is ours, for `yo`, and it comes from the same matplotlib cycle as the rest so that it does not look bolted on.
-pub const COLORS: [&str; 7] = [
-    "#ff7f0e", "#d62728", "#1f77b4", "#e64098", "#8c564b", "#2ca02c", "#9467bd",
+/// Kept as the list it always was, because it is what `--check` compares a redrawn chart against and what a reader comparing two projects' charts is looking at. The order is the order the original assigns them in, which is sorted name order over the original's six.
+pub const COLORS: [&str; 8] = [
+    "#ff7f0e", "#d62728", "#1f77b4", "#e64098", "#8c564b", "#2ca02c", "#9467bd", "#17becf",
 ];
 
-/// The colour for the cache server at this position in the list.
+/// Which colour belongs to which server.
+///
+/// The first six rows are the original's assignment written out: sorted name order over its six names, against `COLORS` in order. Reading it off the sorted order is what this table exists to stop, so it is written out rather than computed.
+///
+/// The two after them are ours. Purple for `yo` was already published and does not move. Cyan for `rugo` is the next unused colour in the same matplotlib cycle, so it does not look bolted on.
+const ASSIGNED: [(CacheKind, &str); 8] = [
+    (CacheKind::Dragonfly, COLORS[0]),
+    (CacheKind::Garnet, COLORS[1]),
+    (CacheKind::Memcache, COLORS[2]),
+    (CacheKind::Pogocache, COLORS[3]),
+    (CacheKind::Redis, COLORS[4]),
+    (CacheKind::Valkey, COLORS[5]),
+    (CacheKind::Yo, COLORS[6]),
+    (CacheKind::Rugo, COLORS[7]),
+];
+
+/// The colour this cache server is drawn in.
 ///
 /// # Errors
 ///
-/// If there are more cache servers than colours. The original indexes the table directly and panics, which is a fine way to find out at the end of a two week sweep that the eighth engine has no colour, but not a fine way to be told.
-pub fn color(at: usize) -> Result<&'static str, TooManyCaches> {
-    COLORS.get(at).copied().ok_or(TooManyCaches { at })
+/// If the name is not a server this build knows. The original indexes a table by position and panics past the end of it, which is a fine way to find out at the end of a two week sweep that an engine has no colour, but not a fine way to be told.
+pub fn color(cache: &str) -> Result<&'static str, NoColor> {
+    ASSIGNED
+        .iter()
+        .find(|(kind, _)| kind.name() == cache)
+        .map(|(_, hex)| *hex)
+        .ok_or_else(|| NoColor(cache.to_owned()))
 }
 
 /// A colour, as three channels from zero to one.
@@ -63,30 +91,30 @@ impl Rgb {
 #[error("{0:?} is not a colour, expected a hash and six hex digits")]
 pub struct BadColor(pub String);
 
-/// More cache servers in a results file than there are colours to draw them with.
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct TooManyCaches {
-    /// The position that had no colour, so the count is this plus one.
-    pub at: usize,
-}
+/// A cache server in a results file that this build has no colour for.
+///
+/// Which means this build has never heard of it, since every server it knows is in [`ASSIGNED`] and a test says so.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct NoColor(pub String);
 
-impl std::fmt::Display for TooManyCaches {
+impl std::fmt::Display for NoColor {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(
             f,
-            "{} cache servers in the results but only {} colours to draw them with",
-            self.at + 1,
-            COLORS.len()
+            "the results name a cache server called {:?}, which this build has no colour for",
+            self.0
         )
     }
 }
 
-impl std::error::Error for TooManyCaches {}
+impl std::error::Error for NoColor {}
 
 #[cfg(test)]
 #[allow(clippy::unwrap_used)]
 mod tests {
-    use super::{COLORS, Rgb, color};
+    use cb_core::CacheKind;
+
+    use super::{ASSIGNED, COLORS, Rgb, color};
 
     // The six the original uses, in its order, because a chart drawn here and a chart drawn there should be the same chart.
     #[test]
@@ -97,6 +125,44 @@ mod tests {
                 "#ff7f0e", "#d62728", "#1f77b4", "#e64098", "#8c564b", "#2ca02c"
             ]
         );
+    }
+
+    // The whole point of the table. Under the original's positional rule these six are the sorted order of its six names, and they have to keep the colours they had whatever is added afterwards.
+    #[test]
+    fn the_originals_six_keep_the_colours_they_had() {
+        let want = [
+            ("dragonfly", "#ff7f0e"),
+            ("garnet", "#d62728"),
+            ("memcache", "#1f77b4"),
+            ("pogocache", "#e64098"),
+            ("redis", "#8c564b"),
+            ("valkey", "#2ca02c"),
+        ];
+        for (cache, hex) in want {
+            assert_eq!(color(cache).unwrap(), hex, "{cache}");
+        }
+    }
+
+    // Adding rugo under the original's rule would have recoloured these three, because `rugo` sorts between `redis` and `valkey`.
+    // This is the test that says it did not.
+    #[test]
+    fn an_engine_added_in_the_middle_of_the_alphabet_moves_nothing() {
+        assert_eq!(color("valkey").unwrap(), "#2ca02c");
+        assert_eq!(color("pogocache").unwrap(), "#e64098");
+        assert_eq!(color("yo").unwrap(), "#9467bd");
+    }
+
+    // A server this build knows and has no colour for would draw a chart with two bars the same colour, which is a chart that misleads rather than one that fails.
+    #[test]
+    fn every_engine_has_a_colour_and_no_two_share_one() {
+        for kind in CacheKind::ALL {
+            assert!(color(kind.name()).is_ok(), "{kind} has no colour");
+        }
+        assert_eq!(ASSIGNED.len(), CacheKind::ALL.len());
+        let mut hexes: Vec<&str> = ASSIGNED.iter().map(|(_, hex)| *hex).collect();
+        hexes.sort_unstable();
+        hexes.dedup();
+        assert_eq!(hexes.len(), ASSIGNED.len());
     }
 
     #[test]
@@ -127,13 +193,14 @@ mod tests {
         assert!(Rgb::parse("#ff7f0g").is_err());
     }
 
+    // The inverse of what this test used to say. It used to be that an eighth engine was an error, because there were seven colours; now an engine is known or it is not, and the ninth engine is a row in the table rather than a limit.
     #[test]
-    fn an_eighth_cache_server_is_an_error_rather_than_a_panic() {
-        assert!(color(6).is_ok());
-        assert!(color(7).is_err());
+    fn a_cache_server_this_build_does_not_know_is_an_error_rather_than_a_panic() {
+        assert!(color("rugo").is_ok());
+        assert!(color("keydb").is_err());
         assert_eq!(
-            color(7).unwrap_err().to_string(),
-            "8 cache servers in the results but only 7 colours to draw them with"
+            color("keydb").unwrap_err().to_string(),
+            "the results name a cache server called \"keydb\", which this build has no colour for"
         );
     }
 }

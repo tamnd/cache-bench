@@ -10,7 +10,7 @@ use std::fmt;
 use cb_core::{Compat, Latency, Op, Output, Run};
 use serde::{Deserialize, Serialize};
 
-use crate::palette::{TooManyCaches, color};
+use crate::palette::{NoColor, color};
 use crate::spec::{Metric, Percentile, Spec, Which};
 
 /// One chart, ready to draw.
@@ -114,8 +114,8 @@ impl<'a> Corpus<'a> {
         threads.sort_unstable();
 
         // Checked once here rather than per chart, so that asking for a chart cannot fail.
-        for at in 0..caches.len() {
-            color(at).map_err(BadCorpus::TooManyCaches)?;
+        for cache in &caches {
+            color(cache).map_err(BadCorpus::NoColor)?;
         }
 
         let operations = first.data.info.operations;
@@ -155,11 +155,10 @@ impl<'a> Corpus<'a> {
         let series = self
             .caches
             .iter()
-            .enumerate()
-            .map(|(at, cache)| Series {
+            .map(|cache| Series {
                 cache: (*cache).to_owned(),
-                // Checked in `new`, and the fallback is the last colour rather than a panic, because a chart with a repeated colour is a worse outcome than no chart only if somebody sees it.
-                color: color(at).unwrap_or("#9467bd").to_owned(),
+                // Checked in `new`, and the fallback is grey rather than a panic, because grey reads as a server the drawing code did not recognise where a repeated colour reads as a result.
+                color: color(cache).unwrap_or("#7f7f7f").to_owned(),
                 points: self
                     .threads
                     .iter()
@@ -284,15 +283,15 @@ fn widen(v: u64) -> f64 {
 pub enum BadCorpus {
     /// Nothing in it.
     Empty,
-    /// More cache servers than colours.
-    TooManyCaches(TooManyCaches),
+    /// A cache server this build has no colour for.
+    NoColor(NoColor),
 }
 
 impl fmt::Display for BadCorpus {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             Self::Empty => f.write_str("the results file has no entries in it"),
-            Self::TooManyCaches(e) => e.fmt(f),
+            Self::NoColor(e) => e.fmt(f),
         }
     }
 }
@@ -435,9 +434,11 @@ mod tests {
         );
     }
 
-    // Legend order and colours come from the order the results file first mentions a server, which is the original's rule.
+    // Legend order comes from the order the results file first mentions a server, which is the original's rule and is kept.
+    //
+    // The colour does not, any more. Under the original's rule these two would be orange then red because that is the order they turned up in; here Valkey is green and Dragonfly is orange wherever they turn up, which is D22.
     #[test]
-    fn the_legend_is_in_the_order_the_file_mentions_them() {
+    fn the_legend_is_in_the_order_the_file_mentions_them_and_the_colours_are_not() {
         let out = corpus(vec![
             cell("valkey", 1, 1, false, 100_000.0, 0.0),
             cell("dragonfly", 1, 1, false, 200_000.0, 0.0),
@@ -445,8 +446,19 @@ mod tests {
         let c = Corpus::new(&out, Compat::Corrected).unwrap();
         assert_eq!(c.caches(), ["valkey", "dragonfly"]);
         let chart = c.chart(spec(Metric::Throughput(Which::Gets), None));
-        assert_eq!(chart.series[0].color, "#ff7f0e");
-        assert_eq!(chart.series[1].color, "#d62728");
+        assert_eq!(chart.series[0].color, "#2ca02c");
+        assert_eq!(chart.series[1].color, "#ff7f0e");
+    }
+
+    // A results file naming a server this build has never heard of is refused when the corpus is built, rather than drawn in a fallback colour that a reader would take for a result.
+    #[test]
+    fn a_server_this_build_does_not_know_is_refused_rather_than_drawn() {
+        let out = corpus(vec![cell("keydb", 1, 1, false, 100_000.0, 0.0)]);
+        let err = Corpus::new(&out, Compat::Corrected).unwrap_err();
+        assert!(
+            err.to_string().contains("keydb"),
+            "the error should name the server: {err}"
+        );
     }
 
     #[test]

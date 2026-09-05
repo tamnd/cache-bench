@@ -1,18 +1,18 @@
 # cache-bench
 
-Throughput, latency and CPU cycles for seven cache servers, measured with `memtier_benchmark` and charted from committed data.
+Throughput, latency and CPU cycles for eight cache servers, measured with `memtier_benchmark` and charted from committed data.
 
-This is a Rust port of [tidwall/cache-benchmarks](https://github.com/tidwall/cache-benchmarks), which is the original and which deserves the credit for the methodology. The port exists for three reasons. It adds [yo](https://github.com/tamnd/yo) as a seventh subject. It runs on hardware that is not a 32 core AWS instance, which the original assumes throughout. And it draws the charts in Rust instead of shelling out to Python and matplotlib, so the chart layer can be tested and so the same input produces the same PNG on every machine.
+This is a Rust port of [tidwall/cache-benchmarks](https://github.com/tidwall/cache-benchmarks), which is the original and which deserves the credit for the methodology. The port exists for three reasons. It adds [yo](https://github.com/tamnd/yo) and [rugo](https://github.com/tamnd/rugo) as a seventh and an eighth subject. It runs on hardware that is not a 32 core AWS instance, which the original assumes throughout. And it draws the charts in Rust instead of shelling out to Python and matplotlib, so the chart layer can be tested and so the same input produces the same PNG on every machine.
 
 ## Status
 
-Every stage is written. `doctor`, `run`, `sweep`, `choose`, `combine`, `chart`, `docs` and `verify` all work: `run` measures one cell and writes one file, `sweep` is the loop that measures the other ten thousand and keeps a record of what it did, and everything downstream of those files has been working since the chart milestone. What is missing is the hardware gate that says all seven servers come up and go away again on a real Linux box, and the results themselves. The [milestones](https://github.com/tamnd/cache-bench/milestones) say what each stage has to land and what it is gated on.
+Every stage is written. `doctor`, `run`, `sweep`, `choose`, `combine`, `chart`, `docs` and `verify` all work: `run` measures one cell and writes one file, `sweep` is the loop that measures the other ten thousand and keeps a record of what it did, and everything downstream of those files has been working since the chart milestone. What is missing is the hardware gate that says all eight servers come up and go away again on a real Linux box, and the results themselves. The [milestones](https://github.com/tamnd/cache-bench/milestones) say what each stage has to land and what it is gated on.
 
 No results have been published. When they are, they will come with the raw `output.json` next to them, so anyone can redraw every chart without trusting us.
 
 ## What gets measured
 
-Seven cache servers, all with persistence off, all over a local unix socket, so no network stack is in the measurement.
+Eight cache servers, all with persistence off, all over a local unix socket, so no network stack is in the measurement.
 
 | Server | Thread flag |
 | --- | --- |
@@ -23,6 +23,7 @@ Seven cache servers, all with persistence off, all over a local unix socket, so 
 | [Garnet](https://github.com/microsoft/garnet) | `--miniothreads`, `--maxiothreads`, `--minthreads`, `--maxthreads` |
 | [Pogocache](https://github.com/tidwall/pogocache) | `-t` |
 | [yo](https://github.com/tamnd/yo) | `--threads` |
+| [rugo](https://github.com/tamnd/rugo) | `--threads` |
 
 The x axis of every chart is that thread count, swept from 1 to 16. Each point is the trimmed median of 31 runs. Each run is 100,000 SET operations and 100,000 GET operations per connection across 256 connections, with a warmup pass before the measured one, at pipeline depths of 1, 10, 25 and 50, with values of 1 to 1024 bytes.
 
@@ -36,7 +37,7 @@ No expiry, no eviction, no mixed command set, no large values, no network, no re
 
 ```
 crates/cb-core      types, the JSON model, config, profiles
-crates/cb-cache     the seven cache adapters and process lifecycle
+crates/cb-cache     the eight cache adapters and process lifecycle
 crates/cb-memtier   the memtier driver and its output parser
 crates/cb-perf      the perf driver, the PMU probe, CSV parsing
 crates/cb-stats     run selection and aggregation
@@ -58,7 +59,7 @@ cargo install cache-bench
 
 That builds the binary from source and needs nothing else. A release also carries a tarball per platform on its [releases page](https://github.com/tamnd/cache-bench/releases), with a SHA-256 next to each one, which is what to fetch on a box that has no Rust toolchain on it and no reason to grow one.
 
-The seven cache servers and `memtier_benchmark` are not installed by any of this. They are named in `config.jsonc` by path, and `cache-bench doctor` says which ones it found. On Ubuntu, `tools/provision/install.sh` builds all eight of them at the versions pinned in `tools/provision/versions.env` and puts them where `config.jsonc` already looks, which is the half hour between a fresh box and a box that can be swept.
+The eight cache servers and `memtier_benchmark` are not installed by any of this. They are named in `config.jsonc` by path, and `cache-bench doctor` says which ones it found. On Ubuntu, `tools/provision/install.sh` builds all nine of them at the versions pinned in `tools/provision/versions.env` and puts them where `config.jsonc` already looks, which is the half hour between a fresh box and a box that can be swept.
 
 ## Usage
 
@@ -74,7 +75,7 @@ cache-bench docs    --dir results/wsl32
 cache-bench verify  --against /path/to/cache-benchmarks/results
 ```
 
-`doctor` refuses rather than warns. A machine with fewer cores than the profile names, a profile that sweeps cycles on a host with no counters, a working set that would not fit in memory, a load average that says somebody else is using the box: each of those is a sweep that produces numbers rather than an error, so each of them stops here instead. `--write` records what the machine is in `host.json` next to the results, and `--deep` starts each of the seven servers in turn and stops it again, which is the check no file can make.
+`doctor` refuses rather than warns. A machine with fewer cores than the profile names, a profile that sweeps cycles on a host with no counters, a working set that would not fit in memory, a load average that says somebody else is using the box: each of those is a sweep that produces numbers rather than an error, so each of them stops here instead. `--write` records what the machine is in `host.json` next to the results, and `--deep` starts each of the eight servers in turn and stops it again, which is the check no file can make.
 
 `sweep` takes days. It measures in the original's order, engine then threads then pipeline depth then counters then run number, so that all the runs of one cell happen together in time and a noisy hour shows up as one bad cell rather than as a tilt across the whole matrix. It is restartable, and the restart rule is file existence and nothing else: a cell whose file is there is skipped, a file that will not parse is measured again rather than trusted, and one results directory takes one sweep at a time. `--dry-run` prints the cells it would measure and touches nothing.
 

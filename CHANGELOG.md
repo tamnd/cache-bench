@@ -2,6 +2,22 @@
 
 What each release costs you, in the order the releases happened. New entries go on top.
 
+## 0.6.0 - unreleased
+
+### Added
+
+- [rugo](https://github.com/tamnd/rugo) as an eighth subject, wired the same way every other engine is: an entry in `config.jsonc`, a `CacheKind` variant, its flags, and a test asserting the four things it is started with. Nothing about the measurement path knows which engine it is running, so nothing else needed changing. This makes a sweep about a fifth longer: 23808 runs at the reference profile against 20832.
+- A `rugo` part in `tools/provision/install.sh` and a `RUGO_REF` in `versions.env`. It is the one ref there that is a branch rather than a tag, which is written down in both places along with what it costs and when it stops being true.
+
+### Changed
+
+- A bar colour is now looked up by which server it is rather than by where that server sorted among the servers in the sweep, which is D22. The original's rule held for `yo` by luck, because `yo` sorts after all six of its names; `rugo` sorts between `redis` and `valkey`, and under the original's rule adding it would have silently repainted Valkey, Pogocache and yo in every chart. No published number moves and the 154 golden charts are unchanged, which is what proves it. A results file naming a server this build has no colour for is now refused, naming the server, rather than drawn in a colour a reader would take for a result.
+- The engine count is read from `CacheKind::ALL` in the four places it used to be the literal seven. Those went out of step the first time an engine was added, and the only thing that said so was a test asserting a different literal.
+
+### Fixed
+
+- `install.sh` checking out a branch ref gave the commit the last run left behind, forever. `git fetch origin` moves `origin/main` and leaves the local `main` alone, so the build was skipped as already current. It now prefers the remote-tracking name where there is one, which resolves identically for every tag already pinned.
+
 ## 0.5.1 - 2026-09-04
 
 ### Added

@@ -150,7 +150,7 @@ impl Readme<'_> {
             out,
             "- {} runs per cell, {} cells, {} runs in all.",
             profile.runs,
-            cells * 7,
+            cells * CacheKind::ALL.len(),
             profile.total_runs()
         );
         let _ = writeln!(out, "- {}", self.statistic());

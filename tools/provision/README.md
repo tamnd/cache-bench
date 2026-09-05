@@ -1,6 +1,6 @@
 # Provisioning a host
 
-`install.sh` turns a fresh Ubuntu box into one that can run a sweep. It installs the build dependencies, a Rust toolchain, a .NET SDK for Garnet, `memtier_benchmark` and the seven cache servers, all at the versions pinned in `versions.env`, into directories beside this checkout, which is where `config.jsonc` already looks for them.
+`install.sh` turns a fresh Ubuntu box into one that can run a sweep. It installs the build dependencies, a Rust toolchain, a .NET SDK for Garnet, `memtier_benchmark` and the eight cache servers, all at the versions pinned in `versions.env`, into directories beside this checkout, which is where `config.jsonc` already looks for them.
 
 ```
 tools/provision/install.sh
@@ -19,6 +19,8 @@ Two environment variables move things. `WORK` is where the sibling checkouts go 
 
 Every version in `versions.env` is written into every run file this harness produces. Two sweeps on two machines are comparable only if these agree, so they are pinned here rather than being whatever each box happened to have on the day, and bumping one is a commit of its own so that a chart that moved can be traced to the thing that moved it.
 
+`RUGO_REF` is the one line in `versions.env` that names a branch rather than a tag, because rugo has not had a release and is rebuilt between sweeps while it is being optimised. Every build of it reports the same version, so a run file cannot tell two of them apart and the commit has to be recorded in the sweep note instead. That ends when rugo cuts 0.1.0.
+
 Dragonfly is the one that is downloaded rather than built. Its own instructions say to take the release binary, its build wants more memory than some of these machines have, and the release binary is what the original measured.
 
 ## What this does not do
@@ -29,6 +31,6 @@ It does not decide whether the box is fit to measure anything. That is `cache-be
 cargo run --release -p cache-bench -- doctor --profile <profile> --deep
 ```
 
-`--deep` starts each of the seven servers in turn, waits for it to answer and stops it again, which is the check no file can make and the one that catches a binary of the wrong architecture, a server built without unix socket support, or a Garnet whose runtime is not installed.
+`--deep` starts each of the eight servers in turn, waits for it to answer and stops it again, which is the check no file can make and the one that catches a binary of the wrong architecture, a server built without unix socket support, or a Garnet whose runtime is not installed.
 
 It also does not touch anything outside `WORK`, `PREFIX/bin` and the packages apt installs. It never removes anything, and running it twice is the normal case rather than the recovery path.

@@ -84,9 +84,9 @@ Drawing the pixels ourselves is not enthusiasm for writing a rasterizer. The two
 
 ## D10, an added subject
 
-`yo` is a seventh cache server that the original does not have. Pogocache, which is the original author's own engine, stays in. Dropping it would mean this is no longer a reproduction of the benchmark but a modified one that happens to omit the engine the original was written to showcase, and the fairness rules in the spec exist precisely so that adding our own engine does not become an excuse to tilt anything.
+`yo` and `rugo` are a seventh and an eighth cache server that the original does not have. Pogocache, which is the original author's own engine, stays in. Dropping it would mean this is no longer a reproduction of the benchmark but a modified one that happens to omit the engine the original was written to showcase, and the fairness rules in the spec exist precisely so that adding our own engine does not become an excuse to tilt anything.
 
-The seventh subject needs a seventh bar colour. The original has six, assigned by position in the sorted list of names rather than by which engine it is, and that rule is kept because a chart drawn here and a chart drawn there have to be comparable. It works out because `yo` sorts last, so the added colour goes on the end and the original's six land exactly where they were. It is purple, from the same matplotlib cycle five of the other six come from.
+Each added subject needs a bar colour. `yo` is purple and `rugo` is cyan, both from the same matplotlib cycle five of the original's six come from, so neither looks bolted on. How a colour gets attached to an engine is no longer the original's rule, and that is D22.
 
 ## D11, unsupported perf counters
 
@@ -100,13 +100,13 @@ Every server in the original is given 32 GB except Dragonfly, which is given 31.
 
 A gigabyte in 32 is not going to move a throughput number when the working set is about six gigabytes and nothing is ever evicted. It is here because Dragonfly is the one engine in the set running under a limit nobody chose, and a reader comparing engines deserves to know that one of them was configured by an arithmetic accident.
 
-Here the profile's `maxmemory` goes to all seven servers unchanged. In `--compat=upstream` the formula is reproduced, arithmetic and all, rather than the 31 it happens to produce.
+Here the profile's `maxmemory` goes to all eight servers unchanged. In `--compat=upstream` the formula is reproduced, arithmetic and all, rather than the 31 it happens to produce.
 
 ## D13, the x tick offset
 
 Under each group of bars the original writes the thread count, and it places that label at `width * 2.5` from the left edge of the group. Six bars of width `width` make a group `6 * width` wide, whose middle is at `width * 3`, so the label is half a bar to the left of centre. It looks centred because the bar the label is under is drawn from its own left edge, and the middle of the last bar in a group of six is exactly `width * 2.5`. The number is right for six bars by construction and for no other count.
 
-We draw seven. Keeping the constant would push every thread count on every chart half a bar off the group it names, which is a visible fault on a chart nobody would think to check, so here the offset is the middle of however many bars there are. At six the two expressions produce the same number, so nothing the original published moves.
+We draw eight. Keeping the constant would push every thread count on every chart half a bar off the group it names, which is a visible fault on a chart nobody would think to check, so here the offset is the middle of however many bars there are. At six the two expressions produce the same number, so nothing the original published moves.
 
 `Bars::upstream_xtick` keeps the original's expression and a test asserts the two agree at six and disagree at seven, which is what makes this a divergence that only shows up once a seventh engine is on the chart.
 
@@ -171,3 +171,15 @@ perf is asked here for `-x,`, its machine readable form, where the fields are co
 The same output carries a `CPUs utilized` figure in its comment column, which is the number the original scrapes. It is a value perf rounded for display. It is computed here instead, from the `task-clock` counter and a duration this process measured itself, which is the same quantity from the same source without a dependency on how perf chose to print it.
 
 Neither of these moves a published number on a machine where the original's parsing worked. They remove the cases where it silently did not.
+
+## D22, a colour belongs to a server
+
+The original picks a bar colour by position: it collects the cache servers a results file mentions, which is the sorted set of their names, and indexes a seven long table with the position each one landed at. So a colour is a property of where a server sorted among the servers that happened to be in that particular sweep, not of the server.
+
+That has two consequences the original does not intend. A sweep with one engine missing draws every engine after it in the wrong colour, so two charts from two sweeps of the same box are not comparable by eye. And an engine added anywhere but the end of the alphabet repaints everything after it, retroactively, in every chart the project has ever drawn.
+
+The second one was luck until now. `yo` sorts after all six of the original's names, so a seventh colour on the end of the table left the six where they were and the rule held by accident. `rugo` sorts between `redis` and `valkey`. Under the original's rule, adding it would have moved Valkey from green to brown, Pogocache to green and yo to brown, silently, with nothing failing.
+
+So the colour is looked up by name here, from a table that says which server gets which colour, and `color` takes a cache name rather than an index. The original's six keep the original's six colours permanently, which is what the positional rule was for and what it could not actually promise. A results file naming a server this build has no colour for is refused when the corpus is built, naming the server, rather than drawn in a colour that a reader would take for a result.
+
+No published number moves. What moves is which chart a colour is the same on.

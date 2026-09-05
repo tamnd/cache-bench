@@ -2,7 +2,7 @@
 #
 # Turn an Ubuntu box into one that can run a sweep.
 #
-# It installs the build dependencies, a Rust toolchain, a .NET SDK for Garnet, memtier_benchmark, and the seven cache servers, all at the versions pinned in versions.env, and it puts them where config.jsonc already looks for them: in directories beside this checkout, which is the layout the original uses.
+# It installs the build dependencies, a Rust toolchain, a .NET SDK for Garnet, memtier_benchmark, and the eight cache servers, all at the versions pinned in versions.env, and it puts them where config.jsonc already looks for them: in directories beside this checkout, which is the layout the original uses.
 #
 # Everything here is safe to run again. A checkout that is already there is fetched rather than cloned, a binary that is already built at the pinned ref is left alone, and nothing is removed. Run it with no arguments to do all of it, or name the parts to do one at a time:
 #
@@ -32,7 +32,7 @@ if [ "${1:-}" = "--force" ]; then
 fi
 want=("$@")
 
-ALL="deps rust dotnet memtier memcached redis valkey dragonfly garnet pogocache yo"
+ALL="deps rust dotnet memtier memcached redis valkey dragonfly garnet pogocache yo rugo"
 
 # A part name that is not one of those is a typo, and a typo that is silently ignored looks exactly like a part that finished in no time at all.
 for one in "${want[@]}"; do
@@ -86,6 +86,10 @@ fetch() {
         git clone --recurse-submodules "$url" "$dir"
     fi
     git -C "$dir" fetch --tags --force origin
+    # A tag resolves the same either way. A branch does not: `git fetch origin` moves `origin/main` and leaves the local `main` where it was, so checking out the bare name on a second run gives yesterday's commit and the build is skipped as already current. Prefer the remote-tracking name where there is one.
+    if git -C "$dir" rev-parse --verify --quiet "origin/$ref^{commit}" >/dev/null; then
+        ref="origin/$ref"
+    fi
     git -C "$dir" checkout --detach "$ref"
     git -C "$dir" submodule update --init --recursive
 }
@@ -257,6 +261,17 @@ if wanted yo; then
     fi
 fi
 
+if wanted rugo; then
+    say "rugo $RUGO_REF"
+    dir="$WORK/rugo"
+    fetch https://github.com/tamnd/rugo.git "$RUGO_REF" "$dir"
+    # RUGO_REF is a branch, so this rebuilds whenever the branch has moved since the binary was built, which is the point of it while rugo is being optimised.
+    if stale "$dir/target/release/rugo" "$dir"; then
+        (cd "$dir" && cargo build --release --locked)
+        built "$dir/target/release/rugo" "$dir"
+    fi
+fi
+
 say "what is where"
 # The same list config.jsonc holds, so that a line with nothing after it is a line to fix before starting a sweep.
 for pair in \
@@ -267,7 +282,8 @@ for pair in \
     "dragonfly:$WORK/dragonfly/dragonfly-$(uname -m)" \
     "garnet:$WORK/garnet/main/GarnetServer/bin/Release/$GARNET_FRAMEWORK/GarnetServer" \
     "pogocache:$WORK/pogocache/pogocache" \
-    "yo:$WORK/yo/target/release/yodb"; do
+    "yo:$WORK/yo/target/release/yodb" \
+    "rugo:$WORK/rugo/target/release/rugo"; do
     name=${pair%%:*}
     path=${pair#*:}
     if [ -x "$path" ]; then

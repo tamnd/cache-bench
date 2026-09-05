@@ -16,9 +16,9 @@ use crate::size::Bytes;
 /// Left as it is rather than scaled with the profile, because scaling it is a change to how Garnet is configured and this table's job is to be the original's table.
 const GARNET_INDEX: &str = "2g";
 
-/// The seven cache servers this harness measures.
+/// The eight cache servers this harness measures.
 ///
-/// The order here is the order the original writes them in `bench-all.sh`.
+/// The order here is the order the original writes them in `bench-all.sh`, with the two that are not in the original on the end in the order they were added.
 /// It is not the order the charts use, which comes from sorted result filenames, so do not rely on this for anything a reader will see.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum CacheKind {
@@ -36,11 +36,13 @@ pub enum CacheKind {
     Pogocache,
     /// yo, from tamnd/yo.
     Yo,
+    /// rugo, from tamnd/rugo.
+    Rugo,
 }
 
 impl CacheKind {
     /// Every kind, in the order the original sweeps them.
-    pub const ALL: [Self; 7] = [
+    pub const ALL: [Self; 8] = [
         Self::Memcache,
         Self::Dragonfly,
         Self::Valkey,
@@ -48,6 +50,7 @@ impl CacheKind {
         Self::Garnet,
         Self::Pogocache,
         Self::Yo,
+        Self::Rugo,
     ];
 
     /// The short name used in result filenames and on chart legends.
@@ -63,6 +66,7 @@ impl CacheKind {
             Self::Garnet => "garnet",
             Self::Pogocache => "pogocache",
             Self::Yo => "yo",
+            Self::Rugo => "rugo",
         }
     }
 
@@ -79,6 +83,7 @@ impl CacheKind {
             Self::Garnet => "Garnet",
             Self::Pogocache => "Pogocache",
             Self::Yo => "yo",
+            Self::Rugo => "rugo",
         }
     }
 
@@ -93,6 +98,7 @@ impl CacheKind {
             Self::Garnet => "https://github.com/microsoft/garnet",
             Self::Pogocache => "https://github.com/tidwall/pogocache",
             Self::Yo => "https://github.com/tamnd/yo",
+            Self::Rugo => "https://github.com/tamnd/rugo",
         }
     }
 
@@ -108,8 +114,8 @@ impl CacheKind {
     /// The full command line for starting this server.
     ///
     /// Everything that varies between runs comes in through [`Launch`], so this is a table and not a policy.
-    /// The thread flag, the memory limit, persistence off and the listening address are all any of the seven get.
-    /// Nothing here is tuning, and the fairness rules in the spec say that a flag added for one server has to be considered for the other six or not added at all.
+    /// The thread flag, the memory limit, persistence off and the listening address are all any of the eight get.
+    /// Nothing here is tuning, and the fairness rules in the spec say that a flag added for one server has to be considered for the other seven or not added at all.
     #[must_use]
     pub fn argv(self, launch: &Launch<'_>) -> Vec<OsString> {
         let threads = launch.threads.to_string();
@@ -129,8 +135,8 @@ impl CacheKind {
             Endpoint::Unix(path) => {
                 argv.push(socket_flag.into());
                 argv.push(path.into());
-                // Every server but yo turns the TCP listener off by being given port zero, which is also how the original does it.
-                if self == Self::Yo {
+                // Six of the eight turn the TCP listener off by being given port zero, which is also how the original does it. The two of ours refuse a port of zero and have a flag for it instead, because a configured port of nought is a request for whichever one is free and answering it by listening on nothing is the wrong reading.
+                if matches!(self, Self::Yo | Self::Rugo) {
                     argv.push("--no-port".into());
                 } else {
                     argv.push(port_flag.into());
@@ -148,7 +154,7 @@ impl CacheKind {
         argv
     }
 
-    /// Everything between the binary and the listening address, which is where the seven look least alike.
+    /// Everything between the binary and the listening address, which is where the eight look least alike.
     fn flags<'f>(self, threads: &'f str, memory: &'f str) -> Vec<&'f str> {
         match self {
             Self::Pogocache => vec!["-t", threads, "--maxmemory", memory],
@@ -192,6 +198,8 @@ impl CacheKind {
                 threads,
             ],
             Self::Yo => vec!["serve", "--maxmemory", memory, "--threads", threads],
+            // No subcommand: the binary is a cache server and does nothing else. Nothing is passed for persistence because there is none to turn off, and nothing for `--shards` or `--uring`, which are tuning and so are not this table's business.
+            Self::Rugo => vec!["--maxmemory", memory, "--threads", threads],
         }
     }
 
@@ -213,7 +221,7 @@ impl CacheKind {
 
     /// How this server spells the port flag and the unix socket flag.
     ///
-    /// The two that came from the memcached side of the world take short flags and the five that came from the Redis side take long ones.
+    /// The two that came from the memcached side of the world take short flags and the six that came from the Redis side take long ones.
     const fn listen_flags(self) -> (&'static str, &'static str) {
         match self {
             Self::Memcache | Self::Pogocache => ("-p", "-s"),
@@ -280,7 +288,7 @@ impl fmt::Display for CacheKind {
     }
 }
 
-/// A name in a filename that is not one of the seven.
+/// A name in a filename that is not one of the eight.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct UnknownCache(pub String);
 
@@ -406,6 +414,25 @@ mod tests {
             [
                 "yodb",
                 "serve",
+                "--maxmemory",
+                "32gb",
+                "--threads",
+                "4",
+                "--unixsocket",
+                "/tmp/cb.sock",
+                "--no-port",
+            ]
+        );
+    }
+
+    // rugo is ours and it is not in the original, so this is the other command line with nobody to check it against.
+    // Same four things every other server gets and nothing else. There is no subcommand because the binary is a cache server and nothing else, and no persistence flag because there is no persistence to turn off.
+    #[test]
+    fn rugo_gets_the_same_four_things_everybody_else_gets() {
+        assert_eq!(
+            words(CacheKind::Rugo, &launch("rugo")),
+            [
+                "rugo",
                 "--maxmemory",
                 "32gb",
                 "--threads",

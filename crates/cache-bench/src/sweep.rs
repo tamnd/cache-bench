@@ -461,7 +461,10 @@ mod tests {
         let profile = profile();
         let cells = plan(&caches(&[CacheKind::Yo]), &profile);
         assert!(cells.iter().all(|c| c.cache == CacheKind::Yo));
-        assert_eq!(cells.len() as u64, profile.total_runs() / 7);
+        assert_eq!(
+            cells.len() as u64,
+            profile.total_runs() / CacheKind::ALL.len() as u64
+        );
     }
 
     // Asked for in any order, swept in the original's, because the order is a property of the sweep and not of the command line.

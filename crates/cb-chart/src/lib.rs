@@ -18,7 +18,7 @@ pub use axis::{Axis, Bars, Sizes, Tick, Unscalable};
 pub use canvas::{Canvas, Rect};
 pub use font::Face;
 pub use golden::{Golden, Mismatch, Tally};
-pub use palette::{BadColor, COLORS, Rgb, TooManyCaches, color};
+pub use palette::{BadColor, COLORS, NoColor, Rgb, color};
 pub use render::{Stamp, Undrawable, draw};
 pub use series::{BadCorpus, Chart, Corpus, Series};
 pub use spec::{Case, Metric, Percentile, Scale, Spec, Which};

@@ -215,7 +215,7 @@ mod tests {
                 }
             }
         }
-        assert_eq!(seen, 7 * 12 * 4 * 2 * 35);
+        assert_eq!(seen, 8 * 12 * 4 * 2 * 35);
     }
 
     #[test]

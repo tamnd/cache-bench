@@ -12,6 +12,7 @@ use std::str::FromStr;
 
 use serde::{Deserialize, Serialize};
 
+use crate::cache::CacheKind;
 use crate::cpuset::CpuSet;
 use crate::size::Bytes;
 
@@ -168,7 +169,8 @@ impl Profile {
     #[must_use]
     pub fn total_runs(&self) -> u64 {
         let cells = self.threads.len() * self.pipelines.len() * self.perf.len();
-        cells as u64 * u64::from(self.runs) * 7
+        // Taken from the engine list rather than written as a number, because the two went out of step the first time an engine was added and the only thing that said so was a test asserting a different literal.
+        cells as u64 * u64::from(self.runs) * CacheKind::ALL.len() as u64
     }
 
     /// Everything that would make this profile measure something other than what it says it measures.
@@ -394,10 +396,11 @@ mod tests {
     }
 
     // Two profiles, one twice the size of the other in every dimension, and the difference in wall clock is what makes it worth printing before starting.
+    // These numbers went up by a seventh when rugo became the eighth engine, which is a day of extra wall clock on the reference profile and is what an engine costs.
     #[test]
     fn a_sweep_is_five_figures_of_runs() {
-        assert_eq!(ours().get("reference").unwrap().total_runs(), 20832);
-        assert_eq!(ours().get("wsl32").unwrap().total_runs(), 10416);
+        assert_eq!(ours().get("reference").unwrap().total_runs(), 23808);
+        assert_eq!(ours().get("wsl32").unwrap().total_runs(), 11904);
     }
 
     #[test]

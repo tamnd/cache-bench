@@ -11,6 +11,7 @@
         // Garnet is .NET and is expected to be built for Release already. The framework in the path follows whatever the pinned Garnet targets, so this line and GARNET_FRAMEWORK in tools/provision/versions.env move together.
         "garnet": "../garnet/main/GarnetServer/bin/Release/net10.0/GarnetServer",
         "pogocache": "../pogocache/pogocache",
-        "yo": "../yo/target/release/yodb"
+        "yo": "../yo/target/release/yodb",
+        "rugo": "../rugo/target/release/rugo"
     }
 }
