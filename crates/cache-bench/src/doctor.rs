@@ -367,13 +367,20 @@ fn rustc() -> Option<String> {
 }
 
 /// One line for each profile, which is enough to see which one this machine is.
+///
+/// A profile that cannot be published from says so here rather than only at the `docs` that refuses it, since this listing is where somebody picks which one to give a machine to.
 fn print_line(name: &str, profile: &cb_core::Profile) {
     println!(
-        "{name:10} {} cores, cache {}, bench {}, {} runs",
+        "{name:10} {} cores, cache {}, bench {}, {} runs{}",
         profile.cores,
         profile.cache_pin,
         profile.bench_pin,
-        profile.total_runs()
+        profile.total_runs(),
+        if profile.publishable {
+            ""
+        } else {
+            ", not for publishing"
+        }
     );
 }
 

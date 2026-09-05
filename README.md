@@ -97,6 +97,8 @@ A sweep keeps a record of itself next to the numbers. `logs/sweep.jsonl` is one 
 
 The original was measured on a 32 core ARM64 AWS c8g.8xlarge with the cache pinned to 16 cores and the load generator pinned to the other 16. Profiles let the same harness run on a box that is not that, and every result file and every chart records which profile produced it. Mixing two profiles into one chart set without saying so is the failure this is built to prevent.
 
+A profile can also say that its numbers are not fit to publish. `smoke` is one: two thread counts, pipeline one and ten, three runs, on a four core box, which answers whether a change helped in minutes and answers nothing about how these engines compare. `docs` refuses to write a results README from a profile marked that way, since a README is where a measurement stops being a note to oneself. The sweep runs as often as is useful.
+
 ## Differences from the original
 
 Recorded in [divergences.md](divergences.md), with the reasoning for each one. The ones worth knowing about before reading any chart:

@@ -137,6 +137,20 @@ pub struct Profile {
     pub runs: u32,
     /// Whether this host measures cells with perf, without it, or both.
     pub perf: Vec<PerfMode>,
+    /// Whether numbers from this profile may be published.
+    ///
+    /// True unless the file says otherwise, because every profile written before this field existed describes a machine whose numbers were meant to be published.
+    ///
+    /// False is for a profile that exists to answer whether a change helped, on a box too small or too shared to produce a comparable number. `docs` refuses to generate a results README from one, which is the point at which a number stops being a note to oneself and starts being a claim. Nothing stops the sweep itself, because the whole use of such a profile is to sweep it often.
+    #[serde(default = "yes")]
+    pub publishable: bool,
+}
+
+/// The default for [`Profile::publishable`].
+///
+/// A function because serde's `default` wants one, and a named one rather than a closure because the name is what appears in the error when the field will not parse.
+const fn yes() -> bool {
+    true
 }
 
 impl Profile {

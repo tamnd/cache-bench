@@ -202,3 +202,15 @@ Linux only, and it says so rather than returning a zero. There is no portable `V
 
 No published throughput number moves. This adds a number that did not exist.
 
+## D24, a profile that cannot be published from
+
+The original has one machine in it and no way to say so. Here the machine is data, and once it is data somebody will point the harness at whatever box is free and get a chart out of it that looks exactly like a chart from a bench host.
+
+A profile carries `publishable`, true unless it says otherwise, and `docs` refuses to write a results README from one that is false. The sweep itself is not stopped, because the whole use of such a profile is to sweep it often.
+
+The distinction is between two different questions. Did that change help is answered on whatever box is to hand, by comparing a run against the run before it on the same box, and a four core machine answers it in minutes. How do these engines compare is answered on a machine chosen so the answer means something off it, and that is the question a results README reads as the answer to. The README is where the second claim gets made: it names the hardware, states the method, and carries the caveats, and a reader who has one in front of them is entitled to assume somebody meant it.
+
+`smoke` is the first such profile. Two thread counts, pipeline one and ten, three runs, a tenth of the reference's operations, and it exists to be run on `server1`.
+
+No published number moves. This refuses to produce one.
+

@@ -22,7 +22,7 @@ pub struct Divergence {
 }
 
 /// Every divergence, in the order `divergences.md` has them.
-pub const DIVERGENCES: [Divergence; 20] = [
+pub const DIVERGENCES: [Divergence; 21] = [
     Divergence {
         id: "D1 to D4",
         title: "the statistics",
@@ -141,6 +141,12 @@ pub const DIVERGENCES: [Divergence; 20] = [
         id: "D23",
         title: "a memory measurement",
         effect: "What each engine costs to hold a known number of keys, which the original does not measure at all. Reported as both a total and an overhead per entry, because they are different claims.",
+        moves: false,
+    },
+    Divergence {
+        id: "D24",
+        title: "a profile that cannot be published from",
+        effect: "A profile can say its numbers are not comparable off the box that produced them, and `docs` refuses a results README from one. The sweep still runs, because answering whether a change helped is what such a profile is for.",
         moves: false,
     },
 ];

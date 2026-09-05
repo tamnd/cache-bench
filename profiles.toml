@@ -59,3 +59,27 @@ maxmemory = "8gb"
 pipelines = [1, 10, 25, 50]
 runs = 31
 perf = ["no", "yes"]
+
+[profiles.smoke]
+description = "A small box, for finding out whether a change helped. Numbers from it are not comparable with anything."
+# Four cores, which is server1 and the smallest thing worth iterating on. A six core box runs this profile too and gets the same shape, because the point is that two runs of it are comparable with each other and with nothing else.
+cores = 4
+cache_pin = "0-1"
+bench_pin = "2-3"
+# Two points rather than twelve. Enough to see whether a change moved the curve or only moved one point on it.
+threads = [1, 2]
+bench_threads = 2
+connections_per_thread = 16
+# A tenth of the reference, because this profile is answering a question in minutes and the answer does not get better for taking an hour.
+operations = 10000
+size_range = "1-1024"
+# Scaled with maxmemory, the same way epyc8 is. A working set that outgrows the limit turns this into an eviction benchmark, and it would do it quietly.
+key_maximum = 250000
+maxmemory = "1gb"
+# Depth one is syscall bound and depth ten is where the batching work is meant to show, so those are the two that answer the question.
+pipelines = [1, 10]
+runs = 3
+perf = ["no"]
+# The whole reason this profile exists is to be run on a box that is not fit to publish from. `docs` refuses to write a results README from it.
+publishable = false
+

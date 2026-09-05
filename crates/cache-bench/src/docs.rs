@@ -58,6 +58,7 @@ pub(crate) fn run(args: &Args) -> Result<(), String> {
     }
     if let Some(dir) = &args.dir {
         let (machine, profile, versions) = about(dir, &args.profiles)?;
+        publishable(&profile, &machine.profile)?;
         let memory = memory(dir)?;
         let readme = Readme {
             machine: &machine,
@@ -127,6 +128,20 @@ fn about(
         .clone();
 
     Ok((machine, profile, versions(dir)?))
+}
+
+/// Refuse a results README from a profile whose numbers were never meant to leave the machine.
+///
+/// A README is where a measurement stops being a note to oneself and becomes a claim: it names the hardware, states the method, and reads as the answer to how these engines compare. A profile marked `publishable = false` describes a box too small or too shared to answer that, so the sweep is worth running often and the document is worth refusing every time.
+///
+/// The refusal is the whole command rather than the README alone. The chart indexes would generate happily, and a directory holding indexes and charts but no README is a directory that looks like somebody deleted the caveat.
+fn publishable(profile: &Profile, name: &str) -> Result<(), String> {
+    if profile.publishable {
+        return Ok(());
+    }
+    Err(format!(
+        "the {name} profile is marked publishable = false, so a sweep run under it has no results README. Its numbers answer whether a change helped on the machine that ran it, which is not the same question as how these engines compare, and this is the command where the difference stops being visible. Sweep {name} as often as is useful and publish from a profile that describes a machine the numbers are meant to come from."
+    ))
 }
 
 /// One version line per engine, read out of the results rather than out of a list somebody keeps.
@@ -203,5 +218,59 @@ fn memory(dir: &Path) -> Result<cb_mem::Report, String> {
     match fs::read_to_string(&path) {
         Ok(text) => cb_mem::Report::parse(&text).map_err(|e| format!("{}: {e}", path.display())),
         Err(_) => Ok(cb_mem::Report::default()),
+    }
+}
+
+#[cfg(test)]
+#[allow(clippy::unwrap_used)]
+mod tests {
+    use cb_core::Profiles;
+
+    use super::publishable;
+
+    fn profiles() -> Profiles {
+        let text = std::fs::read_to_string("../../profiles.toml").unwrap();
+        Profiles::parse(&text).unwrap()
+    }
+
+    #[test]
+    fn a_profile_that_describes_a_bench_host_generates_a_readme() {
+        let all = profiles();
+        for name in ["epyc8", "wsl32", "reference"] {
+            assert_eq!(publishable(all.get(name).unwrap(), name), Ok(()), "{name}");
+        }
+    }
+
+    // The point of the flag. A fast loop exists to answer whether a change helped, and the box it runs on is too small to answer how these engines compare, so the document that reads as the second answer is refused.
+    #[test]
+    fn a_fast_loop_profile_is_refused_and_says_what_to_sweep_instead() {
+        let all = profiles();
+        let err = publishable(all.get("smoke").unwrap(), "smoke").unwrap_err();
+        assert!(err.contains("publishable = false"), "{err}");
+        assert!(err.contains("smoke"), "{err}");
+    }
+
+    // Every profile written before the field existed describes a machine whose numbers were meant to be published, so the absent case has to be the permissive one or those directories stop regenerating.
+    #[test]
+    fn a_profile_that_does_not_mention_it_is_publishable() {
+        let text = "\
+[profiles.quiet]
+description = \"a profile written before the flag existed\"
+cores = 4
+cache_pin = \"0-1\"
+bench_pin = \"2-3\"
+threads = [1]
+bench_threads = 2
+connections_per_thread = 16
+operations = 10000
+size_range = \"1-1024\"
+key_maximum = 250000
+maxmemory = \"1gb\"
+pipelines = [1]
+runs = 3
+perf = [\"no\"]
+";
+        let all = Profiles::parse(text).unwrap();
+        assert_eq!(publishable(all.get("quiet").unwrap(), "quiet"), Ok(()));
     }
 }
