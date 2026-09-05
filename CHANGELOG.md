@@ -21,6 +21,9 @@ What each release costs you, in the order the releases happened. New entries go 
 
 ### Fixed
 
+- `YO_REF` was pinned below the release that added `yodb serve --threads`, so yo was started with a flag it rejects and exited before it listened. Every other engine here is given a thread count and yo was too, against a binary that had no such option. Found on the first real measurement rather than by reading, which is what `doctor --deep` is for and what it would have caught had the machine been quiet enough to run it.
+- A test in `cb-memtier` failed on CI about one run in ten with `Text file busy`. It writes a shell script and runs it, and a `fork` in another test's thread copies the write handle it is still holding, so the exec lands in a window where the kernel will not run the file. Writing a script and starting a process now take the same lock, which is what makes the two never overlap.
+- `cache-bench mem` defaulted to ten million entries, which does not divide by the 256 clients the reference and wsl32 profiles run, so the command refused its own default. The default is now derived from the profile: ten million rounded down to something its clients divide. A count given on the command line is still refused rather than adjusted.
 - `install.sh` checking out a branch ref gave the commit the last run left behind, forever. `git fetch origin` moves `origin/main` and leaves the local `main` alone, so the build was skipped as already current. It now prefers the remote-tracking name where there is one, which resolves identically for every tag already pinned.
 
 ## 0.5.1 - 2026-09-04

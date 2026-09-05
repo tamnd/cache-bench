@@ -157,6 +157,23 @@ mod tests {
             .clone()
     }
 
+    /// Writing an executable and starting a process may not overlap inside one process.
+    ///
+    /// A `fork` in one thread copies every descriptor the process has open, including the write handle another thread is holding on the script it is halfway through creating, and the child keeps that copy until it execs. A thread that runs its own script inside that window is told ETXTBSY, because the kernel will not execute a file somebody has open for writing. Rust opens files close-on-exec, so the window is microseconds wide, and CI found it anyway.
+    ///
+    /// So a script is written under this lock and a process is started under it, which is what makes those two things never overlap. It costs the parallelism of four tests that take milliseconds each.
+    #[cfg(unix)]
+    static EXEC: std::sync::Mutex<()> = std::sync::Mutex::new(());
+
+    /// Hold [`EXEC`] until the end of the statement that took it.
+    ///
+    /// A poisoned lock is taken anyway. It guards no data, only an ordering, and a test that panicked while holding it has already reported the thing worth reporting.
+    #[cfg(unix)]
+    fn alone() -> std::sync::MutexGuard<'static, ()> {
+        EXEC.lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner)
+    }
+
     /// A stand in for memtier, written as a shell script so that a real process is really started.
     ///
     /// Named after the test that asked for it, because these run at the same time and a shared path is a test that measures whichever one wrote last.
@@ -165,6 +182,7 @@ mod tests {
         use std::io::Write as _;
         use std::os::unix::fs::PermissionsExt as _;
 
+        let _held = alone();
         let path =
             std::env::temp_dir().join(format!("cb-fake-memtier-{}-{label}", std::process::id()));
         let mut file = std::fs::File::create(&path).expect("writes the fake memtier");
@@ -218,6 +236,7 @@ mod tests {
         let out = std::env::temp_dir().join(format!("cb-drive-{}.json", std::process::id()));
         let log = std::env::temp_dir().join(format!("cb-drive-{}.log", std::process::id()));
 
+        let _held = alone();
         let load = super::run(
             &binary,
             &invocation(&profile, socket, &out),
@@ -249,6 +268,7 @@ mod tests {
 
         // A memtier that exits without writing anything, which is what a memtier that could not connect does.
         let binary = script("quiet", "exit 0\n");
+        let _held = alone();
         let why = super::run(
             &binary,
             &invocation(&profile, Path::new("/tmp/cb-drive.sock"), &out),
@@ -273,6 +293,7 @@ mod tests {
         let log = std::env::temp_dir().join(format!("cb-hang-{}.log", std::process::id()));
 
         let binary = script("hang", "echo waiting\nwhile true; do sleep 0.2; done\n");
+        let _held = alone();
         let why = super::run(
             &binary,
             &invocation(&profile, Path::new("/tmp/cb-drive.sock"), &out),
@@ -298,6 +319,7 @@ mod tests {
         let out = std::env::temp_dir().join(format!("cb-short-{}.json", std::process::id()));
         let log = std::env::temp_dir().join(format!("cb-short-{}.log", std::process::id()));
 
+        let _held = alone();
         let why = super::run(
             &binary,
             &invocation(&profile, Path::new("/tmp/cb-drive.sock"), &out),
