@@ -6,7 +6,7 @@ This is a Rust port of [tidwall/cache-benchmarks](https://github.com/tidwall/cac
 
 ## Status
 
-Every stage is written. `doctor`, `run`, `sweep`, `choose`, `combine`, `chart`, `docs` and `verify` all work: `run` measures one cell and writes one file, `sweep` is the loop that measures the other ten thousand and keeps a record of what it did, and everything downstream of those files has been working since the chart milestone. What is missing is the hardware gate that says all eight servers come up and go away again on a real Linux box, and the results themselves. The [milestones](https://github.com/tamnd/cache-bench/milestones) say what each stage has to land and what it is gated on.
+Every stage is written. `doctor`, `run`, `sweep`, `mem`, `choose`, `combine`, `chart`, `docs` and `verify` all work: `run` measures one cell and writes one file, `sweep` is the loop that measures the other ten thousand and keeps a record of what it did, and everything downstream of those files has been working since the chart milestone. What is missing is the hardware gate that says all eight servers come up and go away again on a real Linux box, and the results themselves. The [milestones](https://github.com/tamnd/cache-bench/milestones) say what each stage has to land and what it is gated on.
 
 No results have been published. When they are, they will come with the raw `output.json` next to them, so anyone can redraw every chart without trusting us.
 
@@ -29,6 +29,14 @@ The x axis of every chart is that thread count, swept from 1 to 16. Each point i
 
 Throughput comes out in Kops/sec, latency in microseconds at MIN, AVG, P50, P90, P99, P99.9, P99.99 and MAX, and CPU cycles in cycles per operation from `perf`. That is 154 charts, in linear and logarithmic scale.
 
+### Memory
+
+Separately, and not part of any run. `cache-bench mem` starts each server, gives it a known number of distinct keys, lets it settle and reads the largest resident set it ever had. The key count is known rather than estimated: the filling pass writes one operation per key over a range the clients divide evenly, so nothing is written twice and nothing asks the server for a count it defines its own way.
+
+It reports two numbers because there are two claims. Total bytes per entry is the peak divided by the keys in it, which is what a machine has to have. Overhead bytes per entry is what is left after the keys and the values themselves, which is what a design controls. At a hundred-odd bytes of payload per key an index that got twice as small halves the second and moves the first by a few percent, so quoting one of them is picking the flattering number.
+
+It reports and does not judge. Garnet sizes its index at startup and Dragonfly preallocates per proactor, so the baseline each server held before a single key went in is recorded beside the peak rather than subtracted from it. Linux only, because there is no portable high water mark and no number here comes from a machine without `/proc`.
+
 ## What it does not measure
 
 No expiry, no eviction, no mixed command set, no large values, no network, no replication, no persistence, no multi key operations. It is a hot path measurement of two commands. Numbers from it should not be used to say one engine is faster than another in general, and the results README will say so where the numbers appear.
@@ -38,6 +46,7 @@ No expiry, no eviction, no mixed command set, no large values, no network, no re
 ```
 crates/cb-core      types, the JSON model, config, profiles
 crates/cb-cache     the eight cache adapters and process lifecycle
+crates/cb-mem       the memory measurement, its plan and its result file
 crates/cb-memtier   the memtier driver and its output parser
 crates/cb-perf      the perf driver, the PMU probe, CSV parsing
 crates/cb-stats     run selection and aggregation
@@ -68,6 +77,7 @@ cache-bench doctor  --profile wsl32        what this host can and cannot measure
 cache-bench doctor  --profile wsl32 --deep every server started once and stopped again
 cache-bench run     redis --threads 8 --pipeline 10 --perf no --run 1
 cache-bench sweep   --profile wsl32        the whole matrix, restartable
+cache-bench mem     --profile wsl32        what each engine costs to hold ten million keys
 cache-bench choose  --dir results/wsl32
 cache-bench combine --dir results/wsl32
 cache-bench chart   --dir results/wsl32 --profile wsl32

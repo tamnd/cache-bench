@@ -22,7 +22,7 @@ pub struct Divergence {
 }
 
 /// Every divergence, in the order `divergences.md` has them.
-pub const DIVERGENCES: [Divergence; 19] = [
+pub const DIVERGENCES: [Divergence; 20] = [
     Divergence {
         id: "D1 to D4",
         title: "the statistics",
@@ -135,6 +135,12 @@ pub const DIVERGENCES: [Divergence; 19] = [
         id: "D22",
         title: "a colour belongs to a server",
         effect: "A bar colour is looked up by which server it is rather than by where the server sorted in that sweep, so the same engine is the same colour in every chart.",
+        moves: false,
+    },
+    Divergence {
+        id: "D23",
+        title: "a memory measurement",
+        effect: "What each engine costs to hold a known number of keys, which the original does not measure at all. Reported as both a total and an overhead per entry, because they are different claims.",
         moves: false,
     },
 ];

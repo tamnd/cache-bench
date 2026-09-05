@@ -409,13 +409,13 @@ pub(crate) fn cpus() -> Option<u32> {
     clippy::unnecessary_wraps,
     reason = "the option is the other platform's answer, and the two have to have the same signature"
 )]
-fn pin(cpus: &cb_core::CpuSet) -> Option<&cb_core::CpuSet> {
+pub(crate) fn pin(cpus: &cb_core::CpuSet) -> Option<&cb_core::CpuSet> {
     Some(cpus)
 }
 
 /// No affinity call here, so nothing is pinned.
 #[cfg(not(target_os = "linux"))]
-const fn pin(_cpus: &cb_core::CpuSet) -> Option<&cb_core::CpuSet> {
+pub(crate) const fn pin(_cpus: &cb_core::CpuSet) -> Option<&cb_core::CpuSet> {
     None
 }
 

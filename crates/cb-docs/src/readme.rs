@@ -36,6 +36,10 @@ pub struct Readme<'a> {
     pub have: &'a BTreeSet<String>,
     /// Which statistics produced the numbers.
     pub compat: Compat,
+    /// What each engine cost to hold a known number of keys, where that was measured.
+    ///
+    /// Empty on a results directory with no `memory.json` in it, which is every one produced before `cache-bench mem` existed, and the section is left out rather than drawn empty.
+    pub memory: &'a [cb_mem::Row],
 }
 
 impl Readme<'_> {
@@ -81,6 +85,7 @@ impl Readme<'_> {
         self.hardware(&mut out);
         self.table(&mut out);
         self.charts(&mut out);
+        self.memory(&mut out);
         method(&mut out);
         differences(&mut out);
         caveat(&mut out);
@@ -324,6 +329,57 @@ impl Readme<'_> {
             .into_iter()
             .filter(|kind| self.versions.contains_key(kind.name()))
     }
+
+    /// What each engine cost to hold the keys.
+    ///
+    /// Left out entirely where there is no measurement, rather than drawn as an empty table, because an empty table reads like a result.
+    fn memory(&self, out: &mut String) {
+        if self.memory.is_empty() {
+            return;
+        }
+        let _ = writeln!(out, "## Memory\n");
+        let _ = writeln!(
+            out,
+            "Measured separately from the charts above, by `cache-bench mem`, and not part of any run. Each server was started, given a known number of distinct keys, left to settle, and then asked what the largest resident set it ever had was. The count of keys is known rather than estimated: the filling pass writes exactly one operation per key over a key range the clients divide evenly, so no key is written twice.\n"
+        );
+        let _ = writeln!(
+            out,
+            "**These are two different claims and both are here on purpose.** Total is the whole resident set divided by the keys in it, which is what a machine has to have. Overhead is what is left after the keys and the values themselves, which is what a design controls. At this payload size an index that got twice as small halves the second and moves the first by a few percent, so a memory claim that quotes only one of them is a claim that picked the flattering number.\n"
+        );
+        let _ = writeln!(
+            out,
+            "| Server | Version | Entries | Peak RSS | Baseline RSS | Total B/entry | Overhead B/entry |\n|---|---|---:|---:|---:|---:|---:|"
+        );
+        for row in self.memory {
+            let _ = writeln!(
+                out,
+                "| {} | {} | {} | {} | {} | {:.1} | {:.1} |",
+                row.cache,
+                row.version,
+                row.entries,
+                cb_core::Bytes(row.peak_rss),
+                cb_core::Bytes(row.baseline_rss),
+                row.total_per_entry(),
+                row.overhead_per_entry()
+            );
+        }
+        let _ = writeln!(out);
+        let _ = writeln!(
+            out,
+            "Baseline is what the server held before a single key went in. It is reported and not subtracted, because an engine that reserves memory up front has a peak that is partly a configuration rather than a consequence of the keys, and subtracting it would hide which engines those are instead of showing it.\n"
+        );
+        let notes: Vec<&cb_mem::Row> = self.memory.iter().filter(|r| !r.note.is_empty()).collect();
+        if !notes.is_empty() {
+            for row in notes {
+                let _ = writeln!(out, "- {}", row.note);
+            }
+            let _ = writeln!(out);
+        }
+        let _ = writeln!(
+            out,
+            "A peak is a high water mark and not a curve. An engine that peaked while rehashing and then released is reported at the peak, because a machine that cannot hold the peak cannot run the engine.\n"
+        );
+    }
 }
 
 /// The short version of how a number got made.
@@ -488,6 +544,7 @@ mod tests {
             versions: &versions(),
             have,
             compat: Compat::Corrected,
+            memory: &[],
         }
         .render()
     }
@@ -561,10 +618,86 @@ mod tests {
             versions: &with,
             have: &have,
             compat: Compat::Corrected,
+            memory: &[],
         }
         .render();
         assert!(text.contains("See it with Garnet"), "{text}");
         assert!(text.contains("case_1"), "{text}");
+    }
+
+    fn memory_rows() -> Vec<cb_mem::Row> {
+        vec![
+            cb_mem::Row {
+                cache: "redis".to_owned(),
+                version: "v=8.2.1".to_owned(),
+                entries: 1_000_000,
+                peak_rss: 260_000_000,
+                baseline_rss: 9_000_000,
+                payload_bytes: 130_000_000,
+                processes: 1,
+                note: String::new(),
+            },
+            cb_mem::Row {
+                cache: "garnet".to_owned(),
+                version: "1.0.83".to_owned(),
+                entries: 1_000_000,
+                peak_rss: 900_000_000,
+                baseline_rss: 400_000_000,
+                payload_bytes: 130_000_000,
+                processes: 1,
+                note: "Garnet sizes its index at startup.".to_owned(),
+            },
+        ]
+    }
+
+    fn with_memory(rows: &[cb_mem::Row]) -> String {
+        let have = everything();
+        Readme {
+            machine: &machine(Pmu::Present),
+            profile: &profile(),
+            versions: &versions(),
+            have: &have,
+            compat: Compat::Corrected,
+            memory: rows,
+        }
+        .render()
+    }
+
+    // An empty table reads like a result, and every results directory produced before `cache-bench mem` existed has no measurement in it.
+    #[test]
+    fn a_directory_with_no_memory_measurement_has_no_memory_section() {
+        let text = with_memory(&[]);
+        assert!(!text.contains("## Memory"), "{text}");
+    }
+
+    #[test]
+    fn a_measurement_puts_every_engine_in_the_table() {
+        let text = with_memory(&memory_rows());
+        assert!(text.contains("## Memory"));
+        assert!(text.contains("| redis | v=8.2.1 |"), "{text}");
+        assert!(text.contains("| garnet | 1.0.83 |"), "{text}");
+    }
+
+    // The whole reason there are two columns. A README that printed one of them would be a README that picked the flattering number.
+    #[test]
+    fn the_memory_section_reports_both_claims_and_says_they_are_different() {
+        let text = with_memory(&memory_rows());
+        assert!(text.contains("Total B/entry"), "{text}");
+        assert!(text.contains("Overhead B/entry"), "{text}");
+        assert!(text.contains("two different claims"), "{text}");
+        // 260 MB over a million keys is 260 bytes each, and 130 MB of that is payload.
+        assert!(text.contains("| 260.0 | 130.0 |"), "{text}");
+    }
+
+    // An engine that reserves its memory up front has a peak that is partly a configuration, and a number for it with nothing saying so reads as waste.
+    #[test]
+    fn an_engine_that_preallocates_carries_its_note_and_the_others_add_none() {
+        let text = with_memory(&memory_rows());
+        assert!(
+            text.contains("- Garnet sizes its index at startup."),
+            "{text}"
+        );
+        assert_eq!(text.matches("- Garnet sizes").count(), 1);
     }
 
     // What the document says it links to has to be what it links to, because the index cross check trusts it.
@@ -577,6 +710,7 @@ mod tests {
             versions: &versions(),
             have: &have,
             compat: Compat::Corrected,
+            memory: &[],
         };
         let text = readme.render();
         for file in readme.covers() {

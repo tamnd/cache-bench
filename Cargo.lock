@@ -101,6 +101,7 @@ dependencies = [
  "cb-chart",
  "cb-core",
  "cb-docs",
+ "cb-mem",
  "cb-memtier",
  "cb-perf",
  "cb-stats",
@@ -150,6 +151,17 @@ version = "0.5.1"
 dependencies = [
  "cb-chart",
  "cb-core",
+ "cb-mem",
+]
+
+[[package]]
+name = "cb-mem"
+version = "0.5.1"
+dependencies = [
+ "cb-core",
+ "serde",
+ "serde_json",
+ "thiserror",
 ]
 
 [[package]]

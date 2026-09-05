@@ -6,6 +6,7 @@ members = [
     "crates/cb-chart",
     "crates/cb-core",
     "crates/cb-docs",
+    "crates/cb-mem",
     "crates/cb-memtier",
     "crates/cb-perf",
     "crates/cb-stats",
@@ -32,6 +33,7 @@ cb-cache = { path = "crates/cb-cache", version = "0.5.1" }
 cb-chart = { path = "crates/cb-chart", version = "0.5.1" }
 cb-core = { path = "crates/cb-core", version = "0.5.1" }
 cb-docs = { path = "crates/cb-docs", version = "0.5.1" }
+cb-mem = { path = "crates/cb-mem", version = "0.5.1" }
 cb-memtier = { path = "crates/cb-memtier", version = "0.5.1" }
 cb-perf = { path = "crates/cb-perf", version = "0.5.1" }
 cb-stats = { path = "crates/cb-stats", version = "0.5.1" }

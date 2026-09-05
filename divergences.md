@@ -183,3 +183,22 @@ The second one was luck until now. `yo` sorts after all six of the original's na
 So the colour is looked up by name here, from a table that says which server gets which colour, and `color` takes a cache name rather than an index. The original's six keep the original's six colours permanently, which is what the positional rule was for and what it could not actually promise. A results file naming a server this build has no colour for is refused when the corpus is built, naming the server, rather than drawn in a colour that a reader would take for a result.
 
 No published number moves. What moves is which chart a colour is the same on.
+
+## D23, a memory measurement
+
+The original measures throughput, latency and CPU cycles, and nothing else. There is no memory number anywhere in it, and there was none here either, which means half of what somebody comparing two cache servers actually wants to know has never had a metric in this project.
+
+`cache-bench mem` is that metric. It starts a server, notes what it holds before anything is in it, writes a known number of distinct keys, lets it settle, and reads the largest resident set it ever had out of `VmHWM`. It is not part of a run and it does not touch the charts; it writes its own `memory.json` next to them and the generated results README grows a section from it.
+
+Two things about it are deliberate and would be easy to get wrong.
+
+The count of keys is known rather than estimated. memtier reports operations, and a SET pass that writes the same key twice leaves one entry behind, so a bytes-per-entry figure taken over operations is wrong by however much the key pattern overlapped. The pass here is sized so that the clients divide the key range evenly and each writes its own slice exactly once, and an entry count that does not divide is refused rather than rounded. Nothing asks the server how many keys it has: `DBSIZE` and `stats curr_items` are two different questions with two different answers, and an engine-specific denominator is the kind of special handling the fairness rules exist to prevent.
+
+And it reports two numbers, not one. Total bytes per entry is the peak divided by the keys in it, which is what a machine has to have. Overhead bytes per entry is what is left after the keys and the values themselves, which is what a design controls. At a hundred-odd bytes of payload per key an index that got twice as small halves the second and moves the first by a few percent, so a memory claim quoting one of them is a claim that picked the flattering number. Both are in the file, both are in the README, and the README says in as many words that they are different claims.
+
+It reports and it does not judge. Garnet sizes its index at startup and Dragonfly preallocates per proactor, so part of a peak for those is a configuration rather than a consequence of the keys. The baseline is recorded next to the peak rather than subtracted from it, because subtracting would hide which engines those are instead of showing it, and each of them carries a sentence in its own row.
+
+Linux only, and it says so rather than returning a zero. There is no portable `VmHWM`, and no number this project publishes comes from a machine without `/proc`.
+
+No published throughput number moves. This adds a number that did not exist.
+

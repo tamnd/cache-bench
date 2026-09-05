@@ -58,12 +58,14 @@ pub(crate) fn run(args: &Args) -> Result<(), String> {
     }
     if let Some(dir) = &args.dir {
         let (machine, profile, versions) = about(dir, &args.profiles)?;
+        let memory = memory(dir)?;
         let readme = Readme {
             machine: &machine,
             profile: &profile,
             versions: &versions,
             have: &have,
             compat: args.compat,
+            memory: &memory.rows,
         };
         wanted.push((out.join(readme.file()), readme.render()));
     }
@@ -191,4 +193,15 @@ fn destination(args: &Args) -> Result<PathBuf, String> {
     args.dir
         .clone()
         .ok_or_else(|| "pass --out somewhere to put the documents".to_owned())
+}
+
+/// What `cache-bench mem` left in this directory, if it was ever run against it.
+///
+/// A directory with no `memory.json` is every directory produced before that command existed, so it is an empty measurement rather than an error, and the README leaves the section out. A file that is there and will not parse is an error, because that is a measurement somebody made and this would otherwise publish a results directory silently missing it.
+fn memory(dir: &Path) -> Result<cb_mem::Report, String> {
+    let path = dir.join("memory.json");
+    match fs::read_to_string(&path) {
+        Ok(text) => cb_mem::Report::parse(&text).map_err(|e| format!("{}: {e}", path.display())),
+        Err(_) => Ok(cb_mem::Report::default()),
+    }
 }

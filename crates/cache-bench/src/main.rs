@@ -10,6 +10,7 @@ mod docs;
 mod doctor;
 mod host;
 mod lock;
+mod mem;
 mod results;
 mod run;
 mod sweep;
@@ -37,6 +38,8 @@ enum Command {
     Run(run::Args),
     /// Measure the whole matrix, restartable.
     Sweep(sweep::Args),
+    /// Measure what each engine costs to hold a known number of keys.
+    Mem(mem::Args),
     /// Reduce each cell's runs to a median, a best, a worst and an average.
     Choose(choose::Args),
     /// Gather every chosen file into the one file the charts read.
@@ -55,6 +58,7 @@ fn main() -> ExitCode {
         Command::Doctor(args) => doctor::run(args),
         Command::Run(args) => run::run(args),
         Command::Sweep(args) => sweep::run(args),
+        Command::Mem(args) => mem::run(args),
         Command::Choose(args) => choose::run(args),
         Command::Combine(args) => combine::run(args),
         Command::Chart(args) => chart::run(args),
