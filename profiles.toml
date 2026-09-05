@@ -43,6 +43,30 @@ runs = 31
 # Running the perf half of the matrix here would produce ten thousand result files whose only effect is to be filtered back out by the chart layer.
 perf = ["no"]
 
+[profiles.wsl32coarse]
+description = "The wsl32 box and the wsl32 working set, sampled coarsely so a number exists before the full matrix finishes."
+# A run of this matrix is a ninety second warmup and two passes of twenty-five million operations, so a cell is minutes and the full wsl32 sweep is weeks.
+# That is the right shape for a published curve and the wrong shape for finding out where an engine stands, and waiting weeks for the first throughput number is how a project ends up publishing no throughput number at all.
+#
+# What this profile gives up is resolution and confidence, and nothing else.
+# The topology, the working set, the key maximum, the memory ceiling and the four pipeline depths are wsl32's exactly, so a cell here measures the same thing a cell there measures and the two can be compared cell for cell.
+# What it does not give is the twelve point thread curve or the thirty-one run spread, so a number from here is a position rather than a plot, and a difference of a few per cent between two engines is inside what five runs can tell apart.
+cores = 32
+cache_pin = "0-15"
+bench_pin = "16-31"
+# One thread, half the cache's cores, and all of them. Enough to say whether an engine scales, not enough to say how it scales.
+threads = [1, 8, 16]
+bench_threads = 16
+connections_per_thread = 16
+operations = 100000
+size_range = "1-1024"
+key_maximum = 10000000
+maxmemory = "32gb"
+pipelines = [1, 10, 25, 50]
+# Five rather than thirty-one. The trim is ten per cent and nothing below eleven runs, so all five of these are selected from and none is thrown away.
+runs = 5
+perf = ["no"]
+
 [profiles.epyc8]
 description = "8 core x86_64. A quarter of the reference, scaled coherently. Real PMU."
 cores = 8
