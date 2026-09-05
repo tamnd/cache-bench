@@ -51,9 +51,11 @@ pub(crate) struct Args {
     cache: Option<CacheKind>,
     /// How many distinct keys to leave in each server.
     ///
-    /// It has to divide by the number of clients the profile runs, which is what makes the count known rather than estimated.
-    #[arg(long, default_value_t = 10_000_000, value_name = "N")]
-    entries: u64,
+    /// It has to divide by the number of clients the profile runs, which is what makes the count known rather than estimated. A number given here that does not divide is refused rather than adjusted, because somebody who typed a count meant that count.
+    ///
+    /// Left out, it is about ten million, rounded down to something the profile's clients divide. A fixed default cannot be right for every profile: ten million does not divide by the 256 clients the reference profile runs, so the default has to be a function of the profile or it is a default that always fails.
+    #[arg(long, value_name = "N")]
+    entries: Option<u64>,
     /// How many I/O threads to give each server.
     ///
     /// It does not change what an engine holds, so this is here to make the pass finish rather than to shape the result.
@@ -97,7 +99,11 @@ pub(crate) fn run(args: &Args) -> Result<(), String> {
     profile.check().map_err(|e| e.to_string())?;
     check_machine(profile, cpus())?;
 
-    let plan = Plan::new(profile, args.entries).map_err(|e| e.to_string())?;
+    let plan = Plan::new(
+        profile,
+        args.entries.unwrap_or_else(|| about_ten_million(profile)),
+    )
+    .map_err(|e| e.to_string())?;
     let payload = plan.payload(profile);
     check_headroom(payload, profile)?;
 
@@ -266,6 +272,20 @@ fn fill_and_read(
     Ok((before.peak, after.peak, after.processes))
 }
 
+/// The default entry count for a profile: about ten million, and something its clients divide.
+///
+/// Ten million is enough that the per-entry figure is about the data structure rather than about whatever an engine allocated at startup, and small enough that eight engines each fill in a few minutes.
+///
+/// Rounded down rather than up so the answer stays under the headroom check for a profile that was sized against ten million, and never below one client's worth, which is the smallest thing that can be divided at all.
+fn about_ten_million(profile: &Profile) -> u64 {
+    let clients = u64::from(profile.connections_per_thread) * u64::from(profile.bench_threads);
+    if clients == 0 {
+        // Plan::new refuses this with a better sentence than anything that could be said here.
+        return 10_000_000;
+    }
+    (10_000_000 / clients).max(1) * clients
+}
+
 /// A limit the working set would reach turns this into an eviction benchmark.
 ///
 /// Checked against the payload rather than against a guess at the overhead, and given a wide margin, because the thing being caught is a limit that is the wrong order of magnitude rather than one that is close.
@@ -324,7 +344,7 @@ fn human(bytes: u64) -> String {
 mod tests {
     use cb_core::{CacheKind, Profiles};
 
-    use super::{check_headroom, human, note};
+    use super::{about_ten_million, check_headroom, human, note};
 
     fn profile() -> cb_core::Profile {
         let text = std::fs::read_to_string("../../profiles.toml").unwrap();
@@ -333,6 +353,26 @@ mod tests {
             .get("wsl32")
             .unwrap()
             .clone()
+    }
+
+    // A fixed default cannot divide by every profile's client count, and a default that always fails is not a default.
+    #[test]
+    fn the_default_count_divides_by_the_clients_of_every_profile_there_is() {
+        let text = std::fs::read_to_string("../../profiles.toml").unwrap();
+        let all = Profiles::parse(&text).unwrap();
+        for (name, profile) in &all.profiles {
+            let entries = about_ten_million(profile);
+            assert!(
+                cb_mem::Plan::new(profile, entries).is_ok(),
+                "{name} would refuse its own default of {entries}"
+            );
+            // Near enough ten million to be about the data structure rather than about whatever the engine allocated at startup.
+            assert!(entries > 9_000_000, "{name} defaults to only {entries}");
+            assert!(
+                entries <= 10_000_000,
+                "{name} defaults to {entries}, above the target it rounds down from"
+            );
+        }
     }
 
     #[test]
