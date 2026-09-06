@@ -190,6 +190,22 @@ mod tests {
         }
     }
 
+    // Every binary is named by path and none of them is looked up on PATH.
+    //
+    // A sweep is started over ssh or from a script, and a shell like that reads no profile, so anything the provisioner symlinked into a home directory is not on PATH and a bare name resolves to nothing. That is how it failed: the load generator was the one bare name in the file, and the check for it came back saying it did not answer --version.
+    #[test]
+    fn our_own_config_names_everything_by_path() {
+        let cfg = Config::parse(OURS, Some(Arch::X86_64)).unwrap();
+        for name in cfg.names() {
+            let path = cfg.path(name).unwrap();
+            assert!(
+                path.parent().is_some_and(|p| p != std::path::Path::new("")),
+                "{name} is {}, which is a name to be looked up on PATH rather than a path",
+                path.display()
+            );
+        }
+    }
+
     // Nothing in the file is there by accident, so a key that is not a server and is not memtier is a typo.
     #[test]
     fn our_own_config_has_nothing_else_in_it() {

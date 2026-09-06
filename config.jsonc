@@ -3,7 +3,8 @@
     //
     // ${arch} is replaced with x86_64 or aarch64, which is only needed for the Dragonfly release binary.
     "paths": {
-        "memtier": "memtier_benchmark",
+        // The original names this one on PATH and every other one by path, and that works there because the original is run by hand from a login shell. Every run here is started over ssh or from a script, and a shell like that reads no profile, so a load generator installed into ~/.local/bin is invisible and the sweep fails on its first run. This names the copy the provisioner built, which is where it is on both hosts.
+        "memtier": "../memtier_benchmark/memtier_benchmark",
         "memcache": "../memcached/memcached",
         "dragonfly": "../dragonfly/dragonfly-${arch}",
         "valkey": "../valkey/src/valkey-server",
