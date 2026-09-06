@@ -62,6 +62,19 @@ say() {
     printf '\n== %s\n' "$*"
 }
 
+# rustup puts cargo on the path by editing the shell profile, and a profile is
+# not read by a non-interactive shell, which is what `ssh host ./install.sh` is.
+# So a box with a perfectly good toolchain on it fails at the cargo line with
+# `cargo: command not found`, and it fails there rather than at the start,
+# after the clone has already succeeded, which reads like a broken checkout.
+# The `rust` part sources this itself, but only when it is one of the parts
+# asked for, and adding one engine to an already provisioned box is exactly the
+# run that does not ask for it.
+if [ -f "$HOME/.cargo/env" ]; then
+    # shellcheck disable=SC1091
+    . "$HOME/.cargo/env"
+fi
+
 # What .NET calls this machine, which is not what uname calls it.
 dotnet_arch() {
     case "$(uname -m)" in
