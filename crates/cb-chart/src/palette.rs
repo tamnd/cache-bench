@@ -93,7 +93,7 @@ pub struct BadColor(pub String);
 
 /// A cache server in a results file that this build has no colour for.
 ///
-/// Which means this build has never heard of it, since every server it knows is in [`ASSIGNED`] and a test says so.
+/// Which means this build has never heard of it, since every server it knows has a row in the `ASSIGNED` table in this module and a test says so. That table is private, so this is a name rather than a link.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct NoColor(pub String);
 
