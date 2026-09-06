@@ -101,6 +101,8 @@ A profile can also say that its numbers are not fit to publish. `smoke` is one: 
 
 Between the two there is a profile that publishes but samples coarsely. A run is a warmup plus fifty million operations, so a full `wsl32` matrix of eight engines at twelve thread counts, four pipeline depths and thirty-one runs is weeks of machine time, and a first throughput number that arrives in weeks is one that in practice does not arrive. `wsl32coarse` is the same box, the same working set and the same four depths at three thread counts and five runs, which is a day. It gives up the shape of the thread curve and the tightness of the spread and gives up nothing else, so its cells compare directly with `wsl32`'s.
 
+`epyc8coarse` is the same trim applied to `epyc8`, and it drops the cycles half of the matrix as well, since that half doubles the time and a cycles question about one engine is better answered with `perf` than with a sweep of eight.
+
 ## Differences from the original
 
 Recorded in [divergences.md](divergences.md), with the reasoning for each one. The ones worth knowing about before reading any chart:

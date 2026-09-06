@@ -84,6 +84,31 @@ pipelines = [1, 10, 25, 50]
 runs = 31
 perf = ["no", "yes"]
 
+[profiles.epyc8coarse]
+description = "The epyc8 box and the epyc8 working set, sampled coarsely so a number exists before the full matrix finishes."
+# What wsl32coarse is to wsl32, this is to epyc8, and for the same reason.
+# The full epyc8 matrix is four thread counts, four pipeline depths, thirty-one runs and both halves of the perf flag, which is eight thousand cells and weeks of machine time.
+#
+# The topology, the working set, the key maximum, the memory ceiling and the four pipeline depths are epyc8's exactly, so a cell here measures the same thing a cell there measures and the two can be compared cell for cell.
+# What it gives up is the thread curve, the spread and the cycles counters, so a number from here is a position rather than a plot.
+cores = 8
+cache_pin = "0-3"
+bench_pin = "4-7"
+# One thread, half the cache's cores, and all of them, which is the same three points wsl32coarse takes.
+threads = [1, 2, 4]
+bench_threads = 4
+connections_per_thread = 16
+operations = 100000
+size_range = "1-1024"
+key_maximum = 2500000
+maxmemory = "8gb"
+pipelines = [1, 10, 25, 50]
+# Five rather than thirty-one, which is what the trim rule allows without throwing a run away.
+runs = 5
+# The box has a PMU and the cycles half of the matrix doubles the time, so it is left to the full profile.
+# A cycles number wanted for one particular change is better had from perf directly than from a sweep that measures eight engines to answer a question about one.
+perf = ["no"]
+
 [profiles.smoke]
 description = "A small box, for finding out whether a change helped. Numbers from it are not comparable with anything."
 # Four cores, which is server1 and the smallest thing worth iterating on. A six core box runs this profile too and gets the same shape, because the point is that two runs of it are comparable with each other and with nothing else.
