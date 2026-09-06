@@ -188,12 +188,8 @@ if wanted memtier; then
         (cd "$dir" && autoreconf -ivf && ./configure && make -j"$jobs")
         built "$dir/memtier_benchmark" "$dir"
     fi
+    # For running it by hand. config.jsonc names the built copy by path, so it does not matter what else is on PATH or whether this directory is on it at all, which it is not in the kind of shell a sweep is started from.
     ln -sf "$dir/memtier_benchmark" "$PREFIX/bin/memtier_benchmark"
-    # The load generator is the one tool config.jsonc looks for on PATH rather than by path, so a second copy earlier on PATH would be the one that ran, and the version in every run file would be that one.
-    found=$(command -v memtier_benchmark || true)
-    if [ -n "$found" ] && [ "$found" != "$PREFIX/bin/memtier_benchmark" ]; then
-        echo "warning: $found comes first on PATH, so put $PREFIX/bin in front of it or name the built one in config.jsonc"
-    fi
 fi
 
 if wanted memcached; then
