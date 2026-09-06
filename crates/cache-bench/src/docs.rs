@@ -236,7 +236,7 @@ mod tests {
     #[test]
     fn a_profile_that_describes_a_bench_host_generates_a_readme() {
         let all = profiles();
-        for name in ["epyc8", "wsl32", "wsl32coarse", "reference"] {
+        for name in ["epyc8", "epyc8coarse", "wsl32", "wsl32coarse", "reference"] {
             assert_eq!(publishable(all.get(name).unwrap(), name), Ok(()), "{name}");
         }
     }
