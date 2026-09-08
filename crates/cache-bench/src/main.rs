@@ -13,6 +13,7 @@ mod lock;
 mod mem;
 mod results;
 mod run;
+mod spread;
 mod sweep;
 mod verify;
 
@@ -44,6 +45,8 @@ enum Command {
     Choose(choose::Args),
     /// Gather every chosen file into the one file the charts read.
     Combine(combine::Args),
+    /// Say which cells came out too noisy to quote.
+    Spread(spread::Args),
     /// Draw the charts.
     Chart(chart::Args),
     /// Write the documents that go with a results directory.
@@ -61,6 +64,7 @@ fn main() -> ExitCode {
         Command::Mem(args) => mem::run(args),
         Command::Choose(args) => choose::run(args),
         Command::Combine(args) => combine::run(args),
+        Command::Spread(args) => spread::run(args),
         Command::Chart(args) => chart::run(args),
         Command::Docs(args) => docs::run(args),
         Command::Verify(args) => verify::run(args),
