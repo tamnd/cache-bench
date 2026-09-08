@@ -153,7 +153,13 @@ pub(crate) fn run(args: &Args) -> Result<(), String> {
         deep(&config, profile, &args.socket)?;
     }
     if let Some(dir) = &args.write {
-        let written = record(name, &host, &pmu, memtier.as_deref())?;
+        let written = record(
+            name,
+            &host,
+            &pmu,
+            memtier.as_deref(),
+            crate::results::span(dir)?,
+        )?;
         written
             .check_anonymous(&named.iter().map(String::as_str).collect::<Vec<_>>())
             .map_err(|e| e.to_string())?;
@@ -308,11 +314,14 @@ fn deep(config: &Config, profile: &Profile, socket: &Path) -> Result<(), String>
 /// What goes in `host.json`.
 ///
 /// A fact this machine does not publish is refused rather than written as `unknown`. This file is the whole of what a published results directory says about where its numbers came from, and a reader cannot tell a field that was never asked from a machine that would not answer. The frequency governor is the exception, and it is one because a missing governor is not a machine declining to answer, it is a kernel with no cpufreq driver, which is what a guest is. That gets written down as its own case rather than refused, since refusing it means no virtual machine can ever publish a results directory.
+///
+/// `span` is the first and last run already in the directory, and it is where the two times come from when there is one. Writing this file before the sweep and writing it after the sweep are both ordinary things to do, so neither can be the one the times are read off. A clock only tells you when the command was typed.
 fn record(
     name: &str,
     host: &Host,
     pmu: &cb_perf::Probe,
     memtier: Option<&str>,
+    span: Option<(String, String)>,
 ) -> Result<Machine, String> {
     let need = |what: &str, value: Option<String>| {
         value.ok_or_else(|| {
@@ -349,9 +358,11 @@ fn record(
             git: commit(),
         },
         rustc: rustc(),
-        // The sweep overwrites this with its own start, and doctor writes it so that a host.json is complete on its own.
-        started: cb_core::now(),
-        finished: None,
+        // A directory with nothing in it yet gets the clock, which is the intended order and is the only case where there is nothing better to use. Everything after that comes off the runs.
+        started: span
+            .as_ref()
+            .map_or_else(cb_core::now, |(first, _)| first.clone()),
+        finished: span.map(|(_, last)| last),
     })
 }
 
@@ -587,9 +598,16 @@ mod tests {
     fn a_host_record_is_not_written_with_facts_the_machine_did_not_give() {
         let mut quiet = host();
         quiet.kernel = None;
-        let why = record("reference", &quiet, &pmu(true), Some("memtier 2.1.4")).unwrap_err();
+        let why = record("reference", &quiet, &pmu(true), Some("memtier 2.1.4"), None).unwrap_err();
         assert!(why.contains("kernel"), "{why}");
-        let written = record("reference", &host(), &pmu(true), Some("memtier 2.1.4")).unwrap();
+        let written = record(
+            "reference",
+            &host(),
+            &pmu(true),
+            Some("memtier 2.1.4"),
+            None,
+        )
+        .unwrap();
         assert_eq!(written.cpus, 32);
         assert_eq!(written.pmu, cb_core::Pmu::Present);
         // Nothing in it names the machine, which is checked here and again before it is written.
@@ -601,12 +619,50 @@ mod tests {
     fn a_machine_with_no_cpufreq_driver_is_recorded_rather_than_refused() {
         let mut guest = host();
         guest.governor = None;
-        let written = record("reference", &guest, &pmu(false), Some("memtier 2.1.4")).unwrap();
+        let written = record(
+            "reference",
+            &guest,
+            &pmu(false),
+            Some("memtier 2.1.4"),
+            None,
+        )
+        .unwrap();
         assert_eq!(written.governor, Governor::Absent);
         assert!(written.governor.describe().contains("cpufreq"));
         // It survives the round trip through the file, which is the point of it being a case rather than a sentence.
         let back = Machine::parse(&written.emit()).unwrap();
         assert_eq!(back.governor, Governor::Absent);
+    }
+
+    // Both times come off the runs when there are runs, because writing this file before a sweep and writing it after one are both ordinary and neither moment is the sweep. Before the change these were the clock and nothing, so every published directory said it started whenever somebody typed the command and was still running.
+    #[test]
+    fn the_times_come_off_the_runs_rather_than_off_a_clock() {
+        let span = Some((
+            "2026-09-07T22:15:00Z".to_owned(),
+            "2026-09-08T04:00:00Z".to_owned(),
+        ));
+        let written = record(
+            "reference",
+            &host(),
+            &pmu(true),
+            Some("memtier 2.1.4"),
+            span,
+        )
+        .unwrap();
+        assert_eq!(written.started, "2026-09-07T22:15:00Z");
+        assert_eq!(written.finished.as_deref(), Some("2026-09-08T04:00:00Z"));
+
+        // With no runs to read, the clock is all there is, and that is the intended order rather than a failure.
+        let fresh = record(
+            "reference",
+            &host(),
+            &pmu(true),
+            Some("memtier 2.1.4"),
+            None,
+        )
+        .unwrap();
+        assert!(fresh.started.ends_with('Z'), "{}", fresh.started);
+        assert_eq!(fresh.finished, None);
     }
 
     #[test]

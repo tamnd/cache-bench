@@ -75,6 +75,42 @@ pub(crate) fn cells(dir: &Path) -> Result<Vec<Cell>, String> {
     Ok(cells)
 }
 
+/// When the first and last run in a results directory started, or `None` if there are no runs in it yet.
+///
+/// The aggregates are left out, because a chosen file copies its timestamp from one of the runs it was reduced from and would count that run twice.
+///
+/// The strings are compared rather than parsed, which works because they are RFC 3339 in UTC to the second and so sort as text in the order they happened. That is a property of the format rather than a lucky accident, and it is the reason the format was picked.
+///
+/// # Errors
+///
+/// If the directory is there and cannot be listed, or if a run file cannot be read or does not parse. A directory with no `runs` in it at all is not an error: that is what a results directory looks like before a sweep has run in it, which is the order `doctor --write` is meant to be used in.
+pub(crate) fn span(dir: &Path) -> Result<Option<(String, String)>, String> {
+    let runs = runs_dir(dir);
+    if !runs.is_dir() {
+        return Ok(None);
+    }
+    let mut first: Option<String> = None;
+    let mut last: Option<String> = None;
+    for (name, path) in list(&runs)? {
+        let Some((_, slot)) = name.rsplit_once("-run_") else {
+            continue;
+        };
+        if slot.parse::<u32>().is_err() {
+            continue;
+        }
+        let Some(at) = read(&path)?.info.run_started else {
+            continue;
+        };
+        if first.as_ref().is_none_or(|held| at < *held) {
+            first = Some(at.clone());
+        }
+        if last.as_ref().is_none_or(|held| at > *held) {
+            last = Some(at);
+        }
+    }
+    Ok(first.zip(last))
+}
+
 /// Every chosen file in a results directory, paired with the name it is stored under, in the order a directory listing gives them.
 ///
 /// That order is the order the entries appear in `output.json`, and it is the original's order because the original builds the file straight out of a sorted directory listing.
@@ -156,7 +192,7 @@ pub(crate) fn write(path: &Path, text: &str) -> Result<(), String> {
 mod tests {
     use std::path::{Path, PathBuf};
 
-    use super::{cells, chosen, runs_dir, write};
+    use super::{cells, chosen, runs_dir, span, write};
 
     /// A results directory holding one cell of `n` runs, plus whatever extra files the caller names.
     fn sample(tag: &str, n: u32, extra: &[&str]) -> PathBuf {
@@ -228,6 +264,72 @@ mod tests {
     fn a_directory_that_is_not_there_says_so() {
         let err = cells(Path::new("/there/is/no/such/results/dir")).unwrap_err();
         assert!(err.contains("cannot be listed"), "{err}");
+    }
+
+    /// A results directory of runs that started at the times named, in a deliberately unhelpful order.
+    fn stamped(tag: &str, times: &[&str]) -> PathBuf {
+        use cb_core::Run;
+        use cb_core::golden::RUN_PERF;
+
+        let dir = std::env::temp_dir().join(format!("cache-bench-span-{tag}"));
+        let _ = std::fs::remove_dir_all(&dir);
+        for (at, time) in times.iter().enumerate() {
+            let mut run = Run::parse(RUN_PERF).unwrap();
+            run.info.run_started = Some((*time).to_owned());
+            let name = format!(
+                "bench_dragonfly-threads_1-pipeline_1-perf_yes-run_{}.json",
+                at + 1
+            );
+            write(&runs_dir(&dir).join(name), &run.emit()).unwrap();
+        }
+        dir
+    }
+
+    // The span is the whole point of the timestamps, and it is read off the files rather than off a clock, so the order they were written in must not decide the answer.
+    #[test]
+    fn the_span_is_the_earliest_and_latest_run_whatever_order_they_are_in() {
+        let dir = stamped(
+            "unordered",
+            &[
+                "2026-09-08T04:00:00Z",
+                "2026-09-07T22:15:00Z",
+                "2026-09-08T01:30:00Z",
+            ],
+        );
+        let (first, last) = span(&dir).unwrap().unwrap();
+        assert_eq!(first, "2026-09-07T22:15:00Z");
+        assert_eq!(last, "2026-09-08T04:00:00Z");
+    }
+
+    // An aggregate copies its timestamp from one of the runs it was reduced from, so counting it would put a run in the span twice, and a directory reduced halfway would answer differently from the same directory reduced all the way.
+    #[test]
+    fn the_span_does_not_count_the_aggregates() {
+        use cb_core::Run;
+        use cb_core::golden::CHOSEN;
+
+        let dir = stamped("aggregates", &["2026-09-08T01:00:00Z"]);
+        let mut median = Run::parse(CHOSEN).unwrap();
+        median.info.run_started = Some("2031-01-01T00:00:00Z".to_owned());
+        write(
+            &runs_dir(&dir).join("bench_dragonfly-threads_1-pipeline_1-perf_yes-run_median.json"),
+            &median.emit(),
+        )
+        .unwrap();
+        let (first, last) = span(&dir).unwrap().unwrap();
+        assert_eq!(first, "2026-09-08T01:00:00Z");
+        assert_eq!(last, "2026-09-08T01:00:00Z");
+    }
+
+    // Writing host.json before the sweep is the intended order, and there is nothing to read then. That is not a failure, and a missing runs directory is the shape it takes.
+    #[test]
+    fn a_directory_with_no_runs_in_it_yet_has_no_span() {
+        let dir = std::env::temp_dir().join("cache-bench-span-empty");
+        let _ = std::fs::remove_dir_all(&dir);
+        std::fs::create_dir_all(&dir).unwrap();
+        assert_eq!(span(&dir).unwrap(), None);
+        // And so does one where the runs directory exists but holds nothing.
+        std::fs::create_dir_all(runs_dir(&dir)).unwrap();
+        assert_eq!(span(&dir).unwrap(), None);
     }
 
     #[test]
