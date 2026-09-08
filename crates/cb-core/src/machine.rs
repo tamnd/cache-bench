@@ -24,7 +24,7 @@ pub struct Machine {
     /// Whether a hardware PMU was there to be counted with, which decides whether there are any cycles charts at all.
     pub pmu: Pmu,
     /// What the frequency governor was set to, since a chart measured under a governor that ramps is a chart of the governor.
-    pub governor: String,
+    pub governor: Governor,
     /// Which CPU mitigations were on, since several of them are worth double digit percentages on a syscall heavy workload.
     pub mitigations: String,
     /// The load generator's own version line, which is the one version that is not in `output.json` because memtier is not one of the things being measured.
@@ -58,6 +58,32 @@ impl Pmu {
         match self {
             Self::Present => "yes, cycles per operation was measured",
             Self::Absent => "no, this host exposes no hardware PMU",
+        }
+    }
+}
+
+/// What chose the CPU frequency while the sweep ran.
+///
+/// Two cases rather than a string, for the same reason [`Pmu`] is two cases. A machine that says `performance` and a machine that has no cpufreq driver at all are different facts, and a string would have to spell the second one as a sentence that reads like a governor's name. The second case is not this tool failing to ask. It is a kernel with nothing to ask, which is what a guest looks like, since a guest does not choose its own frequency.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "lowercase")]
+pub enum Governor {
+    /// The cpufreq driver was set to this, which is the name the kernel gives it.
+    Set(String),
+    /// The kernel exposes no cpufreq driver. Normal in a virtual machine, where whatever the host does with the frequency is outside this measurement's reach and cannot be recorded here honestly.
+    Absent,
+}
+
+impl Governor {
+    /// How it is written in a generated document.
+    #[must_use]
+    pub fn describe(&self) -> String {
+        match self {
+            Self::Set(name) => name.clone(),
+            Self::Absent => {
+                "none, this kernel exposes no cpufreq driver and the frequency was chosen outside it"
+                    .to_owned()
+            }
         }
     }
 }
@@ -132,7 +158,7 @@ pub enum BadMachine {
 #[cfg(test)]
 #[allow(clippy::unwrap_used)]
 mod tests {
-    use super::{Machine, Pmu, Tool};
+    use super::{Governor, Machine, Pmu, Tool};
 
     fn machine() -> Machine {
         Machine {
@@ -143,7 +169,7 @@ mod tests {
             cpus: 32,
             memory_bytes: 55_834_574_848,
             pmu: Pmu::Absent,
-            governor: "performance".to_owned(),
+            governor: Governor::Set("performance".to_owned()),
             mitigations: "mitigations=on".to_owned(),
             memtier: "memtier_benchmark 2.4.4".to_owned(),
             cache_bench: Tool {

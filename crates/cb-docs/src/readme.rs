@@ -201,7 +201,11 @@ impl Readme<'_> {
         let _ = writeln!(out, "| Memory | {} |", cb_core::Bytes(machine.memory_bytes));
         let _ = writeln!(out, "| Kernel | {} |", machine.kernel);
         let _ = writeln!(out, "| Distribution | {} |", machine.distro);
-        let _ = writeln!(out, "| Frequency governor | {} |", machine.governor);
+        let _ = writeln!(
+            out,
+            "| Frequency governor | {} |",
+            machine.governor.describe()
+        );
         let _ = writeln!(out, "| CPU mitigations | {} |", machine.mitigations);
         let _ = writeln!(out, "| Hardware PMU | {} |", machine.pmu.describe());
         let _ = writeln!(out, "| Sweep started | {} |", machine.started);
@@ -491,7 +495,7 @@ mod tests {
     use std::collections::{BTreeMap, BTreeSet};
 
     use cb_chart::Spec;
-    use cb_core::{Compat, Machine, Pmu, Profile, Profiles, Tool};
+    use cb_core::{Compat, Governor, Machine, Pmu, Profile, Profiles, Tool};
 
     use super::{GRAPHS, MAY, MAY_NOT, Readme, list};
 
@@ -507,7 +511,7 @@ mod tests {
             cpus: 32,
             memory_bytes: 34_359_738_368,
             pmu,
-            governor: "performance".to_owned(),
+            governor: Governor::Set("performance".to_owned()),
             mitigations: "mitigations=on".to_owned(),
             memtier: "memtier_benchmark 2.4.4".to_owned(),
             cache_bench: Tool {

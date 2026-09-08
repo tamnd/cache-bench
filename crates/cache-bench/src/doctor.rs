@@ -12,7 +12,8 @@ use std::path::{Path, PathBuf};
 use std::time::Duration;
 
 use cb_core::{
-    Arch, CacheKind, Config, Endpoint, Hosts, Launch, Machine, Pmu, Profile, Profiles, Tool,
+    Arch, CacheKind, Config, Endpoint, Governor, Hosts, Launch, Machine, Pmu, Profile, Profiles,
+    Tool,
 };
 
 use crate::host::Host;
@@ -189,7 +190,13 @@ fn describe(host: &Host, pmu: &cb_perf::Probe, memtier: Option<&str>) {
         show(host.memory),
         show(host.available)
     );
-    println!("governor  {}", host.governor.as_deref().unwrap_or(unknown));
+    println!(
+        "governor  {}",
+        host.governor
+            .clone()
+            .map_or(Governor::Absent, Governor::Set)
+            .describe()
+    );
     println!(
         "mitigate  {}",
         host.mitigations.as_deref().unwrap_or(unknown)
@@ -300,7 +307,7 @@ fn deep(config: &Config, profile: &Profile, socket: &Path) -> Result<(), String>
 
 /// What goes in `host.json`.
 ///
-/// A fact this machine does not publish is refused rather than written as `unknown`. This file is the whole of what a published results directory says about where its numbers came from, and a reader cannot tell a field that was never asked from a machine that would not answer.
+/// A fact this machine does not publish is refused rather than written as `unknown`. This file is the whole of what a published results directory says about where its numbers came from, and a reader cannot tell a field that was never asked from a machine that would not answer. The frequency governor is the exception, and it is one because a missing governor is not a machine declining to answer, it is a kernel with no cpufreq driver, which is what a guest is. That gets written down as its own case rather than refused, since refusing it means no virtual machine can ever publish a results directory.
 fn record(
     name: &str,
     host: &Host,
@@ -330,7 +337,11 @@ fn record(
         } else {
             Pmu::Absent
         },
-        governor: need("its frequency governor", host.governor.clone())?,
+        // The one fact here that is allowed to be missing. Every machine has a kernel and a CPU and can be asked what they are, so a machine that will not say is a machine this cannot describe. A governor is different: a guest has no cpufreq driver because a guest does not choose its own frequency, so the absence is a fact about the machine rather than a gap in the record, and it is written down as one.
+        governor: host
+            .governor
+            .clone()
+            .map_or(Governor::Absent, Governor::Set),
         mitigations: need("its CPU mitigations", host.mitigations.clone())?,
         memtier: need("a load generator version", memtier.map(ToOwned::to_owned))?,
         cache_bench: Tool {
@@ -446,7 +457,7 @@ fn why(path: &Path, e: &dyn std::error::Error) -> String {
 mod tests {
     use std::path::{Path, PathBuf};
 
-    use super::{Args, Host, check, record, run};
+    use super::{Args, Governor, Host, Machine, check, record, run};
 
     /// The repository root, which is where the three real files are.
     fn root() -> PathBuf {
@@ -575,14 +586,27 @@ mod tests {
     #[test]
     fn a_host_record_is_not_written_with_facts_the_machine_did_not_give() {
         let mut quiet = host();
-        quiet.governor = None;
+        quiet.kernel = None;
         let why = record("reference", &quiet, &pmu(true), Some("memtier 2.1.4")).unwrap_err();
-        assert!(why.contains("governor"), "{why}");
+        assert!(why.contains("kernel"), "{why}");
         let written = record("reference", &host(), &pmu(true), Some("memtier 2.1.4")).unwrap();
         assert_eq!(written.cpus, 32);
         assert_eq!(written.pmu, cb_core::Pmu::Present);
         // Nothing in it names the machine, which is checked here and again before it is written.
         written.check_anonymous(&["server1", "gamingpc"]).unwrap();
+    }
+
+    // The exception, and the reason it is one. A guest has no cpufreq driver because a guest does not pick its own frequency, and refusing that meant a sweep could run on the large host and then never be published from it.
+    #[test]
+    fn a_machine_with_no_cpufreq_driver_is_recorded_rather_than_refused() {
+        let mut guest = host();
+        guest.governor = None;
+        let written = record("reference", &guest, &pmu(false), Some("memtier 2.1.4")).unwrap();
+        assert_eq!(written.governor, Governor::Absent);
+        assert!(written.governor.describe().contains("cpufreq"));
+        // It survives the round trip through the file, which is the point of it being a case rather than a sentence.
+        let back = Machine::parse(&written.emit()).unwrap();
+        assert_eq!(back.governor, Governor::Absent);
     }
 
     #[test]

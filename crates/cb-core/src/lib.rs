@@ -27,7 +27,7 @@ pub use config::{Arch, BadConfig, Config};
 pub use cpuset::{BadCpuSet, CpuSet};
 pub use hosts::{BadHosts, Host, Hosts};
 pub use journal::{Abandoned, BadJournal, Failure, Failures, Outcome, Step};
-pub use machine::{BadMachine, Machine, Pmu, Tool};
+pub use machine::{BadMachine, Governor, Machine, Pmu, Tool};
 pub use name::{BadName, Chosen, RunName, Slot};
 pub use num::{Counter, CpuCounter, EventCounter, Fixed0, Fixed3};
 pub use output::{Entry, Output};
