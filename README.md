@@ -119,6 +119,8 @@ The chart indexes are generated rather than maintained. The original writes `LIN
 
 The README in a results directory is generated too, and none of the facts in it are typed. The methodology bullets carry the profile's own numbers, the hardware table comes out of the `host.json` written before the sweep, and the version table is one row per engine read out of the results themselves. Two things go in it that the original has nowhere: the table of everything this port does differently, and what these numbers may and may not be used for in full, because a caveat that lives in a document nobody opens is a caveat that does not exist. CI regenerates every published document and fails if one of them was edited by hand.
 
+The one thing that cannot be generated is what is true of one sweep and of no other: a build of an engine that turned out not to be steady, an engine that had to run over TCP on that box, a window where the machine was doing something else. A results directory may carry a `NOTES.md` saying that in somebody's own words, and the generated README links to it above the first chart when it is there, because a reader who has already read the bar has read it wrong.
+
 ## Licence
 
 Apache-2.0.

@@ -67,6 +67,8 @@ pub(crate) fn run(args: &Args) -> Result<(), String> {
             have: &have,
             compat: args.compat,
             memory: &memory.rows,
+            // Read off the disk rather than passed on the command line, so that a directory carrying a note says so whoever regenerates it and from wherever.
+            notes: dir.join("NOTES.md").is_file(),
         };
         wanted.push((out.join(readme.file()), readme.render()));
     }
