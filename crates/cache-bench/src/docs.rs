@@ -10,7 +10,7 @@ use std::path::{Path, PathBuf};
 
 use cb_chart::{Scale, Spec};
 use cb_core::{Compat, Machine, Output, Profile, Profiles};
-use cb_docs::{Index, Readme};
+use cb_docs::{Index, Measured, Readme};
 
 /// What to generate and where to put it.
 #[derive(Debug, clap::Args)]
@@ -47,28 +47,43 @@ pub(crate) fn run(args: &Args) -> Result<(), String> {
     let have = present(args)?;
     let out = destination(args)?;
 
+    // Read before the indexes rather than after them, because the indexes carry the host too and a reader who arrived on a link to one of them has seen nothing else.
+    let about = match &args.dir {
+        Some(dir) => {
+            let (machine, profile, versions) = about(dir, &args.profiles)?;
+            publishable(&profile, &machine.profile)?;
+            // Read off the disk rather than passed on the command line, so that a directory carrying a note says so whoever regenerates it and from wherever.
+            let notes = dir.join("NOTES.md").is_file();
+            Some((machine, profile, versions, notes))
+        }
+        None => None,
+    };
+
     let mut wanted: Vec<(PathBuf, String)> = Vec::new();
     for scale in Scale::ALL {
         let index = Index {
             scale,
             have: &have,
             absent: &args.absent,
+            measured: about.as_ref().map(|(machine, profile, _, notes)| Measured {
+                machine,
+                description: &profile.description,
+                connections: profile.connections(),
+                notes: *notes,
+            }),
         };
         wanted.push((out.join(index.file()), index.render()));
     }
-    if let Some(dir) = &args.dir {
-        let (machine, profile, versions) = about(dir, &args.profiles)?;
-        publishable(&profile, &machine.profile)?;
+    if let (Some(dir), Some((machine, profile, versions, notes))) = (&args.dir, &about) {
         let memory = memory(dir)?;
         let readme = Readme {
-            machine: &machine,
-            profile: &profile,
-            versions: &versions,
+            machine,
+            profile,
+            versions,
             have: &have,
             compat: args.compat,
             memory: &memory.rows,
-            // Read off the disk rather than passed on the command line, so that a directory carrying a note says so whoever regenerates it and from wherever.
-            notes: dir.join("NOTES.md").is_file(),
+            notes: *notes,
         };
         wanted.push((out.join(readme.file()), readme.render()));
     }
