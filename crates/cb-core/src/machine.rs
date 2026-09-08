@@ -34,9 +34,13 @@ pub struct Machine {
     /// The compiler that built the engines that are built from source, which is `yo` and nothing else.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub rustc: Option<String>,
-    /// When the sweep started, RFC 3339 in UTC.
+    /// When the first run in this directory started, RFC 3339 in UTC, or when this file was written if there are no runs in it yet.
+    ///
+    /// Taken from the run files rather than from a clock, because a sweep is restartable and a results directory is often filled over several days by several sessions. The first run is a fact the directory holds; the moment somebody typed a command is not.
     pub started: String,
-    /// When it finished, absent while it is still running.
+    /// When the last run in this directory started, absent if there are no runs in it yet.
+    ///
+    /// The last run's start and not its end, because a run file records when it began and there is nowhere it records when it stopped. The difference is one run, which is minutes against the hours or days the span covers.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub finished: Option<String>,
 }

@@ -208,11 +208,12 @@ impl Readme<'_> {
         );
         let _ = writeln!(out, "| CPU mitigations | {} |", machine.mitigations);
         let _ = writeln!(out, "| Hardware PMU | {} |", machine.pmu.describe());
-        let _ = writeln!(out, "| Sweep started | {} |", machine.started);
+        // Named for what they are rather than for the sweep, because the last run's start is what a run file records and its end is not. A row that said the sweep finished would be claiming a fact nothing here holds.
+        let _ = writeln!(out, "| First run started | {} |", machine.started);
         let _ = writeln!(
             out,
-            "| Sweep finished | {} |\n",
-            machine.finished.as_deref().unwrap_or("still running")
+            "| Last run started | {} |\n",
+            machine.finished.as_deref().unwrap_or("no runs here yet")
         );
         let _ = writeln!(
             out,
