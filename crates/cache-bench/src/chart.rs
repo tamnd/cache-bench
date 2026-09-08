@@ -246,7 +246,7 @@ fn parse_manifest(text: &str) -> Result<BTreeMap<String, String>, String> {
 }
 
 /// The SHA-256 of a file, as lower case hex.
-fn digest(bytes: &[u8]) -> String {
+pub(crate) fn digest(bytes: &[u8]) -> String {
     use sha2::Digest as _;
     let out = sha2::Sha256::digest(bytes);
     out.iter().fold(String::with_capacity(64), |mut s, b| {
