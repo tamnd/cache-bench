@@ -145,21 +145,26 @@ pub(crate) fn run(args: &Args) -> Result<(), String> {
         return Ok(());
     };
     let profile = profiles.get(name).map_err(|e| e.to_string())?;
-    check(profile, &host, &pmu, memtier.as_deref())?;
+    // A directory that already holds runs is a sweep that has happened. Everything below is then a description of it rather than a decision about whether to start one, which is what makes the load average beside the point.
+    let swept = match &args.write {
+        Some(dir) => crate::results::span(dir)?,
+        None => None,
+    };
+    check(profile, &host, &pmu, memtier.as_deref(), swept.is_some())?;
     println!();
-    println!("checks    this machine can run {name}");
+    if swept.is_some() {
+        println!(
+            "checks    this machine matches {name}, and how busy it is now was not checked, because the runs it is being asked to describe are already measured"
+        );
+    } else {
+        println!("checks    this machine can run {name}");
+    }
 
     if args.deep {
         deep(&config, profile, &args.socket)?;
     }
     if let Some(dir) = &args.write {
-        let written = record(
-            name,
-            &host,
-            &pmu,
-            memtier.as_deref(),
-            crate::results::span(dir)?,
-        )?;
+        let written = record(name, &host, &pmu, memtier.as_deref(), swept)?;
         written
             .check_anonymous(&named.iter().map(String::as_str).collect::<Vec<_>>())
             .map_err(|e| e.to_string())?;
@@ -234,11 +239,14 @@ fn show(bytes: Option<u64>) -> String {
 /// Everything that would make this machine the wrong one to run this profile on.
 ///
 /// Each of these is refused rather than warned about. A warning printed at the start of a job that runs for eight days is read by nobody, and every one of these failures produces numbers rather than an error.
+///
+/// `measured` says the runs this is being asked about are already on disk. Every check here except the load average is about the machine and stays true whenever it is asked. The load average is about this minute, and this minute is not when those runs were measured. Refusing on it would mean a results directory that was swept on a quiet box can never be described afterwards on a box that is busy again, which is a rule that keeps numbers unpublished rather than keeping them honest.
 fn check(
     profile: &Profile,
     host: &Host,
     pmu: &cb_perf::Probe,
     memtier: Option<&str>,
+    measured: bool,
 ) -> Result<(), String> {
     crate::run::check_machine(profile, host.cpus)?;
     if memtier.is_none() {
@@ -266,6 +274,7 @@ fn check(
     }
     if let Some(load) = host.load
         && load > BUSY
+        && !measured
     {
         return Err(format!(
             "the load average is {load:.2} and this wants it at or below {BUSY:.2}, because something else on a pinned core is a competitor for that core rather than background noise. Wait for the machine to go quiet and ask again."
@@ -533,6 +542,7 @@ mod tests {
             &host(),
             &pmu(true),
             Some("memtier 2.1.4"),
+            false,
         )
         .unwrap();
     }
@@ -545,6 +555,7 @@ mod tests {
             &host(),
             &pmu(false),
             Some("memtier 2.1.4"),
+            false,
         )
         .unwrap_err();
         assert!(why.contains("no counters"), "{why}");
@@ -554,6 +565,7 @@ mod tests {
             &host(),
             &pmu(false),
             Some("memtier 2.1.4"),
+            false,
         )
         .unwrap();
     }
@@ -568,6 +580,7 @@ mod tests {
             &host,
             &pmu(true),
             Some("memtier 2.1.4"),
+            false,
         )
         .unwrap_err();
         assert!(why.contains("working set"), "{why}");
@@ -582,14 +595,41 @@ mod tests {
             &host,
             &pmu(true),
             Some("memtier 2.1.4"),
+            false,
         )
         .unwrap_err();
         assert!(why.contains("load average is 3.50"), "{why}");
     }
 
+    // The same machine, the same minute, describing runs that are already on disk. A box swept while it was quiet and busy again by the time somebody writes host.json is the ordinary case on a machine that is shared, and refusing there keeps numbers unpublished rather than keeping them honest.
+    #[test]
+    fn a_busy_machine_still_describes_a_sweep_that_already_happened() {
+        let mut host = host();
+        host.load = Some(14.5);
+        check(
+            &profile("reference"),
+            &host,
+            &pmu(true),
+            Some("memtier 2.1.4"),
+            true,
+        )
+        .unwrap();
+        // Everything else is about the machine rather than about this minute, so it is still refused.
+        host.available = Some(1024 * 1024 * 1024);
+        let why = check(
+            &profile("reference"),
+            &host,
+            &pmu(true),
+            Some("memtier 2.1.4"),
+            true,
+        )
+        .unwrap_err();
+        assert!(why.contains("working set"), "{why}");
+    }
+
     #[test]
     fn a_load_generator_that_does_not_answer_is_refused() {
-        let why = check(&profile("reference"), &host(), &pmu(true), None).unwrap_err();
+        let why = check(&profile("reference"), &host(), &pmu(true), None, false).unwrap_err();
         assert!(why.contains("load generator"), "{why}");
     }
 
