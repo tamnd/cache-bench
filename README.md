@@ -6,9 +6,11 @@ This is a Rust port of [tidwall/cache-benchmarks](https://github.com/tidwall/cac
 
 ## Status
 
-Every stage is written. `doctor`, `run`, `sweep`, `mem`, `choose`, `combine`, `chart`, `docs` and `verify` all work: `run` measures one cell and writes one file, `sweep` is the loop that measures the other ten thousand and keeps a record of what it did, and everything downstream of those files has been working since the chart milestone. What is missing is the hardware gate that says all eight servers come up and go away again on a real Linux box, and the results themselves. The [milestones](https://github.com/tamnd/cache-bench/milestones) say what each stage has to land and what it is gated on.
+Every stage is written. `doctor`, `run`, `sweep`, `mem`, `choose`, `combine`, `chart`, `docs` and `verify` all work: `run` measures one cell and writes one file, `sweep` is the loop that measures the other ten thousand and keeps a record of what it did, and everything downstream of those files has been working since the chart milestone. What is missing is the hardware gate that says all eight servers come up and go away again on a real Linux box, and a reference sweep. The [milestones](https://github.com/tamnd/cache-bench/milestones) say what each stage has to land and what it is gated on.
 
-No results have been published. When they are, they will come with the raw `output.json` next to them, so anyone can redraw every chart without trusting us.
+The first results are in [`results/wsl32coarse`](results/wsl32coarse), which is a draft sweep rather than the reference matrix: three thread counts instead of six and five runs a cell instead of thirty one, on a host with no hardware PMU, so there are 146 charts and none of them are cycles. It is published because a draft is what finds the layout bugs and the provenance holes that a week long sweep should not find. Read its own README before reading its charts, and read [its NOTES.md](results/wsl32coarse/NOTES.md) before quoting anything at all, because the yo it measures is one release before the fix that made yo's multithreaded numbers repeatable and rugo has the same problem unfixed.
+
+Every results directory comes with the raw `output.json` next to it, so anyone can redraw every chart without trusting us.
 
 ## What gets measured
 
