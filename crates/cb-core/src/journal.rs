@@ -2,7 +2,7 @@
 //!
 //! Two files. `logs/sweep.jsonl` is one line per run attempted, in the order they were attempted, and it is append only. `failures.json` is the current list of cells that were tried and did not produce a file, and it is rewritten as the sweep goes.
 //!
-//! They answer different questions. The journal answers what was happening at three in the morning on day six, which is the question somebody asks a week later when one cell in one chart looks wrong, and the load average recorded before each run is usually the answer. The failure file answers what is missing from this results directory and why, and it exists because the alternative to naming a missing cell is a chart that draws a zero, and a zero is a claim about an engine while an absence is not.
+//! They answer different questions. The journal answers what was happening at three in the morning on day six, which is the question somebody asks a week later when one cell in one chart looks wrong, and what somebody else was running on the machine before each run is usually the answer. The failure file answers what is missing from this results directory and why, and it exists because the alternative to naming a missing cell is a chart that draws a zero, and a zero is a claim about an engine while an absence is not.
 //!
 //! Neither file is an input to anything. Nothing downstream reads them, no chart is drawn from them, and a results directory with both of them deleted still produces the same charts. They are there for the person reading the numbers afterwards.
 
@@ -22,6 +22,11 @@ pub struct Step {
     /// Before rather than after, because what matters is whether the machine was already busy when this run started. A run that is itself the load is not the thing being looked for.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub load: Option<f64>,
+    /// How many cores something other than this sweep was using just before the attempt, where the machine publishes the counters to work it out from.
+    ///
+    /// This is the field that answers the question the load average is usually asked and cannot answer. A load average taken between two runs is mostly the last run decaying out of it, so a quiet machine reads as busy and there is no threshold that tells the two apart. This is sampled over a window that starts after the last server was killed, so whatever it counts is somebody else.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub busy: Option<f64>,
     /// Whether it produced a file.
     pub outcome: Outcome,
     /// Why it did not, when it did not.
@@ -187,6 +192,7 @@ mod tests {
             started: "2026-09-04T03:14:15Z".to_owned(),
             seconds: 42.5,
             load: Some(0.4),
+            busy: Some(0.02),
             outcome: Outcome::Measured,
             why: None,
         }
@@ -207,6 +213,17 @@ mod tests {
         let line = step().emit();
         assert!(!line.contains("why"), "{line}");
         assert!(line.contains("\"outcome\":\"measured\""), "{line}");
+    }
+
+    // A journal written before this field existed is still a journal, and the directories already on disk are the ones somebody reads a year later.
+    #[test]
+    fn a_line_from_an_older_sweep_still_reads() {
+        let older = r#"{"cell":"a.json","started":"2026-09-04T03:14:15Z","seconds":42.5,"load":0.4,"outcome":"measured"}"#;
+        let step = Step::parse(older).unwrap();
+        assert_eq!(step.load, Some(0.4));
+        assert_eq!(step.busy, None);
+        // And it goes back out without a key claiming nobody else was on the machine.
+        assert!(!step.emit().contains("busy"), "{}", step.emit());
     }
 
     #[test]

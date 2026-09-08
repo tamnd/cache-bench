@@ -28,6 +28,27 @@ const ENOUGH: usize = 3;
 /// How many of one engine's cells may fail in a row before the rest of them are left.
 const GIVE_UP: u32 = 3;
 
+/// How much of the machine somebody else may be using before this waits rather than measures, in cores.
+///
+/// Half a core. It sounds strict for a box with 32 of them and it is meant to: the cores this sweep pins to are named in the profile, so a competitor is a competitor for one of the four or sixteen cores the server under test is on rather than background spread over the machine.
+const CROWDED: f64 = 0.5;
+
+/// How long to let the last run's teardown drain out before sampling what everybody else is doing.
+const SETTLE: Duration = Duration::from_secs(2);
+
+/// How long each sample takes.
+///
+/// Long enough that a core switching between two processes averages out and short enough that four seconds a run against three minutes a run is nothing.
+const SAMPLE: Duration = Duration::from_secs(2);
+
+/// How long to wait before looking again, once the machine has been found busy.
+const ASK_AGAIN: Duration = Duration::from_secs(60);
+
+/// How many times to look before giving up on the machine rather than on the cell.
+///
+/// Sixty of them, so an hour. Anything on the box for less than that is a build or a test run and waiting for it costs one cell's worth of time out of a sweep that runs for days. Anything on the box for longer than that is another job rather than a blip, and every remaining cell would measure the two of them fighting.
+const PATIENCE: u32 = 60;
+
 /// Which matrix to sweep, and where to put it.
 #[derive(Debug, clap::Args)]
 pub(crate) struct Args {
@@ -153,6 +174,10 @@ pub(crate) fn run(args: &Args) -> Result<(), String> {
         said.join(", ")
     );
 
+    // Ahead of the missing cells, because a sweep that stopped early is missing cells by definition and the count of them is not the thing to read.
+    if let Some(why) = tally.stopped {
+        return Err(why);
+    }
     if failures.is_empty() {
         return Ok(());
     }
@@ -171,6 +196,8 @@ struct Tally {
     failed: usize,
     /// Cells not attempted, because their engine had been given up on.
     left: usize,
+    /// Why the sweep stopped before it reached the end, when it did.
+    stopped: Option<String>,
 }
 
 /// The loop, over the cells that are not already on disk.
@@ -188,10 +215,18 @@ fn measure_all(
         measured: 0,
         failed: 0,
         left: 0,
+        stopped: None,
     };
     let mut given_up: Vec<CacheKind> = Vec::new();
     let mut in_a_row = 0_u32;
     let mut last: Option<CacheKind> = None;
+    // A machine that will not say how many cores it has cannot have a share of them worked out, so on that machine there is nothing to wait for and the sweep runs as it always did.
+    let cpus = crate::run::cpus();
+    let mut sample = || {
+        // The window has to start after the last run's teardown, or the thing being counted is this sweep putting its own server away.
+        std::thread::sleep(SETTLE);
+        crate::host::busy_cores(SAMPLE, cpus?)
+    };
 
     for (at, cell) in todo.iter().enumerate() {
         if given_up.contains(&cell.cache) {
@@ -199,8 +234,16 @@ fn measure_all(
             continue;
         }
         let name = cell.name().to_string();
+        // Before the run rather than after it, because the question both of these answer is whether the machine was already busy, and a run is itself load.
+        let busy = match wait_for_quiet(&mut sample, &mut std::thread::sleep) {
+            Ok(busy) => busy,
+            Err(e) => {
+                eprintln!("{e}");
+                tally.stopped = Some(e);
+                break;
+            }
+        };
         let when = cb_core::now();
-        // Before the run rather than after it, because the question this answers is whether the machine was already busy, and a run is itself load.
         let load = crate::host::load_average();
         match eta(todo.len() - at, &seconds) {
             Some(rest) => println!("[{}/{}] {name}, about {rest} left", at + 1, todo.len()),
@@ -248,6 +291,7 @@ fn measure_all(
                 started: when,
                 seconds: took,
                 load,
+                busy,
                 outcome: if why.is_none() {
                     Outcome::Measured
                 } else {
@@ -259,6 +303,49 @@ fn measure_all(
         keep(record, failures);
     }
     tally
+}
+
+/// Wait until nothing else is using this machine, and answer what it was doing when it went quiet.
+///
+/// This is the check the results directory on the eight core host needed and did not have. `doctor` asks whether the machine is busy once, before anything starts, and a sweep runs for days. That box turned out to be a build runner as well, so the sweep started on an idle machine and spent the next several hours measuring against eight compilers, which is not a slower number, it is not a number.
+///
+/// Waiting rather than failing, because a cell that fails is a hole in a chart and the usual reason a machine is busy is something that will be finished in twenty minutes. Stopping the whole sweep rather than waiting forever, because nothing is lost by stopping: the cells already on disk stay where they are and a sweep started again picks up from them.
+///
+/// The two arguments are how it looks and how it waits, so that this can be tested without an hour going by.
+///
+/// # Errors
+///
+/// If the machine was still busy after [`PATIENCE`] looks.
+fn wait_for_quiet(
+    look: &mut dyn FnMut() -> Option<f64>,
+    nap: &mut dyn FnMut(Duration),
+) -> Result<Option<f64>, String> {
+    let mut worst = 0.0_f64;
+    for asked in 0..=PATIENCE {
+        // A machine that does not publish the counters is a machine with nothing to wait for, which is every machine that is not Linux.
+        let Some(busy) = look() else {
+            return Ok(None);
+        };
+        if busy <= CROWDED {
+            if asked > 0 {
+                println!("the machine is quiet again at {busy:.2} cores in use, carrying on");
+            }
+            return Ok(Some(busy));
+        }
+        worst = worst.max(busy);
+        if asked == 0 {
+            println!(
+                "something else is using {busy:.2} cores of this machine and this measures at {CROWDED:.2} or under, so it is waiting rather than measuring a race"
+            );
+        }
+        if asked < PATIENCE {
+            nap(ASK_AGAIN);
+        }
+    }
+    Err(format!(
+        "something else has been using up to {worst:.2} cores of this machine for {} and has not stopped, so every cell from here on would measure the two of them fighting. The sweep is stopping instead. Nothing measured is lost: start it again on the same directory when the machine is free and it picks up where this left off.",
+        spell(ASK_AGAIN * PATIENCE)
+    ))
 }
 
 /// Read the failure file, or start a new one.
@@ -410,7 +497,7 @@ mod tests {
 
     use cb_core::{CacheKind, Profiles};
 
-    use super::{caches, done, eta, plan, spell};
+    use super::{PATIENCE, caches, done, eta, plan, spell, wait_for_quiet};
 
     /// The profile the reference numbers were measured with.
     fn profile() -> cb_core::Profile {
@@ -501,6 +588,52 @@ mod tests {
         assert_eq!(spell(Duration::from_secs(90)), "1m 30s");
         assert_eq!(spell(Duration::from_secs(3700)), "1h 1m");
         assert_eq!(spell(Duration::from_secs(200_000)), "2d 7h");
+    }
+
+    // The common case, which is a machine with nothing on it but this sweep.
+    #[test]
+    fn a_quiet_machine_is_measured_on_without_waiting() {
+        let mut naps = 0;
+        let busy = wait_for_quiet(&mut || Some(0.03), &mut |_| naps += 1).unwrap();
+        assert_eq!(busy, Some(0.03));
+        assert_eq!(naps, 0);
+    }
+
+    // A build that finishes is the usual reason a machine is busy, and waiting for it costs one cell out of a sweep that runs for days.
+    #[test]
+    fn a_machine_that_goes_quiet_is_waited_for() {
+        let mut looks = 0;
+        let mut naps = 0;
+        let busy = wait_for_quiet(
+            &mut || {
+                looks += 1;
+                Some(if looks > 3 { 0.10 } else { 7.5 })
+            },
+            &mut |_| naps += 1,
+        )
+        .unwrap();
+        assert_eq!(busy, Some(0.10));
+        assert_eq!(naps, 3);
+    }
+
+    // The eight core host is a build runner as well, and a sweep that kept going there spent hours producing numbers of two workloads fighting. Stopping loses nothing, because the cells on disk stay and the sweep picks up from them.
+    #[test]
+    fn a_machine_that_stays_busy_stops_the_sweep_rather_than_the_cell() {
+        let mut naps = 0;
+        let why = wait_for_quiet(&mut || Some(14.5), &mut |_| naps += 1).unwrap_err();
+        assert!(why.contains("14.50 cores"), "{why}");
+        assert!(why.contains("1h 0m"), "{why}");
+        assert!(why.contains("picks up where this left off"), "{why}");
+        assert_eq!(naps, PATIENCE as usize);
+    }
+
+    // Every machine that is not Linux publishes nothing to work this out from, and a sweep on one of those runs exactly as it did before there was a check here.
+    #[test]
+    fn a_machine_that_publishes_nothing_is_not_waited_for() {
+        let mut naps = 0;
+        let busy = wait_for_quiet(&mut || None, &mut |_| naps += 1).unwrap();
+        assert_eq!(busy, None);
+        assert_eq!(naps, 0);
     }
 
     // The failure this rule prevents is a file that was created and never finished being counted as a measurement.
