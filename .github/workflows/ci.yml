@@ -94,6 +94,12 @@ jobs:
             echo "$raw" >&2
             exit 1
           fi
+          packed=$(git ls-files '*.tar.gz')
+          if [ -n "$packed" ]; then
+            echo "an archive is tracked, and cache-bench archive writes one to go on a release:" >&2
+            echo "$packed" >&2
+            exit 1
+          fi
           if git ls-files --error-unmatch hosts.toml >/dev/null 2>&1; then
             echo "hosts.toml is tracked, and it names machines that stay private" >&2
             exit 1

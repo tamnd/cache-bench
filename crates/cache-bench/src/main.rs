@@ -3,6 +3,7 @@
 //! One subcommand per stage, because a sweep takes days and the stages after it have to be rerunnable without repeating it.
 //! What each stage still owes is in the milestones: <https://github.com/tamnd/cache-bench/milestones>
 
+mod archive;
 mod chart;
 mod choose;
 mod combine;
@@ -47,6 +48,8 @@ enum Command {
     Combine(combine::Args),
     /// Say which cells came out too noisy to quote.
     Spread(spread::Args),
+    /// Pack the raw run files into one file that can go on a release.
+    Archive(archive::Args),
     /// Draw the charts.
     Chart(chart::Args),
     /// Write the documents that go with a results directory.
@@ -65,6 +68,7 @@ fn main() -> ExitCode {
         Command::Choose(args) => choose::run(args),
         Command::Combine(args) => combine::run(args),
         Command::Spread(args) => spread::run(args),
+        Command::Archive(args) => archive::run(args),
         Command::Chart(args) => chart::run(args),
         Command::Docs(args) => docs::run(args),
         Command::Verify(args) => verify::run(args),
