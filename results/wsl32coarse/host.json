@@ -1,0 +1,19 @@
+{
+  "profile": "wsl32coarse",
+  "kernel": "Linux 6.18.33.2-microsoft-standard-WSL2 x86_64",
+  "distro": "Ubuntu 26.04 LTS",
+  "cpu_model": "13th Gen Intel(R) Core(TM) i9-13900K",
+  "cpus": 32,
+  "memory_bytes": 33650573312,
+  "pmu": "absent",
+  "governor": "absent",
+  "mitigations": "19 known, all of them mitigated",
+  "memtier": "memtier_benchmark v=2.5.1 sha=5f634d17:0 bits=64 libevent=2.1.12-stable openssl=OpenSSL 3.5.5 27 Jan 2026 prometheus=yes",
+  "cache_bench": {
+    "version": "0.5.1",
+    "git": "247eefa"
+  },
+  "rustc": "rustc 1.98.0 (88d9e12ae 2026-08-18)",
+  "started": "2026-09-06T15:19:40Z",
+  "finished": "2026-09-07T22:49:03Z"
+}
