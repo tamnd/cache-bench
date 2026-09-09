@@ -12,6 +12,13 @@ use cb_stats::{Kind, correct, upstream};
 
 use crate::results::{self, Cell};
 
+/// The fewest runs a cell can be reduced from.
+///
+/// Three, because that is the smallest number at which the four files a cell comes to are four different claims. Over two runs the median is one of them, the best is one of them and the worst is the other, so three files carry two numbers and a reader is shown a spread that is the whole sample. Over one they are four copies of the same number wearing four names.
+///
+/// This never fires on a full sweep, where every cell has 31 runs, or on the original's own files. What it is for is a directory that has lost runs since it was measured, either to a sweep that stopped partway or to a check that was added after the fact and refused some of them.
+const FEWEST: usize = 3;
+
 /// Which directory to reduce, and how.
 #[derive(Debug, clap::Args)]
 pub(crate) struct Args {
@@ -62,7 +69,18 @@ pub(crate) fn run(args: &Args) -> Result<(), String> {
     let mut written = 0_usize;
     let mut smallest = usize::MAX;
     let mut gaps = 0_usize;
+    let mut thin = 0_usize;
     for cell in &cells {
+        if cell.runs.len() < FEWEST {
+            thin += 1;
+            let held = cell.runs.len();
+            let runs = if held == 1 { "run" } else { "runs" };
+            println!(
+                "{}: {held} {runs}, which is fewer than {FEWEST}, so it is not reduced",
+                cell.name
+            );
+            continue;
+        }
         smallest = smallest.min(cell.runs.len());
         if cell.after_gap > 0 {
             gaps += 1;
@@ -83,13 +101,25 @@ pub(crate) fn run(args: &Args) -> Result<(), String> {
     }
 
     let what = if args.dry_run { "would write" } else { "wrote" };
-    println!(
-        "{what} {written} files for {} cells, {} mode, {smallest} runs in the smallest cell",
-        cells.len(),
-        args.compat
-    );
+    let reduced = cells.len() - thin;
+    if reduced == 0 {
+        println!(
+            "{what} nothing, because every one of the {} cells has fewer than {FEWEST} runs",
+            cells.len()
+        );
+    } else {
+        println!(
+            "{what} {written} files for {reduced} cells, {} mode, {smallest} runs in the smallest cell",
+            args.compat
+        );
+    }
     if gaps > 0 {
         println!("{gaps} cells have a gap in their runs, so a sweep did not finish");
+    }
+    if thin > 0 {
+        println!(
+            "{thin} cells have fewer than {FEWEST} runs and are not reduced, so nothing plots them"
+        );
     }
     Ok(())
 }
@@ -223,19 +253,31 @@ mod tests {
         assert!(run(&args).unwrap_err().contains("no cell called"));
     }
 
-    // A cell too small for the original's index arithmetic stops the command and names itself, where the original crashes.
-    // Corrected mode reduces the same cell without complaint, because a median of one run is one run.
+    // A cell whose runs are not all the same measurement stops the command and names itself, rather than reducing to a number that describes nothing that happened.
     #[test]
     fn a_cell_that_cannot_be_reduced_names_itself() {
-        let dir = sample("too-small");
-        for at in 2..=31 {
+        let dir = sample("not-one-cell");
+        let path = runs_dir(&dir).join(format!("{CELL}-run_2.json"));
+        let mut odd = Run::parse(&std::fs::read_to_string(&path).unwrap()).unwrap();
+        odd.info.threads += 1;
+        write(&path, &odd.emit()).unwrap();
+
+        let err = run(&args(dir)).unwrap_err();
+        assert!(err.contains(CELL), "{err}");
+    }
+
+    // A cell that has lost runs since it was measured, to a sweep that stopped or to a check added afterwards, is skipped rather than reduced to four files carrying one number.
+    #[test]
+    fn a_cell_of_fewer_than_three_runs_is_not_reduced() {
+        let dir = sample("thin");
+        for at in 3..=31 {
             let name = format!("{CELL}-run_{at}.json");
             std::fs::remove_file(runs_dir(&dir).join(name)).unwrap();
         }
-        let mut args = args(dir);
-        args.compat = Compat::Upstream;
-        let err = run(&args).unwrap_err();
-        assert!(err.contains(CELL), "{err}");
+        run(&args(dir.clone())).unwrap();
+        for kind in Kind::ALL {
+            assert!(!path_for(&dir, CELL, kind).exists(), "{kind}");
+        }
     }
 
     #[test]
