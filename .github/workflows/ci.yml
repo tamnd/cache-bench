@@ -118,7 +118,7 @@ jobs:
       - uses: Swatinem/rust-cache@v2.9.2
         with:
           save-if: ${{ github.ref == 'refs/heads/main' }}
-      - uses: taiki-e/install-action@v2.87.3
+      - uses: taiki-e/install-action@v2.87.5
         with:
           tool: cargo-nextest
       - run: cargo nextest run --workspace --locked
