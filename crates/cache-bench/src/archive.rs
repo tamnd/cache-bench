@@ -28,7 +28,9 @@ const MANIFEST: &str = "MANIFEST";
 /// The directories under a results directory that hold what was measured.
 ///
 /// `runs` is the reduced numbers, one file per measurement, and `logs` is what the load generator and the server actually printed while that measurement was taken. A run file is derived from the pair of load generator files beside it, so `logs` is the layer underneath and it is the layer somebody arguing with a number ends up in.
-const UNDER: [&str; 2] = ["runs", "logs"];
+///
+/// `runs/refused` is where `recheck` puts a run that a check this build makes would not have accepted on the day it was measured. Those are not results and nothing plots them, and they go in the archive anyway, because a run that was refused is the evidence for why it was refused and the whole argument for a threshold is what it kept and what it did not. Leaving them out would mean the one directory that can settle that question is the one nobody has.
+const UNDER: [&str; 3] = ["runs", "runs/refused", "logs"];
 
 /// The small files that sit beside those directories and are worth carrying with them.
 ///
@@ -131,6 +133,10 @@ fn pack(dir: &Path, out: &Path) -> Result<(), String> {
         out.display(),
         under(&files, "logs")
     );
+    let refused = under(&files, "runs/refused");
+    if refused > 0 {
+        println!("          and {refused} runs a check refused, under runs/refused");
+    }
     println!("{}  {}", digest(&bytes), name_of(out));
     Ok(())
 }
@@ -292,10 +298,18 @@ fn paths(dir: &Path) -> Result<Vec<(String, PathBuf)>, String> {
     Ok(found)
 }
 
-/// How many of the files are under one of the two directories.
+/// How many of the files sit directly in one of those directories.
+///
+/// Directly, because `runs/refused` is inside `runs` and a count of runs that included the refused ones would be a count of the measurements this directory holds plus the ones it decided not to hold.
 fn under(files: &[(String, PathBuf)], name: &str) -> usize {
     let prefix = format!("{name}/");
-    files.iter().filter(|f| f.0.starts_with(&prefix)).count()
+    files
+        .iter()
+        .filter(|f| {
+            f.0.strip_prefix(&prefix)
+                .is_some_and(|rest| !rest.contains('/'))
+        })
+        .count()
 }
 
 /// Put one member in, with a header that says nothing about the machine it was packed on.
@@ -443,6 +457,26 @@ mod tests {
         assert!(names.iter().any(|n| n.starts_with("logs/")), "{names:?}");
         assert_eq!(names.iter().filter(|n| n.starts_with("runs/")).count(), 4);
         assert!(names.contains(&"host.json".to_owned()), "{names:?}");
+    }
+
+    // A refused run is the evidence for why it was refused, so it ships, and it is not one of the runs the directory holds, so it is not counted as one.
+    #[test]
+    fn a_refused_run_goes_in_the_archive_without_being_counted_as_a_run() {
+        use cb_core::golden::RUN_PERF;
+
+        let dir = sample("refused");
+        let name = "bench_dragonfly-threads_1-pipeline_1-perf_yes-run_4.json";
+        write(&runs_dir(&dir).join("refused").join(name), RUN_PERF).unwrap();
+
+        let files = paths(&dir).unwrap();
+        let names: Vec<String> = files.iter().map(|f| f.0.clone()).collect();
+        assert!(names.contains(&format!("runs/refused/{name}")), "{names:?}");
+        assert_eq!(super::under(&files, "runs"), 4);
+        assert_eq!(super::under(&files, "runs/refused"), 1);
+
+        let out = dir.join("runs.tar.gz");
+        run(&packing(&dir, &out)).unwrap();
+        run(&checking(&out, None)).unwrap();
     }
 
     // The check has to be a check. A byte that changed, a file that went and a file that arrived all have to be found, or the manifest is decoration.
