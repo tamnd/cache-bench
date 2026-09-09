@@ -17,6 +17,7 @@ Read [NOTES.md](NOTES.md) first. It is written by hand and it says what is true 
 - Server I/O threads swept at 1, 8 and 16.
 - Pipelining at 1, 10, 25 and 50.
 - 5 runs per cell, 96 cells, 480 runs in all.
+- 78 of those 96 cells are plotted and the rest are empty. A cell is missing here because its runs were refused, by a check this harness makes that it did not make on the day they were measured, or because it was left with fewer than three of them and three is the fewest a median, a best, a worst and an average can be four different numbers over. `failures.json` in this directory names every run that was refused and what refused it.
 - The median of the 5 runs is plotted, taken from the middle of a window with 10 percent trimmed off each end.
 - Latency is reported at MIN, AVG, the 50th, 90th, 99th, 99.9th and 99.99th percentiles, and MAX.
 - CPU cycles: no, this host exposes no hardware PMU.
@@ -32,14 +33,14 @@ The Threads on the x axis of every chart is the number of I/O threads the server
 | What it is | The wsl32 box and the wsl32 working set, sampled coarsely so a number exists before the full matrix finishes. |
 | CPU | 13th Gen Intel(R) Core(TM) i9-13900K |
 | Logical CPUs | 32 |
-| Memory | 32861888kb |
+| Memory | 32861884kb |
 | Kernel | Linux 6.18.33.2-microsoft-standard-WSL2 x86_64 |
 | Distribution | Ubuntu 26.04 LTS |
 | Frequency governor | none, this kernel exposes no cpufreq driver and the frequency was chosen outside it |
 | CPU mitigations | 19 known, all of them mitigated |
 | Hardware PMU | no, this host exposes no hardware PMU |
-| First run started | 2026-09-06T15:19:40Z |
-| Last run started | 2026-09-07T22:49:03Z |
+| First run started | 2026-09-08T07:20:40Z |
+| Last run started | 2026-09-09T09:57:33Z |
 
 There is no hostname here and there is not going to be one. A results directory gets published and a machine name is not something to publish, so the host is described by what it is rather than by what it is called.
 
@@ -54,10 +55,10 @@ There is no hostname here and there is not going to be one. A results directory 
 | Redis | Redis server v=8.10.1 sha=3399357e:0 malloc=jemalloc-5.3.0 bits=64 build=8693572105b72e6c |
 | rugo | rugo 0.1.0 |
 | Valkey | Valkey server v=9.1.2 sha=7f1dffed:0 malloc=jemalloc-5.3.0 bits=64 build=e0669b3824fb4a7b |
-| yo | yo 0.3.26 |
+| yo | yo 0.3.28 |
 | memtier_benchmark | memtier_benchmark v=2.5.1 sha=5f634d17:0 bits=64 libevent=2.1.12-stable openssl=OpenSSL 3.5.5 27 Jan 2026 prometheus=yes |
 | rustc | rustc 1.98.0 (88d9e12ae 2026-08-18) |
-| cache-bench | 0.5.1 (247eefa) |
+| cache-bench | 0.5.1 (9cbbcb7) |
 
 Every row above the last three is the version string the server itself printed when it was started for these runs, not a list kept by hand.
 

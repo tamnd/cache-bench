@@ -1,3 +1,502 @@
 {
-  "failures": []
+  "failures": [
+    {
+      "cell": "bench_garnet-threads_1-pipeline_25-perf_no-run_1",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the gets pass the first of 16 load generator threads finished after 10.992 seconds where the last took 15.573, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_garnet-threads_1-pipeline_25-perf_no-run_4",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the gets pass the first of 16 load generator threads finished after 12.014 seconds where the last took 15.572, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_garnet-threads_1-pipeline_50-perf_no-run_2",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the gets pass the first of 16 load generator threads finished after 9.411 seconds where the last took 12.172, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_garnet-threads_1-pipeline_50-perf_no-run_3",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 15.501 seconds where the last took 20.610, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_garnet-threads_1-pipeline_50-perf_no-run_4",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the gets pass the first of 16 load generator threads finished after 8.767 seconds where the last took 12.127, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_garnet-threads_1-pipeline_50-perf_no-run_5",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 14.675 seconds where the last took 20.400, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_garnet-threads_8-pipeline_50-perf_no-run_1",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the gets pass the first of 16 load generator threads finished after 2.276 seconds where the last took 3.127, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_garnet-threads_8-pipeline_50-perf_no-run_3",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the gets pass the first of 16 load generator threads finished after 2.191 seconds where the last took 2.957, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_garnet-threads_8-pipeline_50-perf_no-run_4",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the gets pass the first of 16 load generator threads finished after 2.217 seconds where the last took 3.080, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_garnet-threads_8-pipeline_50-perf_no-run_5",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the gets pass the first of 16 load generator threads finished after 2.156 seconds where the last took 3.083, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_rugo-threads_16-pipeline_1-perf_no-run_1",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 10.533 seconds where the last took 14.582, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_rugo-threads_16-pipeline_1-perf_no-run_2",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 11.350 seconds where the last took 21.233, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_rugo-threads_16-pipeline_1-perf_no-run_3",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 10.202 seconds where the last took 16.562, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_rugo-threads_16-pipeline_1-perf_no-run_4",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 10.629 seconds where the last took 18.352, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_rugo-threads_16-pipeline_1-perf_no-run_5",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 10.909 seconds where the last took 20.401, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_rugo-threads_16-pipeline_10-perf_no-run_1",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the sets pass the first of 16 load generator threads finished after 5.067 seconds where the last took 7.805, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_rugo-threads_16-pipeline_10-perf_no-run_2",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the gets pass the first of 16 load generator threads finished after 2.572 seconds where the last took 6.301, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_rugo-threads_16-pipeline_10-perf_no-run_3",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 2.588 seconds where the last took 3.577, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_rugo-threads_16-pipeline_10-perf_no-run_4",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 2.631 seconds where the last took 5.023, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_rugo-threads_16-pipeline_10-perf_no-run_5",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 3.126 seconds where the last took 5.491, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_rugo-threads_16-pipeline_25-perf_no-run_1",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 2.160 seconds where the last took 4.071, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_rugo-threads_16-pipeline_25-perf_no-run_2",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 1.901 seconds where the last took 3.666, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_rugo-threads_16-pipeline_25-perf_no-run_3",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 1.933 seconds where the last took 3.885, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_rugo-threads_16-pipeline_25-perf_no-run_4",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 2.309 seconds where the last took 4.086, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_rugo-threads_16-pipeline_25-perf_no-run_5",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 1.894 seconds where the last took 3.821, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_rugo-threads_16-pipeline_50-perf_no-run_1",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 1.973 seconds where the last took 3.465, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_rugo-threads_16-pipeline_50-perf_no-run_2",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 1.855 seconds where the last took 3.571, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_rugo-threads_16-pipeline_50-perf_no-run_3",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 2.273 seconds where the last took 3.075, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_rugo-threads_16-pipeline_50-perf_no-run_4",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 1.951 seconds where the last took 3.622, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_rugo-threads_16-pipeline_50-perf_no-run_5",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 1.826 seconds where the last took 3.675, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_rugo-threads_8-pipeline_1-perf_no-run_1",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 11.977 seconds where the last took 19.521, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_rugo-threads_8-pipeline_1-perf_no-run_2",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 12.590 seconds where the last took 16.257, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_rugo-threads_8-pipeline_1-perf_no-run_3",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 11.957 seconds where the last took 16.633, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_rugo-threads_8-pipeline_1-perf_no-run_4",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 11.684 seconds where the last took 17.967, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_rugo-threads_8-pipeline_1-perf_no-run_5",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 12.270 seconds where the last took 32.667, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_rugo-threads_8-pipeline_10-perf_no-run_1",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 2.986 seconds where the last took 4.118, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_rugo-threads_8-pipeline_10-perf_no-run_2",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 3.350 seconds where the last took 5.854, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_rugo-threads_8-pipeline_10-perf_no-run_3",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 3.448 seconds where the last took 5.535, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_rugo-threads_8-pipeline_10-perf_no-run_4",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the sets pass the first of 16 load generator threads finished after 4.488 seconds where the last took 8.512, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_rugo-threads_8-pipeline_10-perf_no-run_5",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the sets pass the first of 16 load generator threads finished after 3.716 seconds where the last took 8.190, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_rugo-threads_8-pipeline_25-perf_no-run_1",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 2.824 seconds where the last took 4.048, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_rugo-threads_8-pipeline_25-perf_no-run_2",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 2.743 seconds where the last took 4.522, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_rugo-threads_8-pipeline_25-perf_no-run_3",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 2.410 seconds where the last took 4.869, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_rugo-threads_8-pipeline_25-perf_no-run_4",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 2.807 seconds where the last took 4.660, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_rugo-threads_8-pipeline_25-perf_no-run_5",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 2.580 seconds where the last took 4.470, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_rugo-threads_8-pipeline_50-perf_no-run_1",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 2.571 seconds where the last took 3.948, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_rugo-threads_8-pipeline_50-perf_no-run_2",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 2.586 seconds where the last took 3.485, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_rugo-threads_8-pipeline_50-perf_no-run_3",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 2.741 seconds where the last took 4.014, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_rugo-threads_8-pipeline_50-perf_no-run_4",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 2.588 seconds where the last took 3.587, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_rugo-threads_8-pipeline_50-perf_no-run_5",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the gets pass the first of 16 load generator threads finished after 1.974 seconds where the last took 2.897, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_yo-threads_16-pipeline_1-perf_no-run_3",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the gets pass the first of 16 load generator threads finished after 21.571 seconds where the last took 38.407, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_yo-threads_16-pipeline_1-perf_no-run_4",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the gets pass the first of 16 load generator threads finished after 23.763 seconds where the last took 60.962, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_yo-threads_16-pipeline_1-perf_no-run_5",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 32.320 seconds where the last took 41.331, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_yo-threads_16-pipeline_10-perf_no-run_1",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 15.077 seconds where the last took 24.269, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_yo-threads_16-pipeline_10-perf_no-run_2",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 20.106 seconds where the last took 30.842, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_yo-threads_16-pipeline_10-perf_no-run_3",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the gets pass the first of 16 load generator threads finished after 5.125 seconds where the last took 17.046, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_yo-threads_16-pipeline_10-perf_no-run_4",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 18.218 seconds where the last took 24.733, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_yo-threads_16-pipeline_10-perf_no-run_5",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 17.330 seconds where the last took 26.528, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_yo-threads_16-pipeline_25-perf_no-run_1",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the gets pass the first of 16 load generator threads finished after 4.128 seconds where the last took 8.816, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_yo-threads_16-pipeline_25-perf_no-run_2",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 18.978 seconds where the last took 24.693, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_yo-threads_16-pipeline_25-perf_no-run_3",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 11.443 seconds where the last took 16.698, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_yo-threads_16-pipeline_25-perf_no-run_4",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 17.262 seconds where the last took 22.331, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_yo-threads_16-pipeline_25-perf_no-run_5",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the sets pass the first of 16 load generator threads finished after 16.654 seconds where the last took 43.021, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_yo-threads_16-pipeline_50-perf_no-run_2",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 15.148 seconds where the last took 23.282, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_yo-threads_16-pipeline_50-perf_no-run_3",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the sets pass the first of 16 load generator threads finished after 16.805 seconds where the last took 33.245, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_yo-threads_16-pipeline_50-perf_no-run_4",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 15.786 seconds where the last took 23.573, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_yo-threads_8-pipeline_1-perf_no-run_2",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 26.554 seconds where the last took 43.847, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_yo-threads_8-pipeline_1-perf_no-run_4",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 26.541 seconds where the last took 43.427, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_yo-threads_8-pipeline_1-perf_no-run_5",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 25.998 seconds where the last took 41.462, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_yo-threads_8-pipeline_10-perf_no-run_1",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 14.232 seconds where the last took 22.465, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_yo-threads_8-pipeline_10-perf_no-run_2",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 18.359 seconds where the last took 23.559, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_yo-threads_8-pipeline_10-perf_no-run_3",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 4.196 seconds where the last took 32.170, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_yo-threads_8-pipeline_10-perf_no-run_4",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 20.875 seconds where the last took 26.952, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_yo-threads_8-pipeline_10-perf_no-run_5",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 13.090 seconds where the last took 19.990, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_yo-threads_8-pipeline_25-perf_no-run_1",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the gets pass the first of 16 load generator threads finished after 5.284 seconds where the last took 7.103, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_yo-threads_8-pipeline_25-perf_no-run_2",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 11.851 seconds where the last took 17.722, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_yo-threads_8-pipeline_25-perf_no-run_3",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 11.620 seconds where the last took 33.718, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_yo-threads_8-pipeline_25-perf_no-run_4",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 11.281 seconds where the last took 17.059, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_yo-threads_8-pipeline_25-perf_no-run_5",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 11.684 seconds where the last took 17.167, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_yo-threads_8-pipeline_50-perf_no-run_2",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 11.367 seconds where the last took 14.439, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_yo-threads_8-pipeline_50-perf_no-run_3",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 17.064 seconds where the last took 24.310, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_yo-threads_8-pipeline_50-perf_no-run_4",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 10.773 seconds where the last took 16.441, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    },
+    {
+      "cell": "bench_yo-threads_8-pipeline_50-perf_no-run_5",
+      "when": "2026-09-09T13:16:46Z",
+      "attempts": 1,
+      "why": "on the warmup pass the first of 16 load generator threads finished after 10.773 seconds where the last took 16.899, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    }
+  ]
 }
