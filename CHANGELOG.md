@@ -2,7 +2,7 @@
 
 What each release costs you, in the order the releases happened. New entries go on top.
 
-## 0.6.1 - unreleased
+## 0.6.1 - 2026-09-10
 
 ### Fixed
 

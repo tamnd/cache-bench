@@ -95,7 +95,7 @@ dependencies = [
 
 [[package]]
 name = "cache-bench"
-version = "0.6.0"
+version = "0.6.1"
 dependencies = [
  "cb-cache",
  "cb-chart",
@@ -115,7 +115,7 @@ dependencies = [
 
 [[package]]
 name = "cb-cache"
-version = "0.6.0"
+version = "0.6.1"
 dependencies = [
  "cb-core",
  "libc",
@@ -124,7 +124,7 @@ dependencies = [
 
 [[package]]
 name = "cb-chart"
-version = "0.6.0"
+version = "0.6.1"
 dependencies = [
  "cb-core",
  "png",
@@ -138,7 +138,7 @@ dependencies = [
 
 [[package]]
 name = "cb-core"
-version = "0.6.0"
+version = "0.6.1"
 dependencies = [
  "jsonc-parser",
  "serde",
@@ -149,7 +149,7 @@ dependencies = [
 
 [[package]]
 name = "cb-docs"
-version = "0.6.0"
+version = "0.6.1"
 dependencies = [
  "cb-chart",
  "cb-core",
@@ -158,7 +158,7 @@ dependencies = [
 
 [[package]]
 name = "cb-mem"
-version = "0.6.0"
+version = "0.6.1"
 dependencies = [
  "cb-core",
  "serde",
@@ -168,7 +168,7 @@ dependencies = [
 
 [[package]]
 name = "cb-memtier"
-version = "0.6.0"
+version = "0.6.1"
 dependencies = [
  "cb-cache",
  "cb-core",
@@ -179,7 +179,7 @@ dependencies = [
 
 [[package]]
 name = "cb-perf"
-version = "0.6.0"
+version = "0.6.1"
 dependencies = [
  "cb-cache",
  "cb-core",
@@ -188,7 +188,7 @@ dependencies = [
 
 [[package]]
 name = "cb-stats"
-version = "0.6.0"
+version = "0.6.1"
 dependencies = [
  "cb-core",
  "serde",
@@ -651,7 +651,7 @@ checksum = "23b97319f7b8343df12cc98938e5c3eb436064524c8d2b4e30a1d3a36eecdf81"
 
 [[package]]
 name = "xtask"
-version = "0.6.0"
+version = "0.6.1"
 
 [[package]]
 name = "zeno"
