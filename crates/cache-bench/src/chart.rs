@@ -10,7 +10,7 @@ use std::path::{Path, PathBuf};
 
 use cb_chart::render::{Stamp, draw};
 use cb_chart::{Axis, Chart, Corpus, Scale, Spec};
-use cb_core::{Compat, Output, Profiles};
+use cb_core::{Compat, Machine, Output, Profiles};
 
 /// All 154 charts as the original drew them, which is what `--golden` draws from.
 use cb_core::golden::SERIES;
@@ -33,7 +33,7 @@ pub(crate) struct Args {
     /// Check what was drawn against a manifest written earlier, and draw nothing to disk.
     #[arg(long, value_name = "PATH", conflicts_with_all = ["out", "manifest"])]
     check: Option<PathBuf>,
-    /// Which hardware profile produced the numbers, for the stamp along the bottom.
+    /// Which hardware profile produced the numbers, for the stamp along the bottom. Read from the results directory's `host.json` when there is one.
     #[arg(long, value_name = "NAME")]
     profile: Option<String>,
     /// Where to read the profiles from.
@@ -155,9 +155,16 @@ fn destination(args: &Args) -> Result<Option<PathBuf>, String> {
 
 /// The stamp that goes along the bottom of every chart.
 ///
-/// Nothing without `--profile`, which is what keeps a chart drawn from the golden series byte identical everywhere. A chart drawn from real measurements should always carry one, and `doctor` is where the sweep is told to.
+/// Nothing without a profile, which is what keeps a chart drawn from the golden series byte identical everywhere. A chart drawn from real measurements should always carry one, and `doctor` is where the sweep is told to.
+///
+/// A results directory names its own profile in `host.json`, so `--profile` is only needed when there is no directory to read it from. Passing the wrong one is impossible in the ordinary case and forgetting it is no longer silent: it used to draw 146 unstamped charts and report that all 146 of them failed the manifest, which says the charts are not reproducible when what happened is that the reader left an argument off.
 fn stamp(args: &Args) -> Result<Stamp, String> {
-    let Some(name) = &args.profile else {
+    let named = match (&args.profile, &args.dir) {
+        (Some(name), _) => Some(name.clone()),
+        (None, Some(dir)) => Some(profile_of(dir)?),
+        (None, None) => None,
+    };
+    let Some(name) = &named else {
         return Ok(Stamp::default());
     };
     let text = fs::read_to_string(&args.profiles)
@@ -173,6 +180,19 @@ fn stamp(args: &Args) -> Result<Stamp, String> {
         machine: profile.description.clone(),
         note: format!("{} cores", profile.cores),
     })
+}
+
+/// The profile a results directory says it was measured under.
+fn profile_of(dir: &Path) -> Result<String, String> {
+    let path = dir.join("host.json");
+    let text = fs::read_to_string(&path).map_err(|e| {
+        format!(
+            "{}: {e}, so pass --profile to say which one drew these",
+            path.display()
+        )
+    })?;
+    let machine = Machine::parse(&text).map_err(|e| format!("{}: {e}", path.display()))?;
+    Ok(machine.profile)
 }
 
 /// Which scale a chart is drawn on, which its filename says.
@@ -265,9 +285,29 @@ pub(crate) fn expected() -> usize {
 #[cfg(test)]
 #[allow(clippy::expect_used, reason = "a failed fixture is a failed test")]
 mod tests {
-    use super::{digest, expected, parse_manifest, render_manifest, scale_of};
+    use super::{digest, expected, parse_manifest, profile_of, render_manifest, scale_of};
     use cb_chart::Scale;
     use std::collections::BTreeMap;
+
+    // Every published directory is named for the profile it was measured under, and the stamp along the bottom of its charts now comes off the file inside rather than off the name. If those two ever disagree, a directory called one thing carries charts stamped another, and the manifest beside it stops reproducing for anybody who passes the name they can see.
+    #[test]
+    fn a_results_directory_is_named_for_the_profile_it_says_it_ran() {
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../results");
+        let Ok(entries) = std::fs::read_dir(&root) else {
+            return;
+        };
+        for entry in entries.flatten() {
+            let dir = entry.path();
+            if !dir.join("host.json").exists() {
+                continue;
+            }
+            let named = dir
+                .file_name()
+                .and_then(|name| name.to_str())
+                .expect("a directory has a name");
+            assert_eq!(profile_of(&dir).expect("host.json reads"), named);
+        }
+    }
 
     #[test]
     fn the_scale_comes_off_the_filename() {

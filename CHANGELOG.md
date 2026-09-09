@@ -2,6 +2,13 @@
 
 What each release costs you, in the order the releases happened. New entries go on top.
 
+## 0.6.1 - unreleased
+
+### Fixed
+
+- `chart --dir` drew unstamped charts when `--profile` was left off, and the stamp is part of the picture, so every chart came out different from the committed one. Checking a published directory that way reported that all 146 of its charts failed the manifest, which reads as the charts not being reproducible when what happened is that an argument was missing. The profile now comes off the directory's own `host.json` when there is no `--profile`, which is the only right answer for a results directory and one nobody can get wrong. A test says every published directory is named for the profile it records, since the two disagreeing would put one name on the directory and another on the charts inside it.
+- Nothing ran the check that redrawing the charts from the committed `output.json` reproduces the committed PNGs, which is the whole reason `output.json` is committed beside them and is M8's exit gate written out as a sentence. CI now runs it for every published directory, in the job that already checks the generated documents, comparing SHA-256 rather than pictures. It is also the only check here that can see a change to the chart code quietly moving a pixel.
+
 ## 0.6.0 - 2026-09-10
 
 ### Added
