@@ -2,7 +2,11 @@
 //!
 //! This is the strictest thing in the tree and it is strict on purpose. The original reads memtier's JSON with a path query that returns zero for a path that is not there, so a memtier version that renamed a field, or a run where every connection dropped halfway through, produces a result file full of zeros that then charts as real bars sitting on the axis. Nothing downstream can tell that apart from a server that was genuinely slow.
 //!
-//! So every field is required, and three things are checked before a result is accepted: that the stats object exists at all, that the operation count is the one that was asked for, and that all five requested percentiles came back. A run that fails any of them is a failed run, and `sweep` records it and carries on rather than writing a number nobody can trust.
+//! So every field is required, and four things are checked before a result is accepted: that the stats object exists at all, that the operation count is the one that was asked for, that the load generator's threads finished together, and that all five requested percentiles came back. A run that fails any of them is a failed run, and `sweep` records it and carries on rather than writing a number nobody can trust.
+//!
+//! The third of those is the one that is not obvious. memtier's `Ops/sec` is the whole operation count divided by `Total duration`, and `Total duration` tracks the first of its load generator threads to finish rather than the last. On a run where the threads finish together those are the same number. On a run where one thread finishes in a second and fifteen are still going twelve seconds later, the rate it reports is the whole run's work over the fast thread's window, and it can be an order of magnitude above what the server actually did. That is not a slow server reading slow, it is a server that served some connections far better than others reading faster than any server on the box. It is checked here rather than corrected, because a run whose threads finished that far apart was not offering the load it was asked to offer for most of its length, and there is no honest single number to put in its place.
+
+use std::collections::BTreeMap;
 
 use cb_core::{Fixed3, Latency, Op};
 use serde::Deserialize;
@@ -20,10 +24,27 @@ struct File {
 /// The one object in it that matters.
 #[derive(Debug, Deserialize)]
 struct All {
+    #[serde(rename = "CPU")]
+    cpu: Option<Cpu>,
     #[serde(rename = "Sets")]
     sets: Option<Stats>,
     #[serde(rename = "Gets")]
     gets: Option<Stats>,
+}
+
+/// What the load generator itself spent, of which one part is read.
+#[derive(Debug, Deserialize)]
+struct Cpu {
+    /// One entry per load generator thread, keyed `Thread 0` upwards.
+    #[serde(rename = "Per Thread")]
+    per_thread: Option<BTreeMap<String, ThreadCpu>>,
+}
+
+/// One load generator thread.
+#[derive(Debug, Deserialize)]
+struct ThreadCpu {
+    /// How long it ran for, which is the only field here anything reads. The user and system times beside it in the file are how busy it was, and that is a different question.
+    wall_seconds: f64,
 }
 
 /// One pass, as memtier reports it.
@@ -67,22 +88,28 @@ struct Percentiles {
 /// A thousandth. memtier distributes operations across connections and the arithmetic does not always come out whole, so an exact match is not something to demand, but anything past this is connections that died rather than rounding.
 const TOLERANCE: f64 = 0.001;
 
+/// How much longer the last load generator thread may run than the first before the run is refused.
+///
+/// A quarter. The line is set from measurement rather than from taste. Across the 960 passes of a 32 core sweep and the 740 of an 8 core one, Dragonfly, Memcached, Redis and Valkey never once went past 1.09, and Pogocache reached 1.21 in eight passes, all of them at sixteen threads and all under two seconds long, where a third of a second of stagger is a fifth of the run. Nothing that was serving its connections evenly came near a quarter, and the passes that went past it went a long way past: 1.4 to 1.7 for the ones that were nearly all right, and up to 12.75 for the ones where a thread finished in a second and the rest were still going twelve seconds later.
+const SPREAD: f64 = 1.25;
+
 /// Read one pass out of a memtier JSON file.
 ///
 /// `wanted` is the operation count that was asked for, which is operations per connection times connections.
 ///
 /// # Errors
 ///
-/// If the stats object is missing, if the operation count is not the one that was requested, if any percentile is missing, or if the throughput is zero.
+/// If the stats object is missing, if the throughput is zero, if the operation count is not the one that was requested, if the load generator threads did not finish together, or if any percentile is missing.
 pub fn read(text: &str, pass: Pass, wanted: u64) -> Result<Op, BadOutput> {
     let file: File = serde_json::from_str(text).map_err(|e| BadOutput::Shape(e.to_string()))?;
     let all = file.all.ok_or_else(|| BadOutput::NoStats {
         pass,
         keys: keys(text),
     })?;
+    let All { cpu, sets, gets } = all;
     let stats = match pass {
-        Pass::Warmup | Pass::Sets => all.sets,
-        Pass::Gets => all.gets,
+        Pass::Warmup | Pass::Sets => sets,
+        Pass::Gets => gets,
     };
     let stats = stats.ok_or_else(|| BadOutput::NoStats {
         pass,
@@ -107,6 +134,7 @@ pub fn read(text: &str, pass: Pass, wanted: u64) -> Result<Op, BadOutput> {
             got: stats.count,
         });
     }
+    together(cpu, pass)?;
     let percentiles = stats.percentiles.ok_or(BadOutput::NoPercentiles { pass })?;
 
     Ok(Op {
@@ -123,6 +151,35 @@ pub fn read(text: &str, pass: Pass, wanted: u64) -> Result<Op, BadOutput> {
             p99_99: Fixed3(percentiles.p99_99),
         },
     })
+}
+
+/// Whether the load generator threads finished close enough together for the rate beside them to be a rate over the run.
+///
+/// See [`SPREAD`] for where the line is and why it is there. The comparison is between the shortest thread and the longest rather than against the run's own duration, because the duration is the field this is checking and using it to check itself would pass everything.
+fn together(cpu: Option<Cpu>, pass: Pass) -> Result<(), BadOutput> {
+    let threads = cpu
+        .and_then(|cpu| cpu.per_thread)
+        .filter(|threads| !threads.is_empty())
+        .ok_or(BadOutput::NoThreadTimes { pass })?;
+    let mut first = f64::MAX;
+    let mut last = 0.0_f64;
+    for thread in threads.values() {
+        first = first.min(thread.wall_seconds);
+        last = last.max(thread.wall_seconds);
+    }
+    // A thread that recorded no time at all is a file this cannot be read out of, and dividing by it would say the run was fine.
+    if first <= 0.0 {
+        return Err(BadOutput::NoThreadTimes { pass });
+    }
+    if last / first > SPREAD {
+        return Err(BadOutput::Ragged {
+            pass,
+            threads: threads.len(),
+            first,
+            last,
+        });
+    }
+    Ok(())
 }
 
 /// The top level keys of whatever was handed to us, for an error message.
@@ -169,6 +226,28 @@ pub enum BadOutput {
         /// What came back.
         got: f64,
     },
+    /// No per thread timings, which is a memtier from before it wrote them.
+    #[error(
+        "memtier wrote no per thread timings for the {pass} pass, and those are what say whether its rate covers the whole run, so this wants memtier 2.4.4 or newer"
+    )]
+    NoThreadTimes {
+        /// Which pass was being read.
+        pass: Pass,
+    },
+    /// Load generator threads that finished far apart, which makes the reported rate a rate over part of the run.
+    #[error(
+        "on the {pass} pass the first of {threads} load generator threads finished after {first:.3} seconds where the last took {last:.3}, and memtier divides the whole operation count by the first, so its rate is over a window most of the run was not in"
+    )]
+    Ragged {
+        /// Which pass was being read.
+        pass: Pass,
+        /// How many load generator threads there were.
+        threads: usize,
+        /// How long the first thread to finish ran for, in seconds.
+        first: f64,
+        /// How long the last one ran for, in seconds.
+        last: f64,
+    },
     /// A percentile that was requested and not reported.
     #[error("memtier reported no {pass} percentiles, and all five were requested")]
     NoPercentiles {
@@ -190,10 +269,31 @@ mod tests {
 
     /// A memtier file with the shape the real one has, cut down to the fields that are read.
     fn output(count: f64) -> String {
+        threads(count, &[128.640, 128.651, 128.633, 128.644])
+    }
+
+    /// The same file with the load generator threads given the wall times in `wall`.
+    fn threads(count: f64, wall: &[f64]) -> String {
+        let per: Vec<String> = wall
+            .iter()
+            .enumerate()
+            .map(|(at, seconds)| {
+                format!(
+                    r#""Thread {at}": {{"user_seconds": 2.2, "sys_seconds": 2.5, "total_seconds": 4.7, "wall_seconds": {seconds}, "cores_used": 0.05}}"#
+                )
+            })
+            .collect();
+        let per = per.join(", ");
+        let counted = wall.len();
         format!(
             r#"{{
               "configuration": {{"pipeline": 1}},
               "ALL STATS": {{
+                "CPU": {{
+                  "cpu_wall_seconds": 128.651,
+                  "threads_counted": {counted},
+                  "Per Thread": {{{per}}}
+                }},
                 "Sets": {{
                   "Count": {count},
                   "Ops/sec": 198924.388,
@@ -281,6 +381,34 @@ mod tests {
     fn a_missing_single_percentile_is_an_error() {
         let text = output(25_600_000.0).replace("\"p99.90\"", "\"p99.9\"");
         assert!(read(&text, Pass::Sets, 25_600_000).is_err());
+    }
+
+    // The check the published wsl32coarse numbers were missing. This is the shape of a real refused pass: one thread finished in 1.387 seconds and the last took 17.682, and memtier reported nineteen million operations a second off the first of them.
+    #[test]
+    fn a_pass_whose_threads_finished_far_apart_is_refused_rather_than_charted() {
+        let text = threads(25_600_000.0, &[1.387, 17.682, 16.904, 17.001]);
+        let why = read(&text, Pass::Sets, 25_600_000).unwrap_err();
+        assert!(matches!(why, BadOutput::Ragged { .. }), "{why}");
+        let said = why.to_string();
+        assert!(said.contains("1.387"), "{said}");
+        assert!(said.contains("17.682"), "{said}");
+    }
+
+    // Threads never finish at exactly the same instant, and a rule that expected them to would refuse every pass on the board.
+    #[test]
+    fn threads_that_finished_a_little_apart_are_a_normal_pass() {
+        // The widest a steady engine came in the two sweeps this line was set from.
+        let text = threads(25_600_000.0, &[1.58, 1.72, 1.66, 1.91]);
+        assert!(read(&text, Pass::Sets, 25_600_000).is_ok());
+    }
+
+    // A memtier from before the per thread block would otherwise skip the check silently, which is the whole failure this exists to stop.
+    #[test]
+    fn a_file_with_no_per_thread_timings_is_an_error() {
+        let text = output(25_600_000.0).replace("Per Thread", "Per Core");
+        let why = read(&text, Pass::Sets, 25_600_000).unwrap_err();
+        assert!(matches!(why, BadOutput::NoThreadTimes { .. }), "{why}");
+        assert!(why.to_string().contains("2.4.4"), "{why}");
     }
 
     #[test]

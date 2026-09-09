@@ -210,7 +210,7 @@ mod tests {
     #[cfg(unix)]
     fn fake_json(ops: &str) -> String {
         format!(
-            r#"{{"ALL STATS": {{"Sets": {{"Ops/sec": 1234.5, "KB/sec": 2048.0, "Count": {ops}, "Latency": 0.5, "Min Latency": 0.1, "Max Latency": 9.9, "Average Latency": 0.5, "Percentile Latencies": {{"p50.00": 0.4, "p90.00": 0.8, "p99.00": 1.5, "p99.90": 3.0, "p99.99": 7.0}}}}}}}}"#
+            r#"{{"ALL STATS": {{"CPU": {{"threads_counted": 2, "Per Thread": {{"Thread 0": {{"wall_seconds": 20.74}}, "Thread 1": {{"wall_seconds": 20.75}}}}}}, "Sets": {{"Ops/sec": 1234.5, "KB/sec": 2048.0, "Count": {ops}, "Latency": 0.5, "Min Latency": 0.1, "Max Latency": 9.9, "Average Latency": 0.5, "Percentile Latencies": {{"p50.00": 0.4, "p90.00": 0.8, "p99.00": 1.5, "p99.90": 3.0, "p99.99": 7.0}}}}}}}}"#
         )
     }
 
