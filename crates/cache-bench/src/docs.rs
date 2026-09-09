@@ -49,13 +49,7 @@ pub(crate) fn run(args: &Args) -> Result<(), String> {
 
     // Read before the indexes rather than after them, because the indexes carry the host too and a reader who arrived on a link to one of them has seen nothing else.
     let about = match &args.dir {
-        Some(dir) => {
-            let (machine, profile, versions) = about(dir, &args.profiles)?;
-            publishable(&profile, &machine.profile)?;
-            // Read off the disk rather than passed on the command line, so that a directory carrying a note says so whoever regenerates it and from wherever.
-            let notes = dir.join("NOTES.md").is_file();
-            Some((machine, profile, versions, notes))
-        }
+        Some(dir) => Some(about(dir, &args.profiles)?),
         None => None,
     };
 
@@ -65,25 +59,26 @@ pub(crate) fn run(args: &Args) -> Result<(), String> {
             scale,
             have: &have,
             absent: &args.absent,
-            measured: about.as_ref().map(|(machine, profile, _, notes)| Measured {
-                machine,
-                description: &profile.description,
-                connections: profile.connections(),
-                notes: *notes,
+            measured: about.as_ref().map(|about| Measured {
+                machine: &about.machine,
+                description: &about.profile.description,
+                connections: about.profile.connections(),
+                notes: about.notes,
             }),
         };
         wanted.push((out.join(index.file()), index.render()));
     }
-    if let (Some(dir), Some((machine, profile, versions, notes))) = (&args.dir, &about) {
+    if let (Some(dir), Some(about)) = (&args.dir, &about) {
         let memory = memory(dir)?;
         let readme = Readme {
-            machine,
-            profile,
-            versions,
+            machine: &about.machine,
+            profile: &about.profile,
+            versions: &about.versions,
             have: &have,
             compat: args.compat,
             memory: &memory.rows,
-            notes: *notes,
+            notes: about.notes,
+            plotted: about.plotted,
         };
         wanted.push((out.join(readme.file()), readme.render()));
     }
@@ -123,11 +118,23 @@ fn compare(out: &Path, wanted: &[(PathBuf, String)]) -> Result<(), String> {
     Ok(())
 }
 
-/// What the results directory says about itself: the host, the profile it ran, and the version of every engine in it.
-fn about(
-    dir: &Path,
-    profiles: &Path,
-) -> Result<(Machine, Profile, BTreeMap<String, String>), String> {
+/// What the results directory says about itself: the host, the profile it ran, the version of every engine in it, how much of the profile it actually holds, and whether somebody left a note beside it.
+#[derive(Debug)]
+struct About {
+    /// The machine, out of `host.json`.
+    machine: Machine,
+    /// The profile that machine was swept under.
+    profile: Profile,
+    /// Every engine in the results, with the version line it printed.
+    versions: BTreeMap<String, String>,
+    /// How many cells the charts were drawn from, which is not always the profile's cell count.
+    plotted: usize,
+    /// Whether there is a `NOTES.md` in the directory.
+    notes: bool,
+}
+
+/// Read all of it.
+fn about(dir: &Path, profiles: &Path) -> Result<About, String> {
     let path = dir.join("host.json");
     let text = fs::read_to_string(&path).map_err(|e| {
         format!(
@@ -143,8 +150,18 @@ fn about(
         .get(&machine.profile)
         .map_err(|e| format!("{}: {e}", profiles.display()))?
         .clone();
+    publishable(&profile, &machine.profile)?;
 
-    Ok((machine, profile, versions(dir)?))
+    let (versions, plotted) = results(dir)?;
+    // Read off the disk rather than passed on the command line, so that a directory carrying a note says so whoever regenerates it and from wherever.
+    let notes = dir.join("NOTES.md").is_file();
+    Ok(About {
+        machine,
+        profile,
+        versions,
+        plotted,
+        notes,
+    })
 }
 
 /// Refuse a results README from a profile whose numbers were never meant to leave the machine.
@@ -161,10 +178,12 @@ fn publishable(profile: &Profile, name: &str) -> Result<(), String> {
     ))
 }
 
-/// One version line per engine, read out of the results rather than out of a list somebody keeps.
+/// One version line per engine and how many cells there are, both read out of the results rather than out of a list somebody keeps.
 ///
 /// An engine that reports two different versions inside one results directory means the sweep was rerun against a rebuilt server, which makes the two halves of a chart incomparable, so it is refused rather than reported as whichever one was read last.
-fn versions(dir: &Path) -> Result<BTreeMap<String, String>, String> {
+///
+/// The cell count is the entries over the four aggregates each cell comes to. It is here because the methodology bullets state the shape of the sweep from the profile, and a directory that has lost cells since it was measured would otherwise state a shape it no longer has.
+fn results(dir: &Path) -> Result<(BTreeMap<String, String>, usize), String> {
     let path = dir.join("output.json");
     let text = fs::read_to_string(&path).map_err(|e| format!("{}: {e}", path.display()))?;
     let output = Output::parse(&text).map_err(|e| format!("{}: {e}", path.display()))?;
@@ -185,7 +204,7 @@ fn versions(dir: &Path) -> Result<BTreeMap<String, String>, String> {
         }
         out.insert(info.cache.clone(), info.version.clone());
     }
-    Ok(out)
+    Ok((out, output.entries.len() / cb_stats::Kind::ALL.len()))
 }
 
 /// The charts that are there to be linked.
