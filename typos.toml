@@ -1,5 +1,5 @@
 [default]
-# Every engine's version line is recorded verbatim, because a chart is only worth something if it says what it measured, and those lines carry git hashes and build ids. Hex sometimes spells a word: Redis 8.10.1 on the 8 core host prints build=36d555415e3ba1e6, and the `ba` in the middle of it reads as a misspelling of `by`. Nothing in this repository writes those strings and none of them can be corrected, so the hash itself is skipped rather than the file it sits in, which keeps the prose around it checked.
+# Every engine's version line is recorded verbatim, because a chart is only worth something if it says what it measured, and those lines carry git hashes and build ids. Hex sometimes spells a word: Redis 8.10.1 on the 8 core host prints a build id with a two letter run in the middle of it that this checker reads as a misspelling of an English word. Nothing in this repository writes those strings and none of them can be corrected, so the hash itself is skipped rather than the file it sits in, which keeps the prose around it checked.
 extend-ignore-re = ["(sha|build)=[0-9a-f]{6,}"]
 
 [default.extend-words]
