@@ -1,0 +1,19 @@
+{
+  "profile": "epyc8coarse",
+  "kernel": "Linux 6.8.0-106-generic x86_64",
+  "distro": "Ubuntu 24.04.4 LTS",
+  "cpu_model": "AMD EPYC Processor (with IBPB)",
+  "cpus": 8,
+  "memory_bytes": 25199222784,
+  "pmu": "present",
+  "governor": "absent",
+  "mitigations": "17 known, 1 left open: spec_rstack_overflow",
+  "memtier": "memtier_benchmark v=2.5.1 sha=5f634d17:0 bits=64 libevent=2.1.12-stable openssl=OpenSSL 3.0.13 30 Jan 2024 prometheus=yes",
+  "cache_bench": {
+    "version": "0.5.1",
+    "git": "9cbbcb7"
+  },
+  "rustc": "rustc 1.98.0 (88d9e12ae 2026-08-18)",
+  "started": "2026-09-08T18:05:04Z",
+  "finished": "2026-09-09T16:49:56Z"
+}

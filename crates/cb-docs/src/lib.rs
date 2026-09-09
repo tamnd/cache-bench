@@ -11,4 +11,4 @@ mod readme;
 pub use anchor::{Anchors, slug};
 pub use divergence::{DIVERGENCES, Divergence};
 pub use index::{Index, Measured};
-pub use readme::{MAY, MAY_NOT, Readme};
+pub use readme::{MAY, MAY_NOT, Readme, may};

@@ -8,7 +8,7 @@ use std::collections::{BTreeMap, BTreeSet};
 use std::fmt::Write as _;
 
 use cb_chart::{Case, Metric, Percentile, Scale, Spec, Which};
-use cb_core::{CacheKind, Chosen, Compat, Machine, Pmu, Profile};
+use cb_core::{CacheKind, Chosen, Compat, Machine, PerfMode, Pmu, Profile};
 
 use crate::divergence;
 
@@ -18,7 +18,23 @@ const GRAPHS: &str = "graphs";
 /// What these numbers may be used for, word for word out of `docs/methodology.md`.
 ///
 /// Duplicated rather than linked because this is the sentence that has to travel with the charts. A test asserts that the two copies are the same string, so the duplicate cannot drift.
+///
+/// The connection count in it is the reference profile's. A results directory says its own through [`may`], because this sentence is a claim about the runs that produced the charts beside it, and a draft profile that offered 64 connections supports no claim at all about 256.
 pub const MAY: &str = "They may be used to compare these cache servers against each other, on the stated architecture, over unix sockets, for GET and SET of 1 to 1024 byte values at 256 connections, at the stated pipeline depths, with persistence off and no eviction. That is a narrow claim and it is the one this harness supports.";
+
+/// How many connections the sentence in [`MAY`] is written around, which is what the reference profile offers.
+const REFERENCE_CONNECTIONS: u32 = 256;
+
+/// [`MAY`] for a sweep that offered a different number of connections.
+///
+/// A substitution into the one sentence rather than a second copy of it, so that a reword of the methodology travels here without anybody remembering to carry it, and so that the two cannot say different things about anything except the count. Two tests hold the ends down: that this returns [`MAY`] unchanged at the reference count, and that it returns something else at any other, which is what fails if the sentence is reworded past the substitution.
+#[must_use]
+pub fn may(connections: u32) -> String {
+    MAY.replace(
+        &format!("at {REFERENCE_CONNECTIONS} connections"),
+        &format!("at {connections} connections"),
+    )
+}
 
 /// What they may not be used for, word for word out of `docs/methodology.md`.
 pub const MAY_NOT: &str = "They may not be used to say one engine is faster than another, full stop. This workload has no expiry, no eviction, no mixed command set, no large values, no network, no replication, no persistence and no multi key operations. It is a hot path measurement of two commands. Wherever a number from here is published, that sentence goes with it.";
@@ -96,7 +112,7 @@ impl Readme<'_> {
         self.memory(&mut out);
         method(&mut out);
         differences(&mut out);
-        caveat(&mut out);
+        caveat(&mut out, self.profile.connections());
         out
     }
 
@@ -185,7 +201,7 @@ impl Readme<'_> {
             out,
             "- Latency is reported at MIN, AVG, the 50th, 90th, 99th, 99.9th and 99.99th percentiles, and MAX."
         );
-        let _ = writeln!(out, "- CPU cycles: {}.", self.machine.pmu.describe());
+        let _ = writeln!(out, "- CPU cycles: {}.", self.cycles_bullet());
         let _ = writeln!(
             out,
             "- There is a warmup pass at the start of every run, a dry run of all the SET operations, and it is not part of the measurement.\n"
@@ -195,6 +211,19 @@ impl Readme<'_> {
             "The Threads on the x axis of every chart is the number of I/O threads the server was given. It is not the number of clients, which is held at {} on every point of every chart. This is the single most misread thing about these charts.\n",
             profile.connections()
         );
+    }
+
+    /// Whether cycles per operation is in this directory, which takes two facts and not one.
+    ///
+    /// The machine has to have counters and the profile has to attach them. Reading the machine alone was enough while the only published host had no PMU, and it stopped being enough on a host that has one and swept without it: the bullet said cycles per operation was measured directly above a section saying the cycles chart was not drawn.
+    fn cycles_bullet(&self) -> &'static str {
+        if self.machine.pmu == Pmu::Absent {
+            return "no, this host exposes no hardware PMU";
+        }
+        if !self.profile.perf.contains(&PerfMode::Yes) {
+            return "not measured here, because this profile sweeps without counters attached";
+        }
+        "yes, cycles per operation was measured"
     }
 
     /// Which statistic is plotted, which depends on how the runs were reduced.
@@ -341,11 +370,14 @@ impl Readme<'_> {
 
     /// Why a chart is not here, which is a different sentence depending on what is missing.
     ///
-    /// A cycles chart missing on a machine with no counters is expected and the reader should be told that rather than left to wonder. Anything else missing is a gap in the sweep and saying so plainly is better than inventing a reason for it.
+    /// A cycles chart missing on a machine with no counters is expected and the reader should be told that rather than left to wonder. So is one missing because the profile never asked for counters, which is a different sentence and a more surprising absence, since the hardware table two screens up says the counters are there. Anything else missing is a gap in the sweep and saying so plainly is better than inventing a reason for it.
     fn why(&self, gone: &[Spec]) -> &'static str {
         let counters = gone.iter().all(|spec| spec.metric == Metric::CpuCycles);
         if counters && self.machine.pmu == Pmu::Absent {
             return "This host exposes no hardware PMU, so cycles per operation was never measured here.";
+        }
+        if counters && !self.profile.perf.contains(&PerfMode::Yes) {
+            return "This profile sweeps without counters attached, so cycles per operation was never measured here.";
         }
         "That measurement is not in this results directory."
     }
@@ -443,9 +475,9 @@ fn differences(out: &mut String) {
 }
 
 /// The part that has to travel with the charts.
-fn caveat(out: &mut String) {
+fn caveat(out: &mut String, connections: u32) {
     let _ = writeln!(out, "## What these numbers may and may not be used for\n");
-    let _ = writeln!(out, "{MAY}\n");
+    let _ = writeln!(out, "{}\n", may(connections));
     let _ = writeln!(out, "{MAY_NOT}\n");
 }
 
@@ -520,7 +552,7 @@ mod tests {
     use cb_chart::Spec;
     use cb_core::{CacheKind, Compat, Governor, Machine, Pmu, Profile, Profiles, Tool};
 
-    use super::{GRAPHS, MAY, MAY_NOT, Readme, list};
+    use super::{GRAPHS, MAY, MAY_NOT, REFERENCE_CONNECTIONS, Readme, list, may};
 
     /// The long version of the caveat, which the two constants above are copied out of.
     const METHODOLOGY: &str = include_str!("../../../docs/methodology.md");
@@ -688,6 +720,83 @@ mod tests {
         let text = readme(Pmu::Absent, &have);
         assert!(text.contains(&format!("*Not drawn: {cycles}.")), "{text}");
         assert!(text.contains("no hardware PMU"), "{text}");
+    }
+
+    // Counters the machine has and the sweep never attached. The hardware table says the counters are there, so this is the absence a reader is most likely to read as a bug in the harness, and it is the one the first host to have a PMU walked straight into.
+    #[test]
+    fn a_sweep_that_never_attached_the_counters_says_that_instead() {
+        let mut have = everything();
+        let cycles = "graph_cpucycles-pipeline_1-kind_median-scale_linear.png";
+        assert!(have.remove(cycles));
+        let text = readme(Pmu::Present, &have);
+
+        assert!(
+            text.contains("| Hardware PMU | yes, a live counter answered |"),
+            "{text}"
+        );
+        assert!(
+            text.contains("- CPU cycles: not measured here, because this profile sweeps without counters attached."),
+            "{text}"
+        );
+        assert!(
+            text.contains("This profile sweeps without counters attached, so cycles per operation was never measured here."),
+            "{text}"
+        );
+        assert!(
+            !text.contains("cycles per operation was measured.\n"),
+            "{text}"
+        );
+    }
+
+    // And where the profile does attach them, the bullet is the plain claim again.
+    #[test]
+    fn a_sweep_that_attached_them_on_a_machine_that_has_them_says_so() {
+        let mut profile = profile();
+        profile.perf = vec![cb_core::PerfMode::No, cb_core::PerfMode::Yes];
+        let have = everything();
+        let text = Readme {
+            machine: &machine(Pmu::Present),
+            profile: &profile,
+            versions: &versions(),
+            have: &have,
+            compat: Compat::Corrected,
+            plotted: profile.threads.len() * profile.pipelines.len() * 2 * CacheKind::ALL.len(),
+            memory: &[],
+            notes: false,
+        }
+        .render();
+        assert!(
+            text.contains("- CPU cycles: yes, cycles per operation was measured."),
+            "{text}"
+        );
+    }
+
+    // The caveat is a claim about the runs beside it, and a draft profile offers a different number of connections than the reference one it was written for.
+    #[test]
+    fn the_caveat_says_the_connection_count_the_sweep_actually_offered() {
+        assert_eq!(may(REFERENCE_CONNECTIONS), MAY);
+        assert_ne!(may(64), MAY);
+        assert!(may(64).contains("at 64 connections"), "{}", may(64));
+
+        let text = readme(Pmu::Present, &everything());
+        assert!(text.contains("at 256 connections"), "{text}");
+
+        let mut profile = profile();
+        profile.bench_threads = 4;
+        let have = everything();
+        let text = Readme {
+            machine: &machine(Pmu::Present),
+            profile: &profile,
+            versions: &versions(),
+            have: &have,
+            compat: Compat::Corrected,
+            plotted: whole(),
+            memory: &[],
+            notes: false,
+        }
+        .render();
+        assert!(text.contains("at 64 connections"), "{text}");
+        assert!(!text.contains("at 256 connections"), "{text}");
     }
 
     // The redrawn pair only exists to hide a Garnet bar, so on a results directory without Garnet in it the note would be explaining an absence to nobody.

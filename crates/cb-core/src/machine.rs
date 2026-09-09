@@ -57,10 +57,12 @@ pub enum Pmu {
 
 impl Pmu {
     /// How it is written in a generated document.
+    ///
+    /// What the hardware has rather than what was measured with it. Those are the same sentence on the reference profile and they are two different sentences on a draft one, which can sweep without counters attached on a machine that has them, and did.
     #[must_use]
     pub const fn describe(self) -> &'static str {
         match self {
-            Self::Present => "yes, cycles per operation was measured",
+            Self::Present => "yes, a live counter answered",
             Self::Absent => "no, this host exposes no hardware PMU",
         }
     }
