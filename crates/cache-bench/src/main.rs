@@ -12,6 +12,7 @@ mod doctor;
 mod host;
 mod lock;
 mod mem;
+mod recheck;
 mod results;
 mod run;
 mod spread;
@@ -48,6 +49,8 @@ enum Command {
     Combine(combine::Args),
     /// Say which cells came out too noisy to quote.
     Spread(spread::Args),
+    /// Apply the checks this build makes to a sweep that was measured under older ones.
+    Recheck(recheck::Args),
     /// Pack the raw run files into one file that can go on a release.
     Archive(archive::Args),
     /// Draw the charts.
@@ -68,6 +71,7 @@ fn main() -> ExitCode {
         Command::Choose(args) => choose::run(args),
         Command::Combine(args) => combine::run(args),
         Command::Spread(args) => spread::run(args),
+        Command::Recheck(args) => recheck::run(args),
         Command::Archive(args) => archive::run(args),
         Command::Chart(args) => chart::run(args),
         Command::Docs(args) => docs::run(args),
