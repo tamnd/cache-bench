@@ -214,3 +214,17 @@ The distinction is between two different questions. Did that change help is answ
 
 No published number moves. This refuses to produce one.
 
+
+## D25, a rate that has to cover the run it is a rate for
+
+memtier reports `Ops/sec` in its `ALL STATS` block and both the original and this read it as the throughput of the run. It is the whole completed operation count divided by `Total duration`, and `Total duration` is measured against the first of memtier's load generator threads to finish rather than the last.
+
+On a run where the threads finish together, which is what happens against a server that serves all its connections alike, those are the same number to within a hundredth of a percent. This was checked against 1700 passes on two machines before anything was changed.
+
+On a run where they do not, it is not a small error. In one measured pass one of sixteen threads finished after 1.387 seconds and the last took 17.682, and memtier divided 25.6 million operations by the first of those and reported 19.4 million operations a second, which is more than an order of magnitude above what the server did and above every rival's number on the same box in the same session. Nothing downstream can see that. The operation count is right, the latencies are right, the percentiles are right, and a bar comes out of it that is the fastest bar in the chart.
+
+So a pass whose last load generator thread ran more than a quarter longer than its first is refused, the way a pass that lost connections is refused, and `sweep` records it and carries on. The line is set from measurement: across a 32 core sweep and an 8 core one, four of the eight engines never went past 1.09 and a fifth reached 1.21 on passes under two seconds long, while the passes that went past a quarter went to 1.4, to 5, and in the worst case to 12.75.
+
+It is refused rather than recomputed. The operation count over the longest thread's window is an arithmetically defensible number, but a run where most of the threads were still working after one had stopped was not offering the load it was told to offer for most of its length, so what that number measures is a server under a load nobody specified. Refusing says the cell has no measurement in it, which is true, instead of putting a number there that is merely not the wrong one.
+
+This does move plotted numbers, and only for engines that were serving their connections unevenly. It is why `results/wsl32coarse` has cells with no bar in them.

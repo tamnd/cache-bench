@@ -22,7 +22,7 @@ pub struct Divergence {
 }
 
 /// Every divergence, in the order `divergences.md` has them.
-pub const DIVERGENCES: [Divergence; 21] = [
+pub const DIVERGENCES: [Divergence; 22] = [
     Divergence {
         id: "D1 to D4",
         title: "the statistics",
@@ -148,6 +148,12 @@ pub const DIVERGENCES: [Divergence; 21] = [
         title: "a profile that cannot be published from",
         effect: "A profile can say its numbers are not comparable off the box that produced them, and `docs` refuses a results README from one. The sweep still runs, because answering whether a change helped is what such a profile is for.",
         moves: false,
+    },
+    Divergence {
+        id: "D25",
+        title: "a rate that has to cover the run it is a rate for",
+        effect: "memtier derives `Ops/sec` from the first of its load generator threads to finish, so a pass whose threads finished far apart is refused rather than charted at a rate the server never reached.",
+        moves: true,
     },
 ];
 

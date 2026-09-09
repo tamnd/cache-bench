@@ -129,6 +129,7 @@ Every one of them, with the reasoning in [divergences.md](../../divergences.md).
 | [D22, a colour belongs to a server](../../divergences.md#d22-a-colour-belongs-to-a-server) | A bar colour is looked up by which server it is rather than by where the server sorted in that sweep, so the same engine is the same colour in every chart. | no |
 | [D23, a memory measurement](../../divergences.md#d23-a-memory-measurement) | What each engine costs to hold a known number of keys, which the original does not measure at all. Reported as both a total and an overhead per entry, because they are different claims. | no |
 | [D24, a profile that cannot be published from](../../divergences.md#d24-a-profile-that-cannot-be-published-from) | A profile can say its numbers are not comparable off the box that produced them, and `docs` refuses a results README from one. The sweep still runs, because answering whether a change helped is what such a profile is for. | no |
+| [D25, a rate that has to cover the run it is a rate for](../../divergences.md#d25-a-rate-that-has-to-cover-the-run-it-is-a-rate-for) | memtier derives `Ops/sec` from the first of its load generator threads to finish, so a pass whose threads finished far apart is refused rather than charted at a rate the server never reached. | yes |
 
 ## What these numbers may and may not be used for
 

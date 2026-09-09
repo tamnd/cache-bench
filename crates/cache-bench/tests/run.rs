@@ -56,7 +56,10 @@ stats = {"Ops/sec": 1234.5, "KB/sec": 2048.0, "Count": n * c * t, "Latency": 0.5
          "Percentile Latencies": {"p50.00": 0.4, "p90.00": 0.8, "p99.00": 1.5,
                                   "p99.90": 3.0, "p99.99": 7.0}}
 which = "Gets" if "0:1" in sys.argv else "Sets"
-json.dump({"ALL STATS": {which: stats}}, open(out, "w"))
+# The per thread timings the parser checks. A real memtier's threads finish within a percent of each other against a server that serves its connections alike, and this fake has to look like one of those.
+cpu = {"threads_counted": t,
+       "Per Thread": {f"Thread {i}": {"wall_seconds": 20.74 + i * 0.01} for i in range(t)}}
+json.dump({"ALL STATS": {"CPU": cpu, which: stats}}, open(out, "w"))
 print("fake memtier ran the", which, "pass")
 "#;
 
