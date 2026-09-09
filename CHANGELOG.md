@@ -2,6 +2,14 @@
 
 What each release costs you, in the order the releases happened. New entries go on top.
 
+## 0.6.1 - unreleased
+
+### Fixed
+
+- `chart --dir` drew unstamped charts when `--profile` was left off, and the stamp is part of the picture, so every chart came out different from the committed one. Checking a published directory that way reported that all 146 of its charts failed the manifest, which reads as the charts not being reproducible when what happened is that an argument was missing. The profile now comes off the directory's own `host.json` when there is no `--profile`, which is the only right answer for a results directory and one nobody can get wrong. A test says every published directory is named for the profile it records, since the two disagreeing would put one name on the directory and another on the charts inside it.
+- The spell check failed on a Redis build id. Every engine's version line is recorded verbatim, because a chart is only worth anything if it says what it measured, and Redis 8.10.1 on the 8 core host prints a build id with a two letter run in the middle of it that reads as a misspelling of an English word. Nothing here writes those strings and none of them can be corrected, so the hash is skipped rather than the file it sits in, which keeps the prose around it checked. The first host got through on luck rather than on anything the check knew.
+- Nothing ran the check that redrawing the charts from the committed `output.json` reproduces the committed PNGs, which is the whole reason `output.json` is committed beside them and is M8's exit gate written out as a sentence. CI now runs it for every published directory, in the job that already checks the generated documents, comparing SHA-256 rather than pictures. It is also the only check here that can see a change to the chart code quietly moving a pixel.
+
 ## 0.6.0 - 2026-09-10
 
 ### Added

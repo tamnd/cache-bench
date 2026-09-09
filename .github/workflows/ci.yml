@@ -178,6 +178,17 @@ jobs:
           if [ "$found" = 0 ]; then
             echo "no results directories yet, nothing to check"
           fi
+      # The M8 exit gate, run rather than asserted.
+      # The committed output.json is beside the charts so that anybody can redraw them without trusting us, and that promise is only worth something if somebody redraws them. This redraws every chart in memory from the committed data and compares SHA-256 against the committed manifest, which is a text file diff rather than 146 pictures.
+      # It is also the check that catches a change to the chart code that quietly moves a pixel, which is the failure nothing else here can see.
+      # This runner is Linux and the directories were drawn on Linux and on macOS, so a mismatch here is either the chart code moving or the two platforms disagreeing, and both are worth stopping for.
+      - name: every chart redraws from the committed data
+        run: |
+          shopt -s nullglob
+          for dir in results/*/; do
+            echo "redrawing $dir"
+            cargo run --locked --release --package cache-bench -- chart --dir "$dir" --check "$dir/graphs.sha256"
+          done
 
   # The floor stays green too.
   # It is the same floor as tamnd/yo, so the two trees agree on what a supported compiler is.
