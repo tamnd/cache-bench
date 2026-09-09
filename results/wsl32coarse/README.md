@@ -17,6 +17,7 @@ Read [NOTES.md](NOTES.md) first. It is written by hand and it says what is true 
 - Server I/O threads swept at 1, 8 and 16.
 - Pipelining at 1, 10, 25 and 50.
 - 5 runs per cell, 96 cells, 480 runs in all.
+- 78 of those 96 cells are plotted and the rest are empty. A cell is missing here because its runs were refused, by a check this harness makes that it did not make on the day they were measured, or because it was left with fewer than three of them and three is the fewest a median, a best, a worst and an average can be four different numbers over. `failures.json` in this directory names every run that was refused and what refused it.
 - The median of the 5 runs is plotted, taken from the middle of a window with 10 percent trimmed off each end.
 - Latency is reported at MIN, AVG, the 50th, 90th, 99th, 99.9th and 99.99th percentiles, and MAX.
 - CPU cycles: no, this host exposes no hardware PMU.
