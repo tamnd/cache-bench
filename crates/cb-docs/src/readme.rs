@@ -44,6 +44,10 @@ pub struct Readme<'a> {
     ///
     /// Some things about a set of numbers are true of that set and of nothing else, so they cannot be generated and they cannot be code. A build of one engine that turned out not to be steady, an engine that had to run over TCP on this box, a window where the machine was doing something else: each of those is a sentence somebody has to write, about one directory. That is what `NOTES.md` is, and this line is the only reason a reader would ever find it, because the generated README is where they land.
     pub notes: bool,
+    /// How many cells the charts were drawn from.
+    ///
+    /// The methodology bullets state the shape of the sweep out of the profile, which is what was asked for rather than what is on the disk. Those are the same thing on a sweep that finished, and they are not the same thing on one that lost runs, either because it stopped partway or because a check was applied to it after it was measured. A reader takes those bullets for a description of the data, so where the two disagree this says so.
+    pub plotted: usize,
 }
 
 impl Readme<'_> {
@@ -162,13 +166,20 @@ impl Readme<'_> {
             numbers(&profile.threads)
         );
         let _ = writeln!(out, "- Pipelining at {}.", numbers(&profile.pipelines));
+        let all = cells * CacheKind::ALL.len();
         let _ = writeln!(
             out,
-            "- {} runs per cell, {} cells, {} runs in all.",
+            "- {} runs per cell, {all} cells, {} runs in all.",
             profile.runs,
-            cells * CacheKind::ALL.len(),
             profile.total_runs()
         );
+        if self.plotted < all {
+            let _ = writeln!(
+                out,
+                "- {} of those {all} cells are plotted and the rest are empty. A cell is missing here because its runs were refused, by a check this harness makes that it did not make on the day they were measured, or because it was left with fewer than three of them and three is the fewest a median, a best, a worst and an average can be four different numbers over. `failures.json` in this directory names every run that was refused and what refused it.",
+                self.plotted
+            );
+        }
         let _ = writeln!(out, "- {}", self.statistic());
         let _ = writeln!(
             out,
@@ -507,7 +518,7 @@ mod tests {
     use std::collections::{BTreeMap, BTreeSet};
 
     use cb_chart::Spec;
-    use cb_core::{Compat, Governor, Machine, Pmu, Profile, Profiles, Tool};
+    use cb_core::{CacheKind, Compat, Governor, Machine, Pmu, Profile, Profiles, Tool};
 
     use super::{GRAPHS, MAY, MAY_NOT, Readme, list};
 
@@ -553,6 +564,12 @@ mod tests {
         ])
     }
 
+    /// Every cell the test profile has, which is what a sweep that finished leaves behind.
+    fn whole() -> usize {
+        let profile = profile();
+        profile.threads.len() * profile.pipelines.len() * profile.perf.len() * CacheKind::ALL.len()
+    }
+
     fn readme(pmu: Pmu, have: &BTreeSet<String>) -> String {
         Readme {
             machine: &machine(pmu),
@@ -560,6 +577,7 @@ mod tests {
             versions: &versions(),
             have,
             compat: Compat::Corrected,
+            plotted: whole(),
             memory: &[],
             notes: false,
         }
@@ -600,6 +618,7 @@ mod tests {
             versions: &versions(),
             have: &have,
             compat: Compat::Corrected,
+            plotted: whole(),
             memory: &[],
             notes: true,
         }
@@ -607,6 +626,32 @@ mod tests {
         let note = text.find("[NOTES.md](NOTES.md)").expect(&text);
         let first = text.find("![").expect(&text);
         assert!(note < first, "{text}");
+    }
+
+    // The methodology bullets come out of the profile, so a directory that has lost cells since it was measured would state a shape it no longer has and a reader would take that for a description of the data.
+    #[test]
+    fn a_directory_that_lost_cells_says_how_many_it_has_left() {
+        let text = readme(Pmu::Present, &everything());
+        assert!(
+            !text.contains("are plotted and the rest are empty"),
+            "{text}"
+        );
+
+        let have = everything();
+        let text = Readme {
+            machine: &machine(Pmu::Present),
+            profile: &profile(),
+            versions: &versions(),
+            have: &have,
+            compat: Compat::Corrected,
+            plotted: whole() - 3,
+            memory: &[],
+            notes: false,
+        }
+        .render();
+        let said = format!("- {} of those {} cells are plotted", whole() - 3, whole());
+        assert!(text.contains(&said), "{text}");
+        assert!(text.contains("failures.json"), "{text}");
     }
 
     #[test]
@@ -661,6 +706,7 @@ mod tests {
             versions: &with,
             have: &have,
             compat: Compat::Corrected,
+            plotted: whole(),
             memory: &[],
             notes: false,
         }
@@ -702,6 +748,7 @@ mod tests {
             versions: &versions(),
             have: &have,
             compat: Compat::Corrected,
+            plotted: whole(),
             memory: rows,
             notes: false,
         }
@@ -755,6 +802,7 @@ mod tests {
             versions: &versions(),
             have: &have,
             compat: Compat::Corrected,
+            plotted: whole(),
             memory: &[],
             notes: false,
         };
