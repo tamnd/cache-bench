@@ -4,7 +4,9 @@
 //!
 //! Nothing in here measures anything. It decides which cells to measure and in what order, skips the ones already on disk, and hands each of the rest to the same code path `run` uses, so a cell measured by a sweep and a cell measured by hand are the same cell measured the same way.
 //!
-//! The restart rule is file existence and nothing else, and a file that will not parse does not count as existence. A sweep that ran for six days and lost power holds a directory of result files plus, possibly, one file that was created and never finished. Trusting that file because its name is right is how a truncated run ends up in a median.
+//! The restart rule is file existence, and a file that will not parse does not count as existence. A sweep that ran for six days and lost power holds a directory of result files plus, possibly, one file that was created and never finished. Trusting that file because its name is right is how a truncated run ends up in a median.
+//!
+//! The one thing besides a file that stops a cell being measured is the count of how many times it already has been. Four attempts and it is left alone, because a cell that has failed four times is one this machine cannot measure and the fifth costs a full run to find that out again. `--retry-failed` throws those counts away.
 
 use std::path::PathBuf;
 use std::time::{Duration, Instant};
@@ -27,6 +29,15 @@ const ENOUGH: usize = 3;
 
 /// How many of one engine's cells may fail in a row before the rest of them are left.
 const GIVE_UP: u32 = 3;
+
+/// How many times a cell may be attempted, across every sweep of a directory, before it is left alone.
+///
+/// Four, which is the number the count in `failures.json` was written down for. A cell that failed once is a cell to try again, because the usual reason is something that was on the machine at the time and has since gone. A cell that has failed four times is a cell this machine cannot measure, and the fifth attempt costs a full run to learn that again.
+///
+/// Leaving them is what lets a sweep finish rather than circle. The failures of one shape land next to each other in the order the matrix runs in, because a shape is five consecutive runs, so three of them in a row put the engine down under [`GIVE_UP`] and every later cell is left with it. On a box where one shape cannot be measured that is the difference between a sweep that gets through the rest of the matrix and a sweep that is restarted forever and gets no further.
+///
+/// `--retry-failed` throws the counts away, which is what somebody says when the machine has changed.
+const TRIES: u32 = 4;
 
 /// How much of the machine somebody else may be using before this waits rather than measures, in cores.
 ///
@@ -79,6 +90,9 @@ pub(crate) struct Args {
     /// Print the cells this would measure, in order, and measure none of them.
     #[arg(long)]
     dry_run: bool,
+    /// Attempt the cells that have already been attempted their four times, rather than leaving them alone.
+    #[arg(long)]
+    retry_failed: bool,
 }
 
 /// Sweep the matrix.
@@ -137,24 +151,46 @@ pub(crate) fn run(args: &Args) -> Result<(), String> {
     let mut failures = failures(&record)?;
     // Every engine gets another chance at the start of a session, because the usual reason one was given up on is something on the machine that somebody has since fixed.
     failures.reconsider();
-
-    // The whole matrix is checked against the disk before anything is measured, so the count in the progress line is the work left rather than the work there was, and so a directory full of half written files says so at the start instead of eight days in.
-    let total = cells.len();
-    let mut todo = Vec::new();
-    for cell in cells {
-        let name = cell.name().to_string();
-        if done(&results::runs_dir(&args.dir).join(&name)) {
-            failures.measured(&name);
-            continue;
-        }
-        todo.push(cell);
+    // A cell gets another chance only when somebody asks for it, because the count of how many times it has failed is the one thing here that is about the cell rather than about the session.
+    if args.retry_failed {
+        failures.try_again();
     }
-    let skipped = total - todo.len();
+
+    let total = cells.len();
+    let Left {
+        todo,
+        skipped,
+        spent,
+    } = whats_left(cells, &results::runs_dir(&args.dir), &mut failures);
+    if spent > 0 {
+        println!(
+            "{spent} cells have been attempted {TRIES} times each and are being left alone, so that this sweep can reach the end of the matrix. Their reasons are in {}, and --retry-failed attempts them again.",
+            record.display()
+        );
+    }
     keep(&record, &failures);
 
     let started = Instant::now();
     let tally = measure_all(&setup, &todo, &journal, &record, &mut failures);
 
+    println!(
+        "swept {total} cells in {}: {}",
+        spell(started.elapsed()),
+        summary(&tally, skipped, spent)
+    );
+
+    // Ahead of the missing cells, because a sweep that stopped early is missing cells by definition and the count of them is not the thing to read.
+    if let Some(why) = tally.stopped {
+        return Err(why);
+    }
+    if failures.is_empty() {
+        return Ok(());
+    }
+    Err(missing(&failures, &record))
+}
+
+/// The one line a sweep says about itself on the way out.
+fn summary(tally: &Tally, skipped: usize, spent: usize) -> String {
     let mut said = vec![
         format!("{} measured here", tally.measured),
         format!("{skipped} already on disk"),
@@ -168,24 +204,73 @@ pub(crate) fn run(args: &Args) -> Result<(), String> {
             tally.left
         ));
     }
-    println!(
-        "swept {total} cells in {}: {}",
-        spell(started.elapsed()),
-        said.join(", ")
-    );
+    if spent > 0 {
+        said.push(format!("{spent} left alone after {TRIES} tries each"));
+    }
+    said.join(", ")
+}
 
-    // Ahead of the missing cells, because a sweep that stopped early is missing cells by definition and the count of them is not the thing to read.
-    if let Some(why) = tally.stopped {
-        return Err(why);
+/// What the sweep fails with when the matrix has holes in it.
+///
+/// The two counts are said apart because they mean different things to whoever restarts this. A cell that is short of its tries is worth another sweep. A cell that has had them is not, and a script that keeps starting a sweep to get it will start one forever.
+fn missing(failures: &Failures, record: &std::path::Path) -> String {
+    let all = failures.failures.len();
+    let done_for = failures
+        .failures
+        .iter()
+        .filter(|f| f.attempts >= TRIES)
+        .count();
+    if done_for == 0 {
+        return format!(
+            "{all} cells have no file and are named with a reason in {}",
+            record.display()
+        );
     }
-    if failures.is_empty() {
-        return Ok(());
-    }
-    Err(format!(
-        "{} cells have no file and are named with a reason in {}",
-        failures.failures.len(),
+    format!(
+        "{all} cells have no file and are named with a reason in {}, and {done_for} of them have been attempted {TRIES} times each and will not be attempted again without --retry-failed",
         record.display()
-    ))
+    )
+}
+
+/// Whether a cell is worth a run, given what the failure file remembers about it.
+fn worth_trying(failures: &Failures, cell: &str) -> bool {
+    failures.attempts(cell) < TRIES
+}
+
+/// What a matrix comes to once the disk and the failure file have had their say.
+struct Left {
+    /// The cells to measure, in the order they were planned in.
+    todo: Vec<Cell>,
+    /// Cells with a file already, which is what a restarted sweep is mostly made of.
+    skipped: usize,
+    /// Cells that have had their tries and are being left alone.
+    spent: usize,
+}
+
+/// Take the cells that already have a file and the ones that have had their tries out of the matrix.
+///
+/// The whole matrix is checked against the disk before anything is measured, so the count in the progress line is the work left rather than the work there was, and so a directory full of half written files says so at the start instead of eight days in.
+fn whats_left(cells: Vec<Cell>, runs: &std::path::Path, failures: &mut Failures) -> Left {
+    let total = cells.len();
+    let mut todo = Vec::new();
+    let mut spent = 0;
+    for cell in cells {
+        let name = cell.name().to_string();
+        if done(&runs.join(&name)) {
+            failures.measured(&name);
+            continue;
+        }
+        if !worth_trying(failures, &name) {
+            spent += 1;
+            continue;
+        }
+        todo.push(cell);
+    }
+    Left {
+        skipped: total - todo.len() - spent,
+        todo,
+        spent,
+    }
 }
 
 /// How a session went.
@@ -495,9 +580,12 @@ fn why(path: &std::path::Path, error: &dyn std::fmt::Display) -> String {
 mod tests {
     use std::collections::BTreeSet;
 
-    use cb_core::{CacheKind, Profiles};
+    use cb_core::{CacheKind, Failures, Profiles};
 
-    use super::{PATIENCE, caches, done, eta, plan, spell, wait_for_quiet};
+    use super::{
+        PATIENCE, TRIES, caches, done, eta, missing, plan, spell, wait_for_quiet, whats_left,
+        worth_trying,
+    };
 
     /// The profile the reference numbers were measured with.
     fn profile() -> cb_core::Profile {
@@ -654,5 +742,83 @@ mod tests {
         let cut = dir.join("cut.json");
         crate::results::write(&cut, &RUN[..RUN.len() / 2]).unwrap();
         assert!(!done(&cut));
+    }
+
+    // A cell that failed once is a cell to try again. A cell that has had its four tries is one this machine cannot measure, and the sweep has to get past it rather than spend a run learning that again.
+    #[test]
+    fn a_cell_is_worth_another_run_until_it_has_had_its_tries() {
+        let mut failures = Failures::default();
+        assert!(worth_trying(&failures, "a.json"), "never attempted");
+        for _ in 1..TRIES {
+            failures.failed("a.json", "2026-09-04T00:00:00Z", "the box was busy");
+            assert!(worth_trying(&failures, "a.json"), "short of its tries");
+        }
+        failures.failed("a.json", "2026-09-04T00:00:00Z", "the box was busy");
+        assert!(!worth_trying(&failures, "a.json"), "has had its tries");
+        // And another cell in the same file is its own question.
+        assert!(worth_trying(&failures, "b.json"));
+    }
+
+    // The three counts have to add up to the matrix, or the progress line and the summary are both about a different sweep than the one that ran.
+    #[test]
+    fn the_matrix_comes_apart_into_measured_spent_and_left_to_do() {
+        use cb_core::golden::RUN_PERF as RUN;
+        let dir = std::env::temp_dir().join("cache-bench-sweep-left");
+        let _ = std::fs::remove_dir_all(&dir);
+        std::fs::create_dir_all(&dir).unwrap();
+
+        let cells = plan(&[CacheKind::Yo], &profile());
+        let total = cells.len();
+        assert!(total > 2, "the profile has a matrix worth splitting");
+        let on_disk = cells[0].name().to_string();
+        let had_its_tries = cells[1].name().to_string();
+        crate::results::write(&dir.join(&on_disk), RUN).unwrap();
+
+        let mut failures = Failures::default();
+        // The one on the disk is named in the failure file as well, which is what a cell that failed and was then measured looks like.
+        failures.failed(&on_disk, "2026-09-04T00:00:00Z", "the box was busy");
+        for _ in 0..TRIES {
+            failures.failed(&had_its_tries, "2026-09-04T00:00:00Z", "the box was busy");
+        }
+
+        let left = whats_left(cells, &dir, &mut failures);
+        assert_eq!(left.skipped, 1, "the one with a file");
+        assert_eq!(left.spent, 1, "the one that has had its tries");
+        assert_eq!(left.todo.len(), total - 2);
+        assert_eq!(
+            failures.attempts(&on_disk),
+            0,
+            "a cell with a file is not a failure any more"
+        );
+    }
+
+    // A script restarting the sweep reads this line to decide whether another sweep would get anywhere.
+    #[test]
+    fn the_way_out_says_whether_another_sweep_would_help() {
+        let record = std::path::Path::new("results/failures.json");
+        let mut failures = Failures::default();
+        failures.failed("a.json", "2026-09-04T00:00:00Z", "the box was busy");
+        let said = missing(&failures, record);
+        assert!(said.contains("1 cells have no file"), "{said}");
+        assert!(!said.contains("--retry-failed"), "{said}");
+
+        for _ in 1..TRIES {
+            failures.failed("a.json", "2026-09-04T00:00:00Z", "the box was busy");
+        }
+        let said = missing(&failures, record);
+        assert!(said.contains("--retry-failed"), "{said}");
+        assert!(said.contains("1 of them"), "{said}");
+    }
+
+    // The counts are what make the sweep circle rather than finish, so throwing them away has to be enough to make it try again.
+    #[test]
+    fn retrying_a_spent_cell_takes_asking_for_it() {
+        let mut failures = Failures::default();
+        for _ in 0..TRIES {
+            failures.failed("a.json", "2026-09-04T00:00:00Z", "the box was busy");
+        }
+        assert!(!worth_trying(&failures, "a.json"));
+        failures.try_again();
+        assert!(worth_trying(&failures, "a.json"));
     }
 }

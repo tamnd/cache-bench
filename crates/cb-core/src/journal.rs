@@ -147,6 +147,22 @@ impl Failures {
         self.failures.retain(|f| f.cell != cell);
     }
 
+    /// How many times this cell has been attempted, or nought if it has never failed.
+    #[must_use]
+    pub fn attempts(&self, cell: &str) -> u32 {
+        self.failures
+            .iter()
+            .find(|f| f.cell == cell)
+            .map_or(0, |f| f.attempts)
+    }
+
+    /// Forget every cell that has failed and how many times it failed.
+    ///
+    /// The counts are what stop a cell nothing on this machine can measure being attempted again on every sweep, so throwing them away is somebody saying the machine has changed rather than something a sweep decides on its own.
+    pub fn try_again(&mut self) {
+        self.failures.clear();
+    }
+
     /// Note that an engine has been given up on for the rest of this sweep.
     pub fn abandon(&mut self, cache: &str, when: &str, after: u32, why: &str) {
         self.abandoned.retain(|a| a.cache != cache);
@@ -266,6 +282,33 @@ mod tests {
         assert_eq!(failures.failures[0].cell, "b.json");
         assert!(!failures.is_empty());
         failures.measured("b.json");
+        assert!(failures.is_empty());
+    }
+
+    // The count is what the sweep reads to decide whether a cell is worth another run, so a cell nobody has heard of has to answer nought rather than being absent.
+    #[test]
+    fn a_cell_that_has_never_failed_has_been_attempted_no_times() {
+        let mut failures = Failures::default();
+        assert_eq!(failures.attempts("a.json"), 0);
+        failures.failed("a.json", "2026-09-04T00:00:00Z", "no");
+        assert_eq!(failures.attempts("a.json"), 1);
+        failures.failed("a.json", "2026-09-04T01:00:00Z", "no");
+        assert_eq!(failures.attempts("a.json"), 2);
+        assert_eq!(failures.attempts("b.json"), 0);
+        failures.measured("a.json");
+        assert_eq!(failures.attempts("a.json"), 0);
+    }
+
+    // Somebody who has changed the machine says so with a flag, and then every cell is worth a run again.
+    #[test]
+    fn throwing_the_counts_away_makes_every_cell_worth_trying_again() {
+        let mut failures = Failures::default();
+        failures.failed("a.json", "2026-09-04T00:00:00Z", "no");
+        failures.failed("a.json", "2026-09-04T01:00:00Z", "no");
+        failures.failed("b.json", "2026-09-04T01:00:00Z", "no");
+        failures.try_again();
+        assert_eq!(failures.attempts("a.json"), 0);
+        assert_eq!(failures.attempts("b.json"), 0);
         assert!(failures.is_empty());
     }
 
