@@ -28,13 +28,15 @@ const WINDOW: usize = 20;
 const ENOUGH: usize = 3;
 
 /// How many of one engine's cells may fail in a row before the rest of them are left.
+///
+/// Only for an engine that has not yet produced a cell on this machine. Once it has, the failures are about a shape rather than about the engine and the sweep walks on, which is what [`put_down`] decides.
 const GIVE_UP: u32 = 3;
 
 /// How many times a cell may be attempted, across every sweep of a directory, before it is left alone.
 ///
 /// Four, which is the number the count in `failures.json` was written down for. A cell that failed once is a cell to try again, because the usual reason is something that was on the machine at the time and has since gone. A cell that has failed four times is a cell this machine cannot measure, and the fifth attempt costs a full run to learn that again.
 ///
-/// Leaving them is what lets a sweep finish rather than circle. The failures of one shape land next to each other in the order the matrix runs in, because a shape is five consecutive runs, so three of them in a row put the engine down under [`GIVE_UP`] and every later cell is left with it. On a box where one shape cannot be measured that is the difference between a sweep that gets through the rest of the matrix and a sweep that is restarted forever and gets no further.
+/// Leaving them is what lets a sweep finish rather than circle. A shape the machine cannot measure is five consecutive failures, and on an engine this machine has never run one of those puts the engine down under [`GIVE_UP`]. On an engine that has run, the sweep walks past the bad shape and pays one run for each of its cells, once, because these counts stop the next sweep attempting them again.
 ///
 /// `--retry-failed` throws the counts away, which is what somebody says when the machine has changed.
 const TRIES: u32 = 4;
@@ -161,6 +163,7 @@ pub(crate) fn run(args: &Args) -> Result<(), String> {
         todo,
         skipped,
         spent,
+        mut proven,
     } = whats_left(cells, &results::runs_dir(&args.dir), &mut failures);
     if spent > 0 {
         println!(
@@ -171,7 +174,7 @@ pub(crate) fn run(args: &Args) -> Result<(), String> {
     keep(&record, &failures);
 
     let started = Instant::now();
-    let tally = measure_all(&setup, &todo, &journal, &record, &mut failures);
+    let tally = measure_all(&setup, &todo, &journal, &record, &mut failures, &mut proven);
 
     println!(
         "swept {total} cells in {}: {}",
@@ -237,6 +240,15 @@ fn worth_trying(failures: &Failures, cell: &str) -> bool {
     failures.attempts(cell) < TRIES
 }
 
+/// Whether an engine that has just failed should have the rest of its cells left rather than attempted.
+///
+/// An engine that has never produced a cell on this machine is one the machine probably cannot run at all, and attempting the other thousand cells to find that out costs a day. So [`GIVE_UP`] failures in a row and it is put down.
+///
+/// An engine with a cell on the disk is a different thing. It runs here, and what failed is a shape rather than the engine, so the rest of the matrix is worth walking. The five runs of one shape sit next to each other in the matrix order, which is why a shape the machine cannot measure reads as three failures in a row and used to take the whole engine down with it. The cost of walking on is one run for each cell that fails, and the attempt count in `failures.json` is what stops the next sweep paying it again.
+fn put_down(proven: &[CacheKind], cache: CacheKind, in_a_row: u32) -> bool {
+    in_a_row >= GIVE_UP && !proven.contains(&cache)
+}
+
 /// What a matrix comes to once the disk and the failure file have had their say.
 struct Left {
     /// The cells to measure, in the order they were planned in.
@@ -245,6 +257,8 @@ struct Left {
     skipped: usize,
     /// Cells that have had their tries and are being left alone.
     spent: usize,
+    /// Engines with a cell already on the disk, which is proof they run on this machine.
+    proven: Vec<CacheKind>,
 }
 
 /// Take the cells that already have a file and the ones that have had their tries out of the matrix.
@@ -254,10 +268,14 @@ fn whats_left(cells: Vec<Cell>, runs: &std::path::Path, failures: &mut Failures)
     let total = cells.len();
     let mut todo = Vec::new();
     let mut spent = 0;
+    let mut proven: Vec<CacheKind> = Vec::new();
     for cell in cells {
         let name = cell.name().to_string();
         if done(&runs.join(&name)) {
             failures.measured(&name);
+            if !proven.contains(&cell.cache) {
+                proven.push(cell.cache);
+            }
             continue;
         }
         if !worth_trying(failures, &name) {
@@ -270,6 +288,7 @@ fn whats_left(cells: Vec<Cell>, runs: &std::path::Path, failures: &mut Failures)
         skipped: total - todo.len() - spent,
         todo,
         spent,
+        proven,
     }
 }
 
@@ -294,6 +313,7 @@ fn measure_all(
     journal: &std::path::Path,
     record: &std::path::Path,
     failures: &mut Failures,
+    proven: &mut Vec<CacheKind>,
 ) -> Tally {
     let mut seconds: Vec<f64> = Vec::new();
     let mut tally = Tally {
@@ -345,6 +365,9 @@ fn measure_all(
                 seconds.push(took);
                 failures.measured(&name);
                 in_a_row = 0;
+                if !proven.contains(&cell.cache) {
+                    proven.push(cell.cache);
+                }
                 None
             }
             Err(e) => {
@@ -357,8 +380,7 @@ fn measure_all(
                     1
                 };
                 last = Some(cell.cache);
-                // An engine whose every cell fails is a thousand cells that each take their own time to fail, and this is day three of eight. The rest of the matrix is still worth measuring, so this one is put down and named in the failure file.
-                if in_a_row >= GIVE_UP {
+                if put_down(proven, cell.cache, in_a_row) {
                     given_up.push(cell.cache);
                     failures.abandon(cell.cache.name(), &when, in_a_row, &e);
                     eprintln!(
@@ -583,8 +605,8 @@ mod tests {
     use cb_core::{CacheKind, Failures, Profiles};
 
     use super::{
-        PATIENCE, TRIES, caches, done, eta, missing, plan, spell, wait_for_quiet, whats_left,
-        worth_trying,
+        GIVE_UP, PATIENCE, TRIES, caches, done, eta, missing, plan, put_down, spell,
+        wait_for_quiet, whats_left, worth_trying,
     };
 
     /// The profile the reference numbers were measured with.
@@ -790,6 +812,33 @@ mod tests {
             0,
             "a cell with a file is not a failure any more"
         );
+        assert_eq!(
+            left.proven,
+            vec![CacheKind::Yo],
+            "the cell on the disk is proof this engine runs here"
+        );
+    }
+
+    // The 32 core box has one shape of yo it cannot measure, which is five consecutive failures in the matrix order. Before this it took yo's other 900 cells down with it on every sweep, so the sweep never reached the end of the matrix however many times it was restarted.
+    #[test]
+    fn a_bad_shape_only_takes_the_engine_down_when_the_engine_has_never_run_here() {
+        let never = &[][..];
+        let has_run = &[CacheKind::Yo][..];
+
+        assert!(
+            !put_down(never, CacheKind::Yo, GIVE_UP - 1),
+            "short of the count"
+        );
+        assert!(
+            put_down(never, CacheKind::Yo, GIVE_UP),
+            "nothing here says this engine runs on this machine"
+        );
+        assert!(
+            !put_down(has_run, CacheKind::Yo, GIVE_UP),
+            "it runs here, so what failed is a shape and the rest of the matrix is worth walking"
+        );
+        // And proving one engine says nothing about another.
+        assert!(put_down(has_run, CacheKind::Garnet, GIVE_UP));
     }
 
     // A script restarting the sweep reads this line to decide whether another sweep would get anywhere.
