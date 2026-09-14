@@ -25,7 +25,7 @@ serde_json = { version = "1.0.151", features = ["float_roundtrip"] }
 # The font parser, which reads the embedded faces and hands back glyph outlines.
 # ab_glyph is the obvious choice and it is not the one made here: it sits on ttf-parser, which its author has marked unmaintained, and cargo-deny fails the build on that.
 # skrifa is what the advisory points at instead.
-skrifa = "0.46.2"
+skrifa = "0.47.0"
 thiserror = "2.0.20"
 zeno = "0.3.3"
 
